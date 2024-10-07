@@ -1,0 +1,70 @@
+.login_container{
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login_h1{
+    text-align: center;
+}
+.login_container form{
+    width: 500px;
+    max-width: 100%;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 4px;
+}
+.login_container label{
+    display: block;
+    font-weight: 600;
+}
+.login_container input{
+    display: block;
+    margin-bottom: 10px;
+    margin-top: 3px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.login_container .logging_forget{
+   text-align: right;
+    margin-top: 10px;
+}
+.logging_register,
+.logging_forget a{
+    color: #FF8700;
+    font-weight: 400;
+}
+.login_remember{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 10px;
+}
+.login_logging_btn{
+    width: 100%;
+    background-color: #FF8700;
+    border-radius: 17px;
+    border: none;
+    box-shadow: 0 0 10px 5px white;
+    padding: 10px;
+    color: white;
+}
+.login_by_google{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login_by_google a{
+    color: #cfd0d1;
+    width: 10em;
+    border: 1px solid #cfd0d1;
+    border-radius: 16px;
+    padding: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 20px;
+}
