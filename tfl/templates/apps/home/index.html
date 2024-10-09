@@ -61,17 +61,24 @@
         </div>
     </div>
     <div class="order_page">
-        <h1 style="text-align: center;"><span class="order_page_heading">Today’s <span style="color: #FF951C;">Menu</span></span></h1><br>
+        <h1 style="text-align: center;"><span class="order_page_heading">Today’s <span
+                    style="color: #FF951C;">Menu</span></span></h1><br>
         <p style="text-align: center;font-size: 25px;">"Freshly prepared daily for you".</p>
-        <h1 class="order_page_h1" style="text-align: center;color: #FF951C; "><span style="border-bottom: 3px solid black;">Lunch Menu <span class="order_page_date">(06/06/24)</span></span></h1>
+        <h1 class="order_page_h1" style="text-align: center;color: #FF951C; "><span
+                style="border-bottom: 3px solid black;">Lunch Menu <span
+                    class="order_page_date">(06/06/24)</span></span></h1>
         <br>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-4 order_page_board">
                     <div class="row">
                         <div class="board_data col-md-12">
-                            <div class="board_heading mt-5 w-100" style="display: flex;align-items: center;flex-direction: column;">
-                                <h2><center>Veg Menu <img width="30" src="../../../static/assets/img/order/veg.png" alt=""></center></h2>
+                            <div class="board_heading mt-5 w-100"
+                                style="display: flex;align-items: center;flex-direction: column;">
+                                <h2>
+                                    <center>Veg Menu <img width="30" src="../../../static/assets/img/order/veg.png"
+                                            alt=""></center>
+                                </h2>
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
                             </div>
                             <div class="board_heading board_list_food pb-3">
@@ -83,17 +90,20 @@
                                 <li>Roti</li>
                                 <li>Roti</li>
                             </div>
-                            <div class="board_heading w-100" style="display: flex;align-items: center;flex-direction: column;">
+                            <div class="board_heading w-100"
+                                style="display: flex;align-items: center;flex-direction: column;">
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
                                 <h2 style="text-align: center !important;">80/-</h2>
                             </div>
                         </div>
-                        <div class="board_data_button pb-4 col-md-12" style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        <div class="board_data_button pb-4 col-md-12"
+                            style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
                             <div class="button1">
                                 <span style="color: black;font-weight: 700;">Roti+Rice Combo</span>
                                 <div class="quantity">
                                     <button type="button" class="decrease" onclick="decreaseValue()">-</button>
-                                    <input type="number" id="quantity" name="quantity" value="0" min="0" max="6" readonly>
+                                    <input type="number" id="quantity" name="quantity" value="0" min="0" max="6"
+                                        readonly>
                                     <button type="button" class="increase" onclick="increaseValue()">+</button>
                                 </div>
                             </div>
@@ -108,8 +118,12 @@
                 <div class="col-md-4 order_page_board">
                     <div class="row">
                         <div class="board_data col-md-12">
-                            <div class="board_heading mt-5 w-100" style="display: flex;align-items: center;flex-direction: column;">
-                                <h2><center>Non-Veg Menu <img width="30" src="../../../static/assets/img/order/non_veg.png" alt=""></center></h2>
+                            <div class="board_heading mt-5 w-100"
+                                style="display: flex;align-items: center;flex-direction: column;">
+                                <h2>
+                                    <center>Non-Veg Menu <img width="30"
+                                            src="../../../static/assets/img/order/non_veg.png" alt=""></center>
+                                </h2>
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
                             </div>
                             <div class="board_heading board_list_food pb-3">
@@ -121,17 +135,20 @@
                                 <li>Roti</li>
                                 <li>Roti</li>
                             </div>
-                            <div class="board_heading w-100" style="display: flex;align-items: center;flex-direction: column;">
+                            <div class="board_heading w-100"
+                                style="display: flex;align-items: center;flex-direction: column;">
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
                                 <h2 style="text-align: center !important;">80/-</h2>
                             </div>
                         </div>
-                        <div class="board_data_button pb-4 col-md-12" style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        <div class="board_data_button pb-4 col-md-12"
+                            style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
                             <div class="button1">
                                 <span style="color: black;font-weight: 700;">Roti+Rice Combo</span>
                                 <div class="quantity">
                                     <button type="button" class="decrease" onclick="decreaseValue()">-</button>
-                                    <input type="number" id="quantity" name="quantity" value="0" min="0" max="6" readonly>
+                                    <input type="number" id="quantity" name="quantity" value="0" min="0" max="6"
+                                        readonly>
                                     <button type="button" class="increase" onclick="increaseValue()">+</button>
                                 </div>
                             </div>
@@ -148,41 +165,719 @@
 
     <div class="add_on">
         <h1 style="text-align: center;" class="mt-3">Add Ons</h1>
-        <div class="row">
-            <div class="produto" id="p2_off1">
-                <div class="img_produto">
-                    <div id="elipse_color"></div>
-                    <div id="elipse_nocolor"></div>
+        <div class="container">
+            <div class="row row-cols-1 row-cols-md-4 g-4" style="text-align: center;justify-content: space-evenly;">
+                <div class="produto col-md-3 card" id="p1_off1"
+                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                    <div>
+                        <div class="img_produto">
+                            <div id="elipse_color"></div>
+                            <div id="elipse_nocolor"></div>
+                        </div>
+                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                        <div id="preco_prod"><span>60/-</span></div>
+                        <div id="avaliacoes">
+                            <div id="ava_tot">
+                            </div>
+                            <div id="descri_prod">
+                                <h2>Kebab</h2>
+                                <div>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                </div>
+                            </div>
+                            <button class="bt01">Order Now</button>
+                        </div>
+                    </div>
                 </div>
-                <img id="foto_prod" src="Assets/images/Comidas/comida1_2.png" alt="Comida">
-                <div id="preco_prod"><p>10$</p></div>
-                <div id="avaliacoes">
-                    <div id="ava_tot">
-                        <div id="ava_photos">
-                            <img id="ava_photo1" src="Assets/images/Avaliacoes/ava2_1.png" alt="Avaliaçao" width="38" height="38">
-                            <img id="ava_photo2" src="Assets/images/Avaliacoes/ava2_2.png" alt="Avaliaçao" width="38" height="38">
-                            <img id="ava_photo3" src="Assets/images/Avaliacoes/ava2_3.png" alt="Avaliaçao" width="38" height="38">
+                <div class="produto col-md-3 card" id="p1_off1"
+                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                    <div>
+                        <div class="img_produto">
+                            <div id="elipse_color"></div>
+                            <div id="elipse_nocolor"></div>
                         </div>
-                        <div id="av_nota">
-                            <img src="Assets/images/Avaliacoes/Star.png" alt="Avaliação Estrela" width="28" height="28">
-                            <p>(4.5)</p>
+                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                        <div id="preco_prod"><span>60/-</span></div>
+                        <div id="avaliacoes">
+                            <div id="ava_tot">
+                            </div>
+                            <div id="descri_prod">
+                                <h2>Kebab</h2>
+                                <div>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                </div>
+                            </div>
+                            <button class="bt01">Order Now</button>
                         </div>
                     </div>
-                    <div id="descri_prod">
-                        <h2>Kebab</h2>
-                        <div>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                </div>
+                <div class="produto col-md-3 card" id="p1_off1"
+                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                    <div>
+                        <div class="img_produto">
+                            <div id="elipse_color"></div>
+                            <div id="elipse_nocolor"></div>
+                        </div>
+                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                        <div id="preco_prod"><span>60/-</span></div>
+                        <div id="avaliacoes">
+                            <div id="ava_tot">
+                            </div>
+                            <div id="descri_prod">
+                                <h2>Kebab</h2>
+                                <div>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                </div>
+                            </div>
+                            <button class="bt01">Order Now</button>
                         </div>
                     </div>
-                    <button class="bt01">Order Now</button>
+                </div>
+                <div class="produto col-md-3 card" id="p1_off1"
+                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                    <div>
+                        <div class="img_produto">
+                            <div id="elipse_color"></div>
+                            <div id="elipse_nocolor"></div>
+                        </div>
+                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                        <div id="preco_prod"><span>60/-</span></div>
+                        <div id="avaliacoes">
+                            <div id="ava_tot">
+                            </div>
+                            <div id="descri_prod">
+                                <h2>Kebab</h2>
+                                <div>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                </div>
+                            </div>
+                            <button class="bt01">Order Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="produto col-md-3 card" id="p1_off1"
+                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                    <div>
+                        <div class="img_produto">
+                            <div id="elipse_color"></div>
+                            <div id="elipse_nocolor"></div>
+                        </div>
+                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                        <div id="preco_prod"><span>60/-</span></div>
+                        <div id="avaliacoes">
+                            <div id="ava_tot">
+                            </div>
+                            <div id="descri_prod">
+                                <h2>Kebab</h2>
+                                <div>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                </div>
+                            </div>
+                            <button class="bt01">Order Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="produto col-md-3 card" id="p1_off1"
+                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                    <div>
+                        <div class="img_produto">
+                            <div id="elipse_color"></div>
+                            <div id="elipse_nocolor"></div>
+                        </div>
+                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                        <div id="preco_prod"><span>60/-</span></div>
+                        <div id="avaliacoes">
+                            <div id="ava_tot">
+                            </div>
+                            <div id="descri_prod">
+                                <h2>Kebab</h2>
+                                <div>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                </div>
+                            </div>
+                            <button class="bt01">Order Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="produto col-md-3 card" id="p1_off1"
+                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                    <div>
+                        <div class="img_produto">
+                            <div id="elipse_color"></div>
+                            <div id="elipse_nocolor"></div>
+                        </div>
+                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                        <div id="preco_prod"><span>60/-</span></div>
+                        <div id="avaliacoes">
+                            <div id="ava_tot">
+                            </div>
+                            <div id="descri_prod">
+                                <h2>Kebab</h2>
+                                <div>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                </div>
+                            </div>
+                            <button class="bt01">Order Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="produto col-md-3 card" id="p1_off1"
+                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                    <div>
+                        <div class="img_produto">
+                            <div id="elipse_color"></div>
+                            <div id="elipse_nocolor"></div>
+                        </div>
+                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                        <div id="preco_prod"><span>60/-</span></div>
+                        <div id="avaliacoes">
+                            <div id="ava_tot">
+                            </div>
+                            <div id="descri_prod">
+                                <h2>Kebab</h2>
+                                <div>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                </div>
+                            </div>
+                            <button class="bt01">Order Now</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="order_page">
+        <h1 class="order_page_h1" style="text-align: center;color: #FF951C; "><span
+                style="border-bottom: 3px solid black;">Dinner Menu <span
+                    class="order_page_date">(06/06/24)</span></span></h1>
+        <br>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-4 order_page_board">
+                    <div class="row">
+                        <div class="board_data col-md-12">
+                            <div class="board_heading mt-5 w-100"
+                                style="display: flex;align-items: center;flex-direction: column;">
+                                <h2>
+                                    <center>Veg Menu <img width="30" src="../../../static/assets/img/order/veg.png"
+                                            alt=""></center>
+                                </h2>
+                                <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
+                            </div>
+                            <div class="board_heading board_list_food pb-3">
+                                <li>Roti</li>
+                                <li>Roti</li>
+                                <li>Roti</li>
+                                <li>Roti</li>
+                                <li>Roti</li>
+                                <li>Roti</li>
+                                <li>Roti</li>
+                            </div>
+                            <div class="board_heading w-100"
+                                style="display: flex;align-items: center;flex-direction: column;">
+                                <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
+                                <h2 style="text-align: center !important;">80/-</h2>
+                            </div>
+                        </div>
+                        <div class="board_data_button pb-4 col-md-12"
+                            style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                            <div class="button1">
+                                <span style="color: black;font-weight: 700;">Only Roti</span>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" onclick="decreaseValue()">-</button>
+                                    <input type="number" id="quantity" name="quantity" value="0" min="0" max="6"
+                                        readonly>
+                                    <button type="button" class="increase" onclick="increaseValue()">+</button>
+                                </div>
+                            </div>
+                            <div class="button1 mt-2">
+                                <span style="color: black;font-weight: 700;">Roti + Rice Plate</span>
+                                <button type="button" class="add-to-cart">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 order_page_board">
+                    <div class="row">
+                        <div class="board_data col-md-12">
+                            <div class="board_heading mt-5 w-100"
+                                style="display: flex;align-items: center;flex-direction: column;">
+                                <h2>
+                                    <center>Non-Veg Menu <img width="30"
+                                            src="../../../static/assets/img/order/non_veg.png" alt=""></center>
+                                </h2>
+                                <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
+                            </div>
+                            <div class="board_heading board_list_food pb-3">
+                                <li>Roti</li>
+                                <li>Roti</li>
+                                <li>Roti</li>
+                                <li>Roti</li>
+                                <li>Roti</li>
+                                <li>Roti</li>
+                                <li>Roti</li>
+                            </div>
+                            <div class="board_heading w-100"
+                                style="display: flex;align-items: center;flex-direction: column;">
+                                <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
+                                <h2 style="text-align: center !important;">80/-</h2>
+                            </div>
+                        </div>
+                        <div class="board_data_button pb-4 col-md-12"
+                            style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                            <div class="button1">
+                                <span style="color: black;font-weight: 700;">Roti + Rice Combo</span>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" onclick="decreaseValue()">-</button>
+                                    <input type="number" id="quantity" name="quantity" value="0" min="0" max="6"
+                                        readonly>
+                                    <button type="button" class="increase" onclick="increaseValue()">+</button>
+                                </div>
+                            </div>
+                            <div class="button1 mt-2">
+                                <span style="color: black;font-weight: 700;">Only Rice Plate</span>
+                                <button type="button" class="add-to-cart">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="add_on">
+        <h1 style="text-align: center;" class="mt-3">Add Ons</h1>
+        <div class="container">
+            <div class="row row-cols-1 row-cols-md-4 g-4" style="text-align: center;justify-content: space-evenly;">
+                <div class="produto col-md-3 card" id="p1_off1"
+                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                    <div>
+                        <div class="img_produto">
+                            <div id="elipse_color"></div>
+                            <div id="elipse_nocolor"></div>
+                        </div>
+                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                        <div id="preco_prod"><span>60/-</span></div>
+                        <div id="avaliacoes">
+                            <div id="ava_tot">
+                            </div>
+                            <div id="descri_prod">
+                                <h2>Kebab</h2>
+                                <div>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                </div>
+                            </div>
+                            <button class="bt01">Order Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="produto col-md-3 card" id="p1_off1"
+                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                    <div>
+                        <div class="img_produto">
+                            <div id="elipse_color"></div>
+                            <div id="elipse_nocolor"></div>
+                        </div>
+                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                        <div id="preco_prod"><span>60/-</span></div>
+                        <div id="avaliacoes">
+                            <div id="ava_tot">
+                            </div>
+                            <div id="descri_prod">
+                                <h2>Kebab</h2>
+                                <div>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                </div>
+                            </div>
+                            <button class="bt01">Order Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="produto col-md-3 card" id="p1_off1"
+                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                    <div>
+                        <div class="img_produto">
+                            <div id="elipse_color"></div>
+                            <div id="elipse_nocolor"></div>
+                        </div>
+                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                        <div id="preco_prod"><span>60/-</span></div>
+                        <div id="avaliacoes">
+                            <div id="ava_tot">
+                            </div>
+                            <div id="descri_prod">
+                                <h2>Kebab</h2>
+                                <div>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                </div>
+                            </div>
+                            <button class="bt01">Order Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="produto col-md-3 card" id="p1_off1"
+                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                    <div>
+                        <div class="img_produto">
+                            <div id="elipse_color"></div>
+                            <div id="elipse_nocolor"></div>
+                        </div>
+                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                        <div id="preco_prod"><span>60/-</span></div>
+                        <div id="avaliacoes">
+                            <div id="ava_tot">
+                            </div>
+                            <div id="descri_prod">
+                                <h2>Kebab</h2>
+                                <div>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                </div>
+                            </div>
+                            <button class="bt01">Order Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="how_works">
+        <h1 class="order_page_h1 mt-5" style="text-align: center;"><span style="border-bottom: 3px solid black;"> How
+                <span style="color: #FF951C;">It Works??</span></span></h1>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4" style="display: flex;align-items: center;flex-direction: column;">
+                    <div style="height: 350px;display: flex;align-items: center;justify-content: center;">
+                        <img width="340px" src="{% static 'assets/img/work/order_food.png' %}" alt="">
+                    </div>
+                    <p style="text-align: center;"> Check the website and order your favorites by choosing your delivery
+                        location.</p>
+                </div>
+                <div class="col-md-4" style="display: flex;align-items: center;flex-direction: column;">
+                    <div style="height: 350px;display: flex;align-items: center;justify-content: center;">
+                        <img width="340px" src="{% static 'assets/img/work/chef.png' %}" alt="">
+                    </div>
+                    <p style="text-align: center;">We prepare your food with utmost hygiene and love. </p>
+                </div>
+                <div class="col-md-4" style="display: flex;align-items: center;flex-direction: column;">
+                    <div style="height: 350px;display: flex;align-items: center;justify-content: center;">
+                        <img width="340px" src="{% static 'assets/img/work/time.png' %}" alt="">
+                    </div>
+                    <p style="text-align: center;"> Pay and get your order delivered o your address.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="why_tfl">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6" style="display: flex;justify-content: left;align-items: center;">
+                    <img width="500px" src="{% static 'assets/img/work/frame.png' %}" alt="">
+                </div>
+                <div class="col-md-6" style="display: flex;justify-content: center;flex-direction: column;">
+                    <h1>Why <span style="color: #FF951C;"> TFL??</span></h1>
+                    <p>At The Flavour Lake, we are committed to bringing you the freshest, most delicious meals right to
+                        your doorstep. Here’s why our customers love us:</p>
+                    <span class="why_tfl_li">
+                        <img width="24px" src="{% static 'assets/img/why/6.png' %}" alt="">
+                        <span>Fresh and Quality Ingredients</span>
+                    </span>
+                    <span class="why_tfl_li">
+                        <img width="24px" src="{% static 'assets/img/why/5.png' %}" alt="">
+                        <span>Convenient and Reliable Delivery</span>
+                    </span>
+                    <span class="why_tfl_li">
+                        <img width="24px" src="{% static 'assets/img/why/4.png' %}" alt="">
+                        <span>Simple Ordering Process</span>
+                    </span>
+                    <span class="why_tfl_li">
+                        <img width="24px" src="{% static 'assets/img/why/3.png' %}" alt="">
+                        <span>Customizable Meal Options</span>
+                    </span>
+                    <span class="why_tfl_li">
+                        <img width="24px" src="{% static 'assets/img/why/2.png' %}" alt="">
+                        <span>Clean Kitchen</span>
+                    </span>
+                    <span class="why_tfl_li">
+                        <img width="24px" src="{% static 'assets/img/why/1.png' %}" alt="">
+                        <span>Commitment to Customer Satisfaction</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <div class="best_seller">
+        <div class="container">
+            <h1>Explore <span style="color: #FF951C;">Our</span> Delicious Menu</h1>
+            <h3>Our Best sellers</h3>
+            <!-- Swiper -->
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" style="display: flex; text-align: center;justify-content: space-evenly;">
+                        <div class="produto col-md-3 card" id="p1_off1"
+                            style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                            <div>
+                                <div class="img_produto">
+                                    <div id="elipse_color"></div>
+                                    <div id="elipse_nocolor"></div>
+                                </div>
+                                <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                                <div id="preco_prod"><span>60/-</span></div>
+                                <div id="avaliacoes">
+                                    <div id="ava_tot">
+                                    </div>
+                                    <div id="descri_prod">
+                                        <h2>Kebab</h2>
+                                        <div>
+                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button class="bt01">Order Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide" style="display: flex; text-align: center;justify-content: space-evenly;">
+                        <div class="produto col-md-3 card" id="p1_off1"
+                            style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                            <div>
+                                <div class="img_produto">
+                                    <div id="elipse_color"></div>
+                                    <div id="elipse_nocolor"></div>
+                                </div>
+                                <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                                <div id="preco_prod"><span>60/-</span></div>
+                                <div id="avaliacoes">
+                                    <div id="ava_tot">
+                                    </div>
+                                    <div id="descri_prod">
+                                        <h2>Kebab</h2>
+                                        <div>
+                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button class="bt01">Order Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide" style="display: flex; text-align: center;justify-content: space-evenly;">
+                        <div class="produto col-md-3 card" id="p1_off1"
+                            style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                            <div>
+                                <div class="img_produto">
+                                    <div id="elipse_color"></div>
+                                    <div id="elipse_nocolor"></div>
+                                </div>
+                                <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                                <div id="preco_prod"><span>60/-</span></div>
+                                <div id="avaliacoes">
+                                    <div id="ava_tot">
+                                    </div>
+                                    <div id="descri_prod">
+                                        <h2>Kebab</h2>
+                                        <div>
+                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button class="bt01">Order Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide" style="display: flex; text-align: center;justify-content: space-evenly;">
+                        <div class="produto col-md-3 card" id="p1_off1"
+                            style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                            <div>
+                                <div class="img_produto">
+                                    <div id="elipse_color"></div>
+                                    <div id="elipse_nocolor"></div>
+                                </div>
+                                <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                                <div id="preco_prod"><span>60/-</span></div>
+                                <div id="avaliacoes">
+                                    <div id="ava_tot">
+                                    </div>
+                                    <div id="descri_prod">
+                                        <h2>Kebab</h2>
+                                        <div>
+                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button class="bt01">Order Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide" style="display: flex; text-align: center;justify-content: space-evenly;">
+                        <div class="produto col-md-3 card" id="p1_off1"
+                            style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                            <div>
+                                <div class="img_produto">
+                                    <div id="elipse_color"></div>
+                                    <div id="elipse_nocolor"></div>
+                                </div>
+                                <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                                <div id="preco_prod"><span>60/-</span></div>
+                                <div id="avaliacoes">
+                                    <div id="ava_tot">
+                                    </div>
+                                    <div id="descri_prod">
+                                        <h2>Kebab</h2>
+                                        <div>
+                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button class="bt01">Order Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide" style="display: flex; text-align: center;justify-content: space-evenly;">
+                        <div class="produto col-md-3 card" id="p1_off1"
+                            style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                            <div>
+                                <div class="img_produto">
+                                    <div id="elipse_color"></div>
+                                    <div id="elipse_nocolor"></div>
+                                </div>
+                                <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
+                                <div id="preco_prod"><span>60/-</span></div>
+                                <div id="avaliacoes">
+                                    <div id="ava_tot">
+                                    </div>
+                                    <div id="descri_prod">
+                                        <h2>Kebab</h2>
+                                        <div>
+                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button class="bt01">Order Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+            <h5 class="mt-2" style="text-align: right;"><span style="color: #FF951C;">Scan</span> For Complete Online Menu</h5>
+            <div style="display: flex;justify-content: right;width: 100%;">
+                <img width="200px" src="{% static 'assets/img/why/scanner.png' %}" alt="">
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-black pt-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <!-- First Column: Brand and About -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <h2><img width="150px" src="{% static 'assets/img/home/tfl_logo.png' %}" alt=""></h2>
+                    <p>Plot no.-3,Infocity Avenue ,Infront of Manoj nonveg world,Infocity,Bhubaneswar</p>
+                </div>
+                
+                <!-- Second Column: About Us Links -->
+                <div class="col-md-6 col-lg-2 mb-4">
+                    <h5>About Us</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-black-50">About Us</a></li>
+                        <li><a href="#" class="text-black-50">Service Us</a></li>
+                        <li><a href="#" class="text-black-50">Contact</a></li>
+                        <li><a href="#" class="text-black-50">Company</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Third Column: Company Links -->
+                <div class="col-md-6 col-lg-2 mb-4">
+                    <h5>Company</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-black-50">Partnership</a></li>
+                        <li><a href="#" class="text-black-50">Terms of Use</a></li>
+                        <li><a href="#" class="text-black-50">Privacy</a></li>
+                        <li><a href="#" class="text-black-50">Sitemap</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Fourth Column: Get in Touch and Subscribe -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <h5>Get in touch</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Email" aria-label="Email">
+                        <button class="login_logging_btn" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright Section -->
+            <div class="row pt-4">
+                <div class="col text-center">
+                    <p class="text-black-50 mb-0">Copyright © 2022 Foodhut.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+
 </div>
 
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+<!-- Initialize Swiper -->
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 4,
+        spaceBetween: 30,
+        keyboard: {
+            enabled: true,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        breakpoints: {
+            420: {
+                slidesPerView: 1,
+                spaceBetween: 10,
+            },
+            640: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+            },
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 25,
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+            },
+            1240: {
+                slidesPerView: 4,
+                spaceBetween: 30,
+            }
+        }
+    });
+</script>
 <script>
     function increaseValue() {
         var value = parseInt(document.getElementById('quantity').value, 10);
