@@ -1,0 +1,190 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load static %}
+{% load allauth account %}
+{% block head_title %}
+{% trans "Cart" %}
+{% endblock head_title %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'assets/css/cart.css' %}">
+<style>
+
+.navbar-brand img{
+    width: 100px;
+}
+.login_logging_btn{
+    background-color: #E9661D;
+    border-radius: 25px;
+    border: none;
+    padding: 10px;
+    color: white;
+    width:8em;
+}
+.not_login_logging_btn{
+    background-color: transparent;
+    border: none;
+    width:8em;
+    text-decoration: underline;
+}
+.nav-link{
+    border-bottom: 2px solid transparent;
+}
+.nav-link.active{
+    border-bottom: 2px solid #E9661D;
+}
+/* Styling for cart item placeholders */
+.img-placeholder {
+    width: 70px;
+    height: 70px;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+}
+
+.quantity-selector .btn {
+    padding: 0.5rem;
+    font-size: 14px;
+    width: 40px;
+}
+
+.cart-item {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.recommendation-item {
+    background-color: #fff7f7;
+    border-radius: 10px;
+}
+
+.cart-summary {
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+    margin-top: 20px;
+}
+
+.btn-warning {
+    background-color: #f69300;
+    border: none;
+}
+
+.btn-close {
+    border: none;
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+</style>
+{% endblock stylesheet %}
+{% block content %}
+<div class="login_container">
+    {% include 'apps/partials/navbar.html' %}
+    <div class="cart_page container">
+        <div class="row mt-4">
+            <div class="card p-3" style="border: none;">
+                <div class="mb-3">
+                    <h3 style="border-bottom: 1px solid #ddd;">Your Cart</h3>
+                </div>
+    
+                <!-- Cart Items -->
+                <div class="cart-item d-flex justify-content-between align-items-center pb-4 mb-4">
+                    <div class="d-flex">
+                        <div class="img-placeholder me-3"></div>
+                        <div>
+                            <h5>Halal Beef Meat</h5>
+                            <p>(00/kg)</p>
+                            <div class="input-group quantity-selector">
+                                <button class="btn btn-outline-secondary btn-minus">-</button>
+                                <input type="text" class="form-control text-center" value="1kg">
+                                <button class="btn btn-outline-secondary btn-plus">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5>$23.00</h5>
+                        <button class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="cart-item d-flex justify-content-between align-items-center pb-4 mb-4">
+                    <div class="d-flex">
+                        <div class="img-placeholder me-3"></div>
+                        <div>
+                            <h5>Halal Beef Meat</h5>
+                            <p>(00/kg)</p>
+                            <div class="input-group quantity-selector">
+                                <button class="btn btn-outline-secondary btn-minus">-</button>
+                                <input type="text" class="form-control text-center" value="1kg">
+                                <button class="btn btn-outline-secondary btn-plus">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5>$23.00</h5>
+                        <button class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="cart-item d-flex justify-content-between align-items-center pb-4 mb-4">
+                    <div class="d-flex">
+                        <div class="img-placeholder me-3"></div>
+                        <div>
+                            <h5>Halal Beef Meat</h5>
+                            <p>(00/kg)</p>
+                            <div class="input-group quantity-selector">
+                                <button class="btn btn-outline-secondary btn-minus">-</button>
+                                <input type="text" class="form-control text-center" value="1kg">
+                                <button class="btn btn-outline-secondary btn-plus">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5>$23.00</h5>
+                        <button class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+    
+                <!-- Repeat similar blocks for more items as needed -->
+                
+                <!-- Product Recommendations -->
+                <div class="mt-5 mb-4 text-center">
+                    <h6>Shop More Easy To Use Essentials</h6>
+                    <div class="recommendation-item d-flex justify-content-between align-items-center p-3">
+                        <div class="d-flex">
+                            <div class="img-placeholder me-3"></div>
+                            <div>
+                                <h6>Halal Sheep Meat</h6>
+                                <p>$23 (03/kg)</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-warning rounded-circle">
+                            <i class="bi bi-plus"></i> 
+                        </button>
+                    </div>
+                </div>
+    
+                <!-- Summary -->
+                <div class="cart-summary">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal (1 Item)</span>
+                        <span>$23</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping Fee</span>
+                        <span>$0</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <strong>Total</strong>
+                        <strong>$23</strong>
+                    </div>
+                    <button class="btn btn-warning btn-lg w-100">CHECK OUT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

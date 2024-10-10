@@ -7,6 +7,7 @@
 {% endblock head_title %}
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'assets/css/home.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
 {% endblock stylesheet %}
 {% block content %}
 
@@ -70,7 +71,7 @@
         <br>
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-4 order_page_board">
+                <div class="col-md-4 col-lg-6 col-xxl-4 order_page_board"  style="position: relative;">
                     <div class="row">
                         <div class="board_data col-md-12">
                             <div class="board_heading mt-5 w-100"
@@ -81,14 +82,10 @@
                                 </h2>
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
                             </div>
-                            <div class="board_heading board_list_food pb-3">
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
+                            <div class="board_heading board_list_food pb-3 mt-2">
+                                {% for item in today_veg_lunch_menu %}
+                                <li>{{ item.item_name }}</li>
+                                {% endfor %}
                             </div>
                             <div class="board_heading w-100"
                                 style="display: flex;align-items: center;flex-direction: column;">
@@ -96,7 +93,8 @@
                                 <h2 style="text-align: center !important;">80/-</h2>
                             </div>
                         </div>
-                        <div class="board_data_button pb-4 col-md-12"
+                        <div class="spacer" style="height: 120px;width: 100%;"></div>
+                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12"
                             style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
                             <div class="button1">
                                 <span style="color: black;font-weight: 700;">Roti+Rice Combo</span>
@@ -115,7 +113,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-4 order_page_board">
+                <div class="col-md-4 col-lg-6 col-xxl-4 order_page_board"  style="position: relative;">
                     <div class="row">
                         <div class="board_data col-md-12">
                             <div class="board_heading mt-5 w-100"
@@ -127,13 +125,9 @@
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
                             </div>
                             <div class="board_heading board_list_food pb-3">
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
+                                {% for item in today_nonveg_lunch_menu %}
+                                <li>{{ item.item_name }}</li>
+                                {% endfor %}
                             </div>
                             <div class="board_heading w-100"
                                 style="display: flex;align-items: center;flex-direction: column;">
@@ -141,7 +135,8 @@
                                 <h2 style="text-align: center !important;">80/-</h2>
                             </div>
                         </div>
-                        <div class="board_data_button pb-4 col-md-12"
+                        <div class="spacer" style="height: 120px;width: 100%;"></div>
+                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12"
                             style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
                             <div class="button1">
                                 <span style="color: black;font-weight: 700;">Roti+Rice Combo</span>
@@ -167,182 +162,29 @@
         <h1 style="text-align: center;" class="mt-3">Add Ons</h1>
         <div class="container">
             <div class="row row-cols-1 row-cols-md-4 g-4" style="text-align: center;justify-content: space-evenly;">
-                <div class="produto col-md-3 card" id="p1_off1"
+                {% for item in lunch_add_ons %}
+                <div class="produto col-md-3 col-6 card" id="p1_off1"
                     style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
                     <div>
                         <div class="img_produto">
                             <div id="elipse_color"></div>
                             <div id="elipse_nocolor"></div>
                         </div>
-                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                        <div id="preco_prod"><span>60/-</span></div>
+                        <img id="foto_prod" src="{{ item.item_image.url }}" alt="{{ item.item_name }}">
+                        <div id="preco_prod"><span>{{ item.item_price }}/-</span></div>
                         <div id="avaliacoes">
-                            <div id="ava_tot">
-                            </div>
+                            <div id="ava_tot"></div>
                             <div id="descri_prod">
-                                <h2>Kebab</h2>
+                                <h2>{{ item.item_name }}</h2>
                                 <div>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                    <p>{{ item.item_description }}</p>
                                 </div>
                             </div>
-                            <button class="bt01">Order Now</button>
+                            <button class="bt01">Add</button>
                         </div>
                     </div>
                 </div>
-                <div class="produto col-md-3 card" id="p1_off1"
-                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                    <div>
-                        <div class="img_produto">
-                            <div id="elipse_color"></div>
-                            <div id="elipse_nocolor"></div>
-                        </div>
-                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                        <div id="preco_prod"><span>60/-</span></div>
-                        <div id="avaliacoes">
-                            <div id="ava_tot">
-                            </div>
-                            <div id="descri_prod">
-                                <h2>Kebab</h2>
-                                <div>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-                                </div>
-                            </div>
-                            <button class="bt01">Order Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="produto col-md-3 card" id="p1_off1"
-                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                    <div>
-                        <div class="img_produto">
-                            <div id="elipse_color"></div>
-                            <div id="elipse_nocolor"></div>
-                        </div>
-                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                        <div id="preco_prod"><span>60/-</span></div>
-                        <div id="avaliacoes">
-                            <div id="ava_tot">
-                            </div>
-                            <div id="descri_prod">
-                                <h2>Kebab</h2>
-                                <div>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-                                </div>
-                            </div>
-                            <button class="bt01">Order Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="produto col-md-3 card" id="p1_off1"
-                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                    <div>
-                        <div class="img_produto">
-                            <div id="elipse_color"></div>
-                            <div id="elipse_nocolor"></div>
-                        </div>
-                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                        <div id="preco_prod"><span>60/-</span></div>
-                        <div id="avaliacoes">
-                            <div id="ava_tot">
-                            </div>
-                            <div id="descri_prod">
-                                <h2>Kebab</h2>
-                                <div>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-                                </div>
-                            </div>
-                            <button class="bt01">Order Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="produto col-md-3 card" id="p1_off1"
-                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                    <div>
-                        <div class="img_produto">
-                            <div id="elipse_color"></div>
-                            <div id="elipse_nocolor"></div>
-                        </div>
-                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                        <div id="preco_prod"><span>60/-</span></div>
-                        <div id="avaliacoes">
-                            <div id="ava_tot">
-                            </div>
-                            <div id="descri_prod">
-                                <h2>Kebab</h2>
-                                <div>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-                                </div>
-                            </div>
-                            <button class="bt01">Order Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="produto col-md-3 card" id="p1_off1"
-                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                    <div>
-                        <div class="img_produto">
-                            <div id="elipse_color"></div>
-                            <div id="elipse_nocolor"></div>
-                        </div>
-                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                        <div id="preco_prod"><span>60/-</span></div>
-                        <div id="avaliacoes">
-                            <div id="ava_tot">
-                            </div>
-                            <div id="descri_prod">
-                                <h2>Kebab</h2>
-                                <div>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-                                </div>
-                            </div>
-                            <button class="bt01">Order Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="produto col-md-3 card" id="p1_off1"
-                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                    <div>
-                        <div class="img_produto">
-                            <div id="elipse_color"></div>
-                            <div id="elipse_nocolor"></div>
-                        </div>
-                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                        <div id="preco_prod"><span>60/-</span></div>
-                        <div id="avaliacoes">
-                            <div id="ava_tot">
-                            </div>
-                            <div id="descri_prod">
-                                <h2>Kebab</h2>
-                                <div>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-                                </div>
-                            </div>
-                            <button class="bt01">Order Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="produto col-md-3 card" id="p1_off1"
-                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                    <div>
-                        <div class="img_produto">
-                            <div id="elipse_color"></div>
-                            <div id="elipse_nocolor"></div>
-                        </div>
-                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                        <div id="preco_prod"><span>60/-</span></div>
-                        <div id="avaliacoes">
-                            <div id="ava_tot">
-                            </div>
-                            <div id="descri_prod">
-                                <h2>Kebab</h2>
-                                <div>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-                                </div>
-                            </div>
-                            <button class="bt01">Order Now</button>
-                        </div>
-                    </div>
-                </div>
+            {% endfor %}            
             </div>
         </div>
     </div>
@@ -354,7 +196,7 @@
         <br>
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-4 order_page_board">
+                <div class="col-md-4 col-lg-6 col-xxl-4 order_page_board"  style="position: relative;">
                     <div class="row">
                         <div class="board_data col-md-12">
                             <div class="board_heading mt-5 w-100"
@@ -366,13 +208,9 @@
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
                             </div>
                             <div class="board_heading board_list_food pb-3">
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
+                                {% for item in today_veg_dinner_menu %}
+                                <li>{{ item.item_name }}</li>
+                                {% endfor %}
                             </div>
                             <div class="board_heading w-100"
                                 style="display: flex;align-items: center;flex-direction: column;">
@@ -380,7 +218,8 @@
                                 <h2 style="text-align: center !important;">80/-</h2>
                             </div>
                         </div>
-                        <div class="board_data_button pb-4 col-md-12"
+                        <div class="spacer" style="height: 120px;width: 100%;"></div>
+                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12"
                             style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
                             <div class="button1">
                                 <span style="color: black;font-weight: 700;">Only Roti</span>
@@ -399,7 +238,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-4 order_page_board">
+                <div class="col-md-4 col-lg-6 col-xxl-4 order_page_board"  style="position: relative;">
                     <div class="row">
                         <div class="board_data col-md-12">
                             <div class="board_heading mt-5 w-100"
@@ -411,13 +250,9 @@
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
                             </div>
                             <div class="board_heading board_list_food pb-3">
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
-                                <li>Roti</li>
+                                {% for item in today_nonveg_dinner_menu %}
+                                <li>{{ item.item_name }}</li>
+                                {% endfor %}
                             </div>
                             <div class="board_heading w-100"
                                 style="display: flex;align-items: center;flex-direction: column;">
@@ -425,7 +260,8 @@
                                 <h2 style="text-align: center !important;">80/-</h2>
                             </div>
                         </div>
-                        <div class="board_data_button pb-4 col-md-12"
+                        <div class="spacer" style="height: 120px;width: 100%;"></div>
+                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12"
                             style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
                             <div class="button1">
                                 <span style="color: black;font-weight: 700;">Roti + Rice Combo</span>
@@ -450,95 +286,35 @@
     <div class="add_on">
         <h1 style="text-align: center;" class="mt-3">Add Ons</h1>
         <div class="container">
+            <style>
+                .bt01{
+                    border-radius: 9px !important;
+                }
+            </style>
             <div class="row row-cols-1 row-cols-md-4 g-4" style="text-align: center;justify-content: space-evenly;">
-                <div class="produto col-md-3 card" id="p1_off1"
-                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                    <div>
-                        <div class="img_produto">
-                            <div id="elipse_color"></div>
-                            <div id="elipse_nocolor"></div>
-                        </div>
-                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                        <div id="preco_prod"><span>60/-</span></div>
-                        <div id="avaliacoes">
-                            <div id="ava_tot">
+                {% for item in dinner_add_ons %}
+                    <div class="produto col-md-3 card" id="p1_off1"
+                        style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                        <div>
+                            <div class="img_produto">
+                                <div id="elipse_color"></div>
+                                <div id="elipse_nocolor"></div>
                             </div>
-                            <div id="descri_prod">
-                                <h2>Kebab</h2>
-                                <div>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            <img id="foto_prod" src="{{ item.item_image.url }}" alt="{{ item.item_name }}">
+                            <div id="preco_prod"><span>{{ item.item_price }}/-</span></div>
+                            <div id="avaliacoes">
+                                <div id="ava_tot"></div>
+                                <div id="descri_prod">
+                                    <h2>{{ item.item_name }}</h2>
+                                    <div>
+                                        <p>{{ item.item_description }}</p>
+                                    </div>
                                 </div>
+                                <button class="bt01">Add</button>
                             </div>
-                            <button class="bt01">Order Now</button>
                         </div>
                     </div>
-                </div>
-                <div class="produto col-md-3 card" id="p1_off1"
-                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                    <div>
-                        <div class="img_produto">
-                            <div id="elipse_color"></div>
-                            <div id="elipse_nocolor"></div>
-                        </div>
-                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                        <div id="preco_prod"><span>60/-</span></div>
-                        <div id="avaliacoes">
-                            <div id="ava_tot">
-                            </div>
-                            <div id="descri_prod">
-                                <h2>Kebab</h2>
-                                <div>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-                                </div>
-                            </div>
-                            <button class="bt01">Order Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="produto col-md-3 card" id="p1_off1"
-                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                    <div>
-                        <div class="img_produto">
-                            <div id="elipse_color"></div>
-                            <div id="elipse_nocolor"></div>
-                        </div>
-                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                        <div id="preco_prod"><span>60/-</span></div>
-                        <div id="avaliacoes">
-                            <div id="ava_tot">
-                            </div>
-                            <div id="descri_prod">
-                                <h2>Kebab</h2>
-                                <div>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-                                </div>
-                            </div>
-                            <button class="bt01">Order Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="produto col-md-3 card" id="p1_off1"
-                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                    <div>
-                        <div class="img_produto">
-                            <div id="elipse_color"></div>
-                            <div id="elipse_nocolor"></div>
-                        </div>
-                        <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                        <div id="preco_prod"><span>60/-</span></div>
-                        <div id="avaliacoes">
-                            <div id="ava_tot">
-                            </div>
-                            <div id="descri_prod">
-                                <h2>Kebab</h2>
-                                <div>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
-                                </div>
-                            </div>
-                            <button class="bt01">Order Now</button>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %} 
             </div>
         </div>
     </div>
@@ -612,13 +388,14 @@
     </div>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-    <div class="best_seller" id="best_seller">
+    <div class="best_seller mt-5" id="best_seller">
         <div class="container">
             <h1>Explore <span style="color: #FF951C;">Our</span> Delicious Menu</h1>
             <h3>Our Best sellers</h3>
             <!-- Swiper -->
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
+                    {% for item in crousal_menu_items %}
                     <div class="swiper-slide" style="display: flex; text-align: center;justify-content: space-evenly;">
                         <div class="produto col-md-3 card" id="p1_off1"
                             style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
@@ -627,148 +404,22 @@
                                     <div id="elipse_color"></div>
                                     <div id="elipse_nocolor"></div>
                                 </div>
-                                <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                                <div id="preco_prod"><span>60/-</span></div>
+                                <img id="foto_prod" src="{{ item.item_image.url }}" alt="Comida">
+                                <div id="preco_prod"><span>{{ item.item_price }}/-</span></div>
                                 <div id="avaliacoes">
                                     <div id="ava_tot">
                                     </div>
                                     <div id="descri_prod">
-                                        <h2>Kebab</h2>
+                                        <h2>{{ item.item_name }}</h2>
                                         <div>
-                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry
-                                            </p>
+                                            <p>{{ item.item_description }}</p>
                                         </div>
                                     </div>
-                                    <button class="bt01">Order Now</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" style="display: flex; text-align: center;justify-content: space-evenly;">
-                        <div class="produto col-md-3 card" id="p1_off1"
-                            style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                            <div>
-                                <div class="img_produto">
-                                    <div id="elipse_color"></div>
-                                    <div id="elipse_nocolor"></div>
-                                </div>
-                                <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                                <div id="preco_prod"><span>60/-</span></div>
-                                <div id="avaliacoes">
-                                    <div id="ava_tot">
-                                    </div>
-                                    <div id="descri_prod">
-                                        <h2>Kebab</h2>
-                                        <div>
-                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <button class="bt01">Order Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" style="display: flex; text-align: center;justify-content: space-evenly;">
-                        <div class="produto col-md-3 card" id="p1_off1"
-                            style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                            <div>
-                                <div class="img_produto">
-                                    <div id="elipse_color"></div>
-                                    <div id="elipse_nocolor"></div>
-                                </div>
-                                <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                                <div id="preco_prod"><span>60/-</span></div>
-                                <div id="avaliacoes">
-                                    <div id="ava_tot">
-                                    </div>
-                                    <div id="descri_prod">
-                                        <h2>Kebab</h2>
-                                        <div>
-                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <button class="bt01">Order Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" style="display: flex; text-align: center;justify-content: space-evenly;">
-                        <div class="produto col-md-3 card" id="p1_off1"
-                            style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                            <div>
-                                <div class="img_produto">
-                                    <div id="elipse_color"></div>
-                                    <div id="elipse_nocolor"></div>
-                                </div>
-                                <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                                <div id="preco_prod"><span>60/-</span></div>
-                                <div id="avaliacoes">
-                                    <div id="ava_tot">
-                                    </div>
-                                    <div id="descri_prod">
-                                        <h2>Kebab</h2>
-                                        <div>
-                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <button class="bt01">Order Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" style="display: flex; text-align: center;justify-content: space-evenly;">
-                        <div class="produto col-md-3 card" id="p1_off1"
-                            style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                            <div>
-                                <div class="img_produto">
-                                    <div id="elipse_color"></div>
-                                    <div id="elipse_nocolor"></div>
-                                </div>
-                                <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                                <div id="preco_prod"><span>60/-</span></div>
-                                <div id="avaliacoes">
-                                    <div id="ava_tot">
-                                    </div>
-                                    <div id="descri_prod">
-                                        <h2>Kebab</h2>
-                                        <div>
-                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <button class="bt01">Order Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" style="display: flex; text-align: center;justify-content: space-evenly;">
-                        <div class="produto col-md-3 card" id="p1_off1"
-                            style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                            <div>
-                                <div class="img_produto">
-                                    <div id="elipse_color"></div>
-                                    <div id="elipse_nocolor"></div>
-                                </div>
-                                <img id="foto_prod" src="{% static 'assets/img/addon/roti.png' %}" alt="Comida">
-                                <div id="preco_prod"><span>60/-</span></div>
-                                <div id="avaliacoes">
-                                    <div id="ava_tot">
-                                    </div>
-                                    <div id="descri_prod">
-                                        <h2>Kebab</h2>
-                                        <div>
-                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <button class="bt01">Order Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
@@ -855,17 +506,17 @@
             prevEl: ".swiper-button-prev",
         },
         breakpoints: {
-            420: {
+            375: {
                 slidesPerView: 1,
                 spaceBetween: 10,
             },
             640: {
-                slidesPerView: 2,
+                slidesPerView: 1,
                 spaceBetween: 20,
             },
             768: {
                 slidesPerView: 2,
-                spaceBetween: 25,
+                spaceBetween: 15,
             },
             1024: {
                 slidesPerView: 3,
