@@ -3,7 +3,7 @@
 {% load static %}
 {% load allauth account %}
 {% block head_title %}
-{% trans "Password Reset Done" %}
+{% trans "Home" %}
 {% endblock head_title %}
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'assets/css/home.css' %}">
@@ -12,8 +12,8 @@
 
 <div class="container-fluid">
     {% include 'apps/partials/navbar.html' %}
-    <div class="cart_button">
-        <a href="">
+    <div class="cart_button" style="z-index: 10000;">
+        <a href="{% url 'home:add_to_cart' %}">
             <img width="25px" src="{% static 'assets/img/home/cart.svg' %}" alt="">
         </a>
     </div>
@@ -23,7 +23,7 @@
         <img class="Decore_image" src="{% static 'assets/img/home/Decore.png' %}" alt="">
         <img src="{% static 'assets/img/home/bg_pattern.png' %}" alt="">
     </div>
-    <div class="landing_page">
+    <div class="landing_page" id="landing_page">
         <div class="row">
             <div class="col-md-6">
                 <p class="home_heading mt-5">Delicious Meals <br>Delivered to Your <br><span
@@ -60,7 +60,7 @@
             </div>
         </div>
     </div>
-    <div class="order_page">
+    <div class="order_page" id="today_menu">
         <h1 style="text-align: center;"><span class="order_page_heading">Today’s <span
                     style="color: #FF951C;">Menu</span></span></h1><br>
         <p style="text-align: center;font-size: 25px;">"Freshly prepared daily for you".</p>
@@ -543,7 +543,7 @@
         </div>
     </div>
 
-    <div class="how_works">
+    <div class="how_works" id="how_works">
         <h1 class="order_page_h1 mt-5" style="text-align: center;"><span style="border-bottom: 3px solid black;"> How
                 <span style="color: #FF951C;">It Works??</span></span></h1>
         <div class="container">
@@ -572,7 +572,7 @@
     </div>
 
 
-    <div class="why_tfl">
+    <div class="why_tfl" id="why_tfl">
         <div class="container">
             <div class="row">
                 <div class="col-md-6" style="display: flex;justify-content: left;align-items: center;">
@@ -612,7 +612,7 @@
     </div>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-    <div class="best_seller">
+    <div class="best_seller" id="best_seller">
         <div class="container">
             <h1>Explore <span style="color: #FF951C;">Our</span> Delicious Menu</h1>
             <h3>Our Best sellers</h3>

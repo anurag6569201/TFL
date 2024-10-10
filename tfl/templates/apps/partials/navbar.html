@@ -1,7 +1,7 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg" style="z-index: 10000;">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="#landing_page" style="z-index: 10000;">
         <img src="{% static 'assets/img/home/tfl_logo.png' %}" alt="">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,21 +10,21 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="width: 100%;justify-content: center;gap: 25px;">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Why <span style="color: #E9661D;">TFL?</span></a>
+            <a class="nav-link" aria-current="page" href="#why_tfl">Why <span style="color: #E9661D;">TFL?</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Explore menu</a>
+            <a class="nav-link" aria-current="page" href="#best_seller">Explore menu</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Today’s Menu</a>
+            <a class="nav-link" aria-current="page" href="#today_menu">Today’s Menu</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">How It Works?</a>
+            <a class="nav-link" aria-current="page" href="#how_works">How It Works?</a>
           </li>
         </ul>
         <form class="d-flex">
-          <button class="not_login_logging_btn" type="submit">Sign Up</button>
-          <button class="login_logging_btn" type="submit">Login</button>
+          <button onclick="location.href='{% url 'account_signup' %}'" class="not_login_logging_btn" type="button">Sign Up</button>
+          <button onclick="location.href='{% url 'account_login' %}'" class="login_logging_btn" type="button">Login</button>
         </form>
       </div>
     </div>
