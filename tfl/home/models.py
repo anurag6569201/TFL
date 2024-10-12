@@ -43,6 +43,7 @@ class TodayLunchMenu(models.Model):
     )
     item_category=models.CharField(max_length=100,choices=options)
     items = models.ManyToManyField(Menu_Board_items, related_name='today_lunch_menu')
+    price = models.IntegerField()
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -55,6 +56,7 @@ class TodayDinnerMenu(models.Model):
     )
     item_category=models.CharField(max_length=100,choices=options)
     items = models.ManyToManyField(Menu_Board_items, related_name='today_dinner_menu')
+    price = models.IntegerField()
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):

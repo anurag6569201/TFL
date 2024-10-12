@@ -1,6 +1,7 @@
 {% extends "account/base_entrance.html" %}
 {% load i18n %}
 {% load static %}
+{% load cart_extras %}
 {% load allauth account %}
 {% block head_title %}
 {% trans "Home" %}
@@ -8,13 +9,17 @@
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'assets/css/home.css' %}">
 <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+<script
+src="https://code.jquery.com/jquery-3.7.1.min.js"
+integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+crossorigin="anonymous"></script>
 {% endblock stylesheet %}
 {% block content %}
 
 <div class="container-fluid">
     {% include 'apps/partials/navbar.html' %}
     <div class="cart_button" style="z-index: 10000;">
-        <a href="{% url 'home:add_to_cart' %}">
+        <a href="{% url 'home:view_cart' %}">
             <img width="25px" src="{% static 'assets/img/home/cart.svg' %}" alt="">
         </a>
     </div>
@@ -70,15 +75,14 @@
                     class="order_page_date">(06/06/24)</span></span></h1>
         <br>
         <div class="container">
+
             <div class="row justify-content-center">
-                <div class="col-md-4 col-lg-6 col-xxl-4 order_page_board"  style="position: relative;">
+                <div class="col-md-4 col-lg-6 col-xxl-4 order_page_board" style="position: relative;">
                     <div class="row">
                         <div class="board_data col-md-12">
-                            <div class="board_heading mt-5 w-100"
-                                style="display: flex;align-items: center;flex-direction: column;">
+                            <div class="board_heading mt-5 w-100" style="display: flex;align-items: center;flex-direction: column;">
                                 <h2>
-                                    <center>Veg Menu <img width="30" src="../../../static/assets/img/order/veg.png"
-                                            alt=""></center>
+                                    <center>Veg Menu <img width="30" src="../../../static/assets/img/order/veg.png" alt=""></center>
                                 </h2>
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
                             </div>
@@ -87,40 +91,39 @@
                                 <li>{{ item.item_name }}</li>
                                 {% endfor %}
                             </div>
-                            <div class="board_heading w-100"
-                                style="display: flex;align-items: center;flex-direction: column;">
+                            <div class="board_heading w-100" style="display: flex;align-items: center;flex-direction: column;">
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
-                                <h2 style="text-align: center !important;">80/-</h2>
+                                <h2 style="text-align: center !important;">{{ today_veg_lunch_menu_price.price }}/-</h2>
                             </div>
                         </div>
                         <div class="spacer" style="height: 120px;width: 100%;"></div>
-                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12"
-                            style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12" style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
                             <div class="button1">
                                 <span style="color: black;font-weight: 700;">Roti+Rice Combo</span>
                                 <div class="quantity">
-                                    <button type="button" class="decrease" onclick="decreaseValue()">-</button>
-                                    <input type="number" id="quantity" name="quantity" value="0" min="0" max="6"
-                                        readonly>
-                                    <button type="button" class="increase" onclick="increaseValue()">+</button>
+                                    <button type="button" class="decrease" data-id="lunchveg_combo_qty">-</button>
+                                    <input type="number" id="lunchveg_combo_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="lunchveg_combo_qty">+</button>
                                 </div>
                             </div>
                             <div class="button1 mt-2">
                                 <span style="color: black;font-weight: 700;">Only Rice Plate</span>
-                                <button type="button" class="add-to-cart">Add</button>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" data-id="lunchveg_rice_qty">-</button>
+                                    <input type="number" id="lunchveg_rice_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="lunchveg_rice_qty">+</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-4 col-lg-6 col-xxl-4 order_page_board"  style="position: relative;">
+            
+                <div class="col-md-4 col-lg-6 col-xxl-4 order_page_board" style="position: relative;">
                     <div class="row">
                         <div class="board_data col-md-12">
-                            <div class="board_heading mt-5 w-100"
-                                style="display: flex;align-items: center;flex-direction: column;">
+                            <div class="board_heading mt-5 w-100" style="display: flex;align-items: center;flex-direction: column;">
                                 <h2>
-                                    <center>Non-Veg Menu <img width="30"
-                                            src="../../../static/assets/img/order/non_veg.png" alt=""></center>
+                                    <center>Non-Veg Menu <img width="30" src="../../../static/assets/img/order/non_veg.png" alt=""></center>
                                 </h2>
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
                             </div>
@@ -129,65 +132,84 @@
                                 <li>{{ item.item_name }}</li>
                                 {% endfor %}
                             </div>
-                            <div class="board_heading w-100"
-                                style="display: flex;align-items: center;flex-direction: column;">
+                            <div class="board_heading w-100" style="display: flex;align-items: center;flex-direction: column;">
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
-                                <h2 style="text-align: center !important;">80/-</h2>
+                                <h2 style="text-align: center !important;">{{ today_nonveg_lunch_menu_price.price }}/-</h2>
                             </div>
                         </div>
                         <div class="spacer" style="height: 120px;width: 100%;"></div>
-                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12"
-                            style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12" style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
                             <div class="button1">
                                 <span style="color: black;font-weight: 700;">Roti+Rice Combo</span>
                                 <div class="quantity">
-                                    <button type="button" class="decrease" onclick="decreaseValue()">-</button>
-                                    <input type="number" id="quantity" name="quantity" value="0" min="0" max="6"
-                                        readonly>
-                                    <button type="button" class="increase" onclick="increaseValue()">+</button>
+                                    <button type="button" class="decrease" data-id="lunchnonveg_combo_qty">-</button>
+                                    <input type="number" id="lunchnonveg_combo_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="lunchnonveg_combo_qty">+</button>
                                 </div>
                             </div>
                             <div class="button1 mt-2">
                                 <span style="color: black;font-weight: 700;">Only Rice Plate</span>
-                                <button type="button" class="add-to-cart">Add</button>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" data-id="lunchnonveg_rice_qty">-</button>
+                                    <input type="number" id="lunchnonveg_rice_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="lunchnonveg_rice_qty">+</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            
         </div>
     </div>
 
     <div class="add_on">
-        <h1 style="text-align: center;" class="mt-3">Add Ons</h1>
+        <h1 style="text-align: center;" class="mt-3">Lunch Add Ons</h1>
         <div class="container">
             <div class="row row-cols-1 row-cols-md-4 g-4" style="text-align: center;justify-content: space-evenly;">
                 {% for item in lunch_add_ons %}
-                <div class="produto col-md-3 col-6 card" id="p1_off1"
-                    style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
-                    <div>
-                        <div class="img_produto">
-                            <div id="elipse_color"></div>
-                            <div id="elipse_nocolor"></div>
-                        </div>
-                        <img id="foto_prod" src="{{ item.item_image.url }}" alt="{{ item.item_name }}">
-                        <div id="preco_prod"><span>{{ item.item_price }}/-</span></div>
-                        <div id="avaliacoes">
-                            <div id="ava_tot"></div>
-                            <div id="descri_prod">
-                                <h2>{{ item.item_name }}</h2>
-                                <div>
-                                    <p>{{ item.item_description }}</p>
-                                </div>
+                    <div class="produto col-md-3 col-6 card" id="p1_off1" style="display: flex; align-items: center; justify-content: center; background-color: transparent; border: none;">
+                        <div>
+                            <div class="img_produto">
+                                <div id="elipse_color"></div>
+                                <div id="elipse_nocolor"></div>
                             </div>
-                            <button class="bt01">Add</button>
+                            <img id="foto_prod" src="{{ item.item_image.url }}" alt="{{ item.item_name }}">
+                            <div id="preco_prod"><span>{{ item.item_price }}/-</span></div>
+                            <div id="avaliacoes">
+                                <div id="ava_tot"></div>
+                                <div id="descri_prod">
+                                    <h2>{{ item.item_name }}</h2>
+                                    <div>
+                                        <p>{{ item.item_description }}</p>
+                                    </div>
+                                </div>
+                                <form class="add-to-cart-form">
+                                    <input type="hidden" name="item_name" value="{{ item.item_name }}">
+                                    <input type="hidden" name="meal_type" value="lunch">
+                                    <button type="button" class="bt01 add-addon" 
+                                        data-id="{{ item.item_name }}" 
+                                        data-price="{{ item.item_price }}" 
+                                        data-meal="lunch">
+                                        
+                                        {% with cart_key=item.item_name|add:"_lunch" %}
+                                            {% if cart|get_item:cart_key %}
+                                                Added
+                                            {% else %}
+                                                Add
+                                            {% endif %}
+                                        {% endwith %}
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}            
+                {% endfor %}
+
             </div>
         </div>
-    </div>
+    </div>    
 
     <div class="order_page">
         <h1 class="order_page_h1" style="text-align: center;color: #FF951C; "><span
@@ -215,24 +237,26 @@
                             <div class="board_heading w-100"
                                 style="display: flex;align-items: center;flex-direction: column;">
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
-                                <h2 style="text-align: center !important;">80/-</h2>
+                                <h2 style="text-align: center !important;">{{ today_veg_dinner_menu_price.price }}/-</h2>
                             </div>
                         </div>
                         <div class="spacer" style="height: 120px;width: 100%;"></div>
-                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12"
-                            style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12" style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
                             <div class="button1">
-                                <span style="color: black;font-weight: 700;">Only Roti</span>
+                                <span style="color: black;font-weight: 700;">Roti+Rice Combo</span>
                                 <div class="quantity">
-                                    <button type="button" class="decrease" onclick="decreaseValue()">-</button>
-                                    <input type="number" id="quantity" name="quantity" value="0" min="0" max="6"
-                                        readonly>
-                                    <button type="button" class="increase" onclick="increaseValue()">+</button>
+                                    <button type="button" class="decrease" data-id="dinnerveg_combo_qty">-</button>
+                                    <input type="number" id="dinnerveg_combo_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="dinnerveg_combo_qty">+</button>
                                 </div>
                             </div>
                             <div class="button1 mt-2">
-                                <span style="color: black;font-weight: 700;">Roti + Rice Plate</span>
-                                <button type="button" class="add-to-cart">Add</button>
+                                <span style="color: black;font-weight: 700;">Only Rice Plate</span>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" data-id="dinnerveg_rice_qty">-</button>
+                                    <input type="number" id="dinnerveg_rice_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="dinnerveg_rice_qty">+</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -257,24 +281,26 @@
                             <div class="board_heading w-100"
                                 style="display: flex;align-items: center;flex-direction: column;">
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
-                                <h2 style="text-align: center !important;">80/-</h2>
+                                <h2 style="text-align: center !important;">{{ today_nonveg_dinner_menu_price.price }}/-</h2>
                             </div>
                         </div>
                         <div class="spacer" style="height: 120px;width: 100%;"></div>
-                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12"
-                            style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12" style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
                             <div class="button1">
-                                <span style="color: black;font-weight: 700;">Roti + Rice Combo</span>
+                                <span style="color: black;font-weight: 700;">Roti+Rice Combo</span>
                                 <div class="quantity">
-                                    <button type="button" class="decrease" onclick="decreaseValue()">-</button>
-                                    <input type="number" id="quantity" name="quantity" value="0" min="0" max="6"
-                                        readonly>
-                                    <button type="button" class="increase" onclick="increaseValue()">+</button>
+                                    <button type="button" class="decrease" data-id="dinnernonveg_combo_qty">-</button>
+                                    <input type="number" id="dinnernonveg_combo_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="dinnernonveg_combo_qty">+</button>
                                 </div>
                             </div>
                             <div class="button1 mt-2">
                                 <span style="color: black;font-weight: 700;">Only Rice Plate</span>
-                                <button type="button" class="add-to-cart">Add</button>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" data-id="dinnernonveg_rice_qty">-</button>
+                                    <input type="number" id="dinnernonveg_rice_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="dinnernonveg_rice_qty">+</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -284,7 +310,7 @@
     </div>
 
     <div class="add_on">
-        <h1 style="text-align: center;" class="mt-3">Add Ons</h1>
+        <h1 style="text-align: center;" class="mt-3">Dinner Add Ons</h1>
         <div class="container">
             <style>
                 .bt01{
@@ -293,8 +319,7 @@
             </style>
             <div class="row row-cols-1 row-cols-md-4 g-4" style="text-align: center;justify-content: space-evenly;">
                 {% for item in dinner_add_ons %}
-                    <div class="produto col-md-3 card" id="p1_off1"
-                        style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                    <div class="produto col-md-3 col-6 card" id="p1_off1" style="display: flex; align-items: center; justify-content: center; background-color: transparent; border: none;">
                         <div>
                             <div class="img_produto">
                                 <div id="elipse_color"></div>
@@ -310,11 +335,27 @@
                                         <p>{{ item.item_description }}</p>
                                     </div>
                                 </div>
-                                <button class="bt01">Add</button>
+                                <form class="add-to-cart-form">
+                                    <input type="hidden" name="item_name" value="{{ item.item_name }}">
+                                    <input type="hidden" name="meal_type" value="dinner">
+                                    <button type="button" class="bt01 add-addon" 
+                                        data-id="{{ item.item_name }}" 
+                                        data-price="{{ item.item_price }}" 
+                                        data-meal="dinner">
+                                        
+                                        {% with cart_key=item.item_name|add:"_dinner" %}
+                                            {% if cart|get_item:cart_key %}
+                                                Added
+                                            {% else %}
+                                                Add
+                                            {% endif %}
+                                        {% endwith %}
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
-                {% endfor %} 
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -485,6 +526,114 @@
     
 
 </div>
+<script>
+    $(document).ready(function() {
+        // Initialize addedItems set based on items already in the cart
+        const addedItems = new Set();
+        
+        // Create unique key by combining item name and meal type
+        function createUniqueKey(itemName, mealType) {
+            return itemName + '-' + mealType;
+        }
+
+        // Populate addedItems based on cart items (ensure each item-meal combination has a unique key)
+        {% for item in cart.items %}
+            addedItems.add(createUniqueKey("{{ item.item_name }}", "{{ item.meal_type }}"));
+        {% endfor %}
+
+        // Iterate over each "Add" button and check if the item is already added in the specific meal type
+        $('.add-addon').each(function() {
+            const itemName = $(this).data('id');
+            const mealType = $(this).data('meal'); // Get meal type from data attribute (Ensure data-meal is set in HTML)
+
+            // Create unique key for this button's item and meal type
+            const uniqueKey = createUniqueKey(itemName, mealType);
+
+            if (addedItems.has(uniqueKey)) {
+                $(this).text('Added'); // Mark button as "Added" if item is in the cart for the specific meal type
+            }
+        });
+
+        // Add or remove item when the button is clicked
+        $('.add-addon').click(function(event) {
+            event.preventDefault();
+            const itemName = $(this).data('id');
+            const mealType = $(this).data('meal'); // Get meal type from data attribute
+
+            // Create unique key for the clicked item and meal type
+            const uniqueKey = createUniqueKey(itemName, mealType);
+
+            if (addedItems.has(uniqueKey)) {
+                // If item is already added in this meal type, remove it
+                addedItems.delete(uniqueKey);
+                $(this).text('Add'); // Change button text back to 'Add'
+                updateCart(itemName, mealType, 0); // Send quantity 0 to remove from cart
+            } else {
+                // If item is not added in this meal type, add it
+                addedItems.add(uniqueKey);
+                $(this).text('Added'); // Change button text to 'Added'
+                updateCart(itemName, mealType, 1); // Update server cart with default quantity of 1
+            }
+        });
+
+        // Function to update local cart and send to server
+        function updateCart(itemName, mealType, quantity) {
+            $.ajax({
+                type: 'POST',
+                url: '{% url "home:add_to_cart" %}',  // Update with your URL for the add-to-cart view
+                data: {
+                    'item_name': itemName,
+                    'meal_type': mealType,  // Send meal type to server
+                    'quantity': quantity,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'  // Ensure CSRF token is included
+                },
+                success: function(response) {
+                    console.log('Cart updated:', response.cart);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+    });
+</script>
+
+<script>
+  $(document).ready(function() {
+      // Increase quantity
+      $('.increase').on('click', function() {
+          var inputId = $(this).data('id');
+          var currentVal = parseInt($('#' + inputId).val());
+          if (currentVal < 6) {
+              currentVal++;
+              $('#' + inputId).val(currentVal);
+              // Save the updated quantity to session storage
+              sessionStorage.setItem(inputId, currentVal);
+          }
+      });
+
+      // Decrease quantity
+      $('.decrease').on('click', function() {
+          var inputId = $(this).data('id');
+          var currentVal = parseInt($('#' + inputId).val());
+          if (currentVal > 0) {
+              currentVal--;
+              $('#' + inputId).val(currentVal);
+              // Save the updated quantity to session storage
+              sessionStorage.setItem(inputId, currentVal);
+          }
+      });
+
+      // Load saved quantities from session storage
+      $('.quantity input').each(function() {
+          var inputId = $(this).attr('id');
+          var savedQty = sessionStorage.getItem(inputId);
+          if (savedQty !== null) {
+              $(this).val(savedQty);
+          }
+      });
+  });
+</script>
 
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

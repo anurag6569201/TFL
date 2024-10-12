@@ -1,0 +1,513 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load static %}
+{% load allauth account %}
+{% block head_title %}
+{% trans "Cart" %}
+{% endblock head_title %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'assets/css/cart.css' %}">
+<style>
+    .navbar-brand img {
+        width: 100px;
+    }
+
+    .login_logging_btn {
+        background-color: #E9661D;
+        border-radius: 25px;
+        border: none;
+        padding: 10px;
+        color: white;
+        width: 8em;
+    }
+
+    .not_login_logging_btn {
+        background-color: transparent;
+        border: none;
+        width: 8em;
+        text-decoration: underline;
+    }
+
+    .nav-link {
+        border-bottom: 2px solid transparent;
+    }
+
+    .nav-link.active {
+        border-bottom: 2px solid #E9661D;
+    }
+
+    /* Styling for cart item placeholders */
+    .img-placeholder {
+        width: 70px;
+        height: 70px;
+        background-color: #e0e0e0;
+        border-radius: 8px;
+    }
+
+    .quantity-selector .btn {
+        padding: 0.5rem;
+        font-size: 14px;
+        width: 40px;
+    }
+
+    .cart-item {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+
+    .recommendation-item {
+        background-color: #fff7f7;
+        border-radius: 10px;
+    }
+
+    .cart-summary {
+        border-top: 1px solid #ddd;
+        padding-top: 15px;
+        margin-top: 20px;
+    }
+
+    .btn-warning {
+        background-color: #f69300;
+        border: none;
+    }
+
+    .btn-close {
+        border: none;
+        background: none;
+        font-size: 24px;
+        cursor: pointer;
+    }
+</style>
+{% endblock stylesheet %}
+{% block content %}
+<div class="login_container">
+    {% include 'apps/partials/navbar.html' %}
+    <div class="cart_page container">
+        <div class="row mt-4">
+            <div class="card p-3" style="border: none;">
+                <div class="mb-3">
+                    <!-- <h3 style="border-bottom: 1px solid #ddd;">Your Cart</h3> -->
+                </div>
+                {% if cart %}
+                <!-- Lunch Items Section -->
+                <h3 class="pb-3" style="border-bottom: 1px solid #ddd;">Lunch Items</h3>
+                {% for item_name, item_data in cart.items %}
+                {% if item_data.meal_type == 'lunch' %}
+                <div class="cart-item d-flex justify-content-between align-items-center pb-4 mb-4"
+                    data-item="{{ item_name }}">
+                    <div class="d-flex">
+                        <div class="img-placeholder me-3">
+                            {% if item_data.image_url %}
+                            <img src="{{ item_data.image_url }}" alt="{{ item_name }}"
+                                style="width: 50px; height: 50px;">
+                            {% else %}
+                            <div class="img-placeholder" style="width: 50px; height: 50px; background-color: #e0e0e0;">
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h5>{{ item_data.item_name }}</h5>
+                            <p class="item-price">{{ item_data.price }} /-</p>
+                            <div class="input-group quantity-selector">
+                                <button class="btn btn-outline-secondary btn-minus" data-id="{{ item_name }}">-</button>
+                                <input type="number" class="form-control text-center" value="{{ item_data.quantity }}"
+                                    min="0" max="6" id="{{ item_name }}_qty">
+                                <button class="btn btn-outline-secondary btn-plus" data-id="{{ item_name }}">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="item-total"><span>{{ item_data.total_price|floatformat:2 }}</span></h5>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+
+                <!-- Dinner Items Section -->
+                <h3 class="pb-3" style="border-bottom: 1px solid #ddd;">Dinner Items</h3>
+                {% for item_name, item_data in cart.items %}
+                {% if item_data.meal_type == 'dinner' %}
+                <div class="cart-item d-flex justify-content-between align-items-center pb-4 mb-4"
+                    data-item="{{ item_name }}">
+                    <div class="d-flex">
+                        <div class="img-placeholder me-3">
+                            {% if item_data.image_url %}
+                            <img src="{{ item_data.image_url }}" alt="{{ item_name }}"
+                                style="width: 50px; height: 50px;">
+                            {% else %}
+                            <div class="img-placeholder" style="width: 50px; height: 50px; background-color: #e0e0e0;">
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h5>{{ item_data.item_name }}</h5>
+                            <p class="item-price">{{ item_data.price }} /-</p>
+                            <div class="input-group quantity-selector">
+                                <button class="btn btn-outline-secondary btn-minus" data-id="{{ item_name }}">-</button>
+                                <input type="number" class="form-control text-center" value="{{ item_data.quantity }}"
+                                    min="0" max="6" id="{{ item_name }}_qty">
+                                <button class="btn btn-outline-secondary btn-plus" data-id="{{ item_name }}">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="item-total">{{ item_data.total_price|floatformat:2 }}</h5>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+
+                <h3 class="pb-3" style="border-bottom: 1px solid #ddd;">Combo Items</h3>
+                <div id="lunchVegComboDiv" style="display:none;">
+                    <div class="static_cart_item d-flex justify-content-between align-items-center pb-4 mb-4"
+                        data-item="Veg Roti + Rice Combo">
+                        <div class="d-flex">
+                            <div class="img-placeholder me-3">
+                                <img src="{% static 'assets/img/menu/vegcombo.png' %}" alt="Veg Roti + Rice Combo"
+                                    style="width: 50px; height: 50px;">
+                            </div>
+                            <div>
+                                <h5>Veg Roti + Rice Combo</h5>
+                                <p class="item-price">{{ today_veg_lunch_menu_price.price }} /-</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="item-total">
+                                <span id="lunchcart_veg_combo_total">{{ today_veg_lunch_menu_price.price }}</span> /-
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="lunchVegRiceDiv" style="display:none;">
+                    <div class="static_cart_item d-flex justify-content-between align-items-center pb-4 mb-4"
+                        data-item="Veg Only Rice Plate">
+                        <div class="d-flex">
+                            <div class="img-placeholder me-3">
+                                <img src="{% static 'assets/img/menu/vegrice.png' %}" alt="Veg Only Rice Plate"
+                                    style="width: 50px; height: 50px;">
+                            </div>
+                            <div>
+                                <h5>Veg Only Rice Plate</h5>
+                                <p class="item-price">{{ today_veg_lunch_menu_price.price }} /-</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="item-total">
+                                <span id="lunchcart_veg_rice_total">{{ today_veg_lunch_menu_price.price }}</span> /-
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="lunchNonVegComboDiv" style="display:none;">
+                    <div class="static_cart_item d-flex justify-content-between align-items-center pb-4 mb-4"
+                        data-item="Non-Veg Roti + Rice Combo">
+                        <div class="d-flex">
+                            <div class="img-placeholder me-3">
+                                <img src="{% static 'assets/img/menu/nonvegrotirice.png' %}"
+                                    alt="Non-Veg Roti + Rice Combo" style="width: 50px; height: 50px;">
+                            </div>
+                            <div>
+                                <h5>Non-Veg Roti + Rice Combo</h5>
+                                <p class="item-price">{{ today_nonveg_lunch_menu_price.price }} /-</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="item-total">
+                                <span id="lunchcart_nonveg_combo_total">{{ today_nonveg_lunch_menu_price.price }}</span>
+                                /-
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="lunchNonVegRiceDiv" style="display:none;">
+                    <div class="static_cart_item d-flex justify-content-between align-items-center pb-4 mb-4"
+                        data-item="Non-Veg Only Rice Plate">
+                        <div class="d-flex">
+                            <div class="img-placeholder me-3">
+                                <img src="{% static 'assets/img/menu/nonvegrice.png' %}" alt="Non-Veg Only Rice Plate"
+                                    style="width: 50px; height: 50px;">
+                            </div>
+                            <div>
+                                <h5>Non-Veg Only Rice Plate</h5>
+                                <p class="item-price">{{ today_nonveg_lunch_menu_price.price }} /-</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="item-total">
+                                <span id="lunchcart_nonveg_rice_total">{{ today_nonveg_lunch_menu_price.price }}</span>
+                                /-
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Dinner Veg Roti+Rice Combo -->
+                <div id="dinnerVegComboDiv" style="display:none;">
+                    <div class="static_cart_item d-flex justify-content-between align-items-center pb-4 mb-4"
+                        data-item="Veg Roti+Rice Combo">
+                        <div class="d-flex">
+                            <div class="img-placeholder me-3">
+                                <img src="{% static 'assets/img/menu/vegcombo.png' %}" alt="Veg Roti+Rice Combo"
+                                    style="width: 50px; height: 50px;">
+                            </div>
+                            <div>
+                                <h5>Veg Roti+Rice Combo</h5>
+                                <p class="item-price">{{ today_veg_dinner_menu_price.price }} /-</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="item-total">
+                                <span id="dinnercart_veg_combo_total">{{ today_veg_dinner_menu_price.price }}</span> /-
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dinner Veg Only Rice Plate -->
+                <div id="dinnerVegRiceDiv" style="display:none;">
+                    <div class="static_cart_item d-flex justify-content-between align-items-center pb-4 mb-4"
+                        data-item="Veg Only Rice Plate">
+                        <div class="d-flex">
+                            <div class="img-placeholder me-3">
+                                <img src="{% static 'assets/img/menu/vegrice.png' %}" alt="Veg Only Rice Plate"
+                                    style="width: 50px; height: 50px;">
+                            </div>
+                            <div>
+                                <h5>Veg Only Rice Plate</h5>
+                                <p class="item-price">{{ today_veg_dinner_menu_price.price }} /-</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="item-total">
+                                <span id="dinnercart_veg_rice_total">{{ today_veg_dinner_menu_price.price }}</span> /-
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dinner Non-Veg Roti+Rice Combo -->
+                <div id="dinnerNonVegComboDiv" style="display:none;">
+                    <div class="static_cart_item d-flex justify-content-between align-items-center pb-4 mb-4"
+                        data-item="Non-Veg Roti+Rice Combo">
+                        <div class="d-flex">
+                            <div class="img-placeholder me-3">
+                                <img src="{% static 'assets/img/menu/nonvegrotirice.png' %}"
+                                    alt="Non-Veg Roti+Rice Combo" style="width: 50px; height: 50px;">
+                            </div>
+                            <div>
+                                <h5>Non-Veg Roti+Rice Combo</h5>
+                                <p class="item-price">{{ today_nonveg_dinner_menu_price.price }} /-</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="item-total">
+                                <span id="dinnercart_nonveg_combo_total">{{ today_nonveg_dinner_menu_price.price
+                                    }}</span> /-
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dinner Non-Veg Only Rice Plate -->
+                <div id="dinnerNonVegRiceDiv" style="display:none;">
+                    <div class="static_cart_item d-flex justify-content-between align-items-center pb-4 mb-4"
+                        data-item="Non-Veg Only Rice Plate">
+                        <div class="d-flex">
+                            <div class="img-placeholder me-3">
+                                <img src="{% static 'assets/img/menu/nonvegrice.png' %}" alt="Non-Veg Only Rice Plate"
+                                    style="width: 50px; height: 50px;">
+                            </div>
+                            <div>
+                                <h5>Non-Veg Only Rice Plate</h5>
+                                <p class="item-price">{{ today_nonveg_dinner_menu_price.price }} /-</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="item-total">
+                                <span id="dinnercart_nonveg_rice_total">{{ today_nonveg_dinner_menu_price.price
+                                    }}</span> /-
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Summary -->
+                <div class="cart-summary">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal (<span id="item-count">{{ cart|length }}</span> Items)</span>
+                        <span id="subtotal">0</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping Fee</span>
+                        <span id="shipping-fee">0</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <strong>Total</strong>
+                        <strong id="total">0</strong>
+                    </div>
+                    <button id="checkout-btn" class="btn btn-warning btn-lg w-100">CHECK OUT</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Get quantities from sessionStorage or default to 0
+            var lunchVegComboQty = sessionStorage.getItem('lunchveg_combo_qty');
+            var lunchVegRiceQty = sessionStorage.getItem('lunchveg_rice_qty');
+            var lunchNonVegComboQty = sessionStorage.getItem('lunchnonveg_combo_qty');
+            var lunchNonVegRiceQty = sessionStorage.getItem('lunchnonveg_rice_qty');
+
+            var dinnerVegComboQty = sessionStorage.getItem('dinnerveg_combo_qty');
+            var dinnerVegRiceQty = sessionStorage.getItem('dinnerveg_rice_qty');
+            var dinnerNonVegComboQty = sessionStorage.getItem('dinnernonveg_combo_qty');
+            var dinnerNonVegRiceQty = sessionStorage.getItem('dinnernonveg_rice_qty');
+
+            var todayVegLunchPrice = {{ today_veg_lunch_menu_price.price }
+        };
+        var todayNonVegLunchPrice = {{ today_nonveg_lunch_menu_price.price }};
+        var todayVegDinnerPrice = {{ today_veg_dinner_menu_price.price }};
+        var todayNonVegDinnerPrice = {{ today_nonveg_dinner_menu_price.price }};
+
+        // Update the total price for each meal
+        $('#lunchcart_nonveg_combo_total').text((lunchNonVegComboQty * todayNonVegLunchPrice).toFixed(2));
+        $('#lunchcart_nonveg_rice_total').text((lunchNonVegRiceQty * todayNonVegLunchPrice).toFixed(2));
+        $('#lunchcart_veg_rice_total').text((lunchVegRiceQty * todayVegLunchPrice).toFixed(2));
+        $('#lunchcart_veg_combo_total').text((lunchVegComboQty * todayVegLunchPrice).toFixed(2));
+
+        $('#dinnercart_nonveg_combo_total').text((dinnerNonVegComboQty * todayNonVegDinnerPrice).toFixed(2));
+        $('#dinnercart_nonveg_rice_total').text((dinnerNonVegRiceQty * todayNonVegDinnerPrice).toFixed(2));
+        $('#dinnercart_veg_rice_total').text((dinnerVegRiceQty * todayVegDinnerPrice).toFixed(2));
+        $('#dinnercart_veg_combo_total').text((dinnerVegComboQty * todayVegDinnerPrice).toFixed(2));
+
+        if (lunchVegComboQty > 0) {
+            $('#lunchVegComboDiv').show();
+        }
+        if (lunchVegRiceQty > 0) {
+            $('#lunchVegRiceDiv').show();
+        }
+        if (lunchNonVegComboQty > 0) {
+            $('#lunchNonVegComboDiv').show();
+        }
+        if (lunchNonVegRiceQty > 0) {
+            $('#lunchNonVegRiceDiv').show();
+        }
+        if (dinnerVegComboQty > 0) {
+            $('#dinnerVegComboDiv').show();
+        }
+        if (dinnerVegRiceQty > 0) {
+            $('#dinnerVegRiceDiv').show();
+        }
+        if (dinnerNonVegComboQty > 0) {
+            $('#dinnerNonVegComboDiv').show();
+        }
+        if (dinnerNonVegRiceQty > 0) {
+            $('#dinnerNonVegRiceDiv').show();
+        }
+        // Calculate and update subtotal
+        function updateSubtotal() {
+            let subtotal = 0;
+            $('.item-total').each(function () {
+                subtotal += parseFloat($(this).text());
+            });
+            $('#subtotal').text(subtotal.toFixed(2));
+            $('#total').text(subtotal.toFixed(2)); // Assuming no additional charges
+        }
+
+        // Event listener to update quantity
+        $('.btn-plus, .btn-minus').click(function () {
+            let itemId = $(this).data('id');
+            let inputField = $('#' + itemId + '_qty');
+            let currentQty = parseInt(inputField.val());
+            let newQty = $(this).hasClass('btn-plus') ? currentQty : currentQty;
+            if (newQty < 0) newQty = 0; // Prevent negative values
+
+            inputField.val(newQty);
+            updateSubtotal();
+        });
+
+        updateSubtotal();
+        function updateCartSummary() {
+            let subtotal = 0;
+
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const quantity = parseInt(item.querySelector('input[type="number"]').value);
+                const price = parseFloat(item.querySelector('.item-price').textContent);
+                const itemTotal = quantity * price;
+
+                item.querySelector('.item-total').textContent = itemTotal.toFixed(2);
+                subtotal += itemTotal;
+            });
+
+            // Assuming shipping is a fixed value; modify as needed
+            const shippingFee = 0; // Change this if needed
+            const total = subtotal + shippingFee;
+
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+            document.getElementById('shipping-fee').textContent = shippingFee.toFixed(2);
+            document.getElementById('total').textContent = total.toFixed(2);
+        }
+
+        document.querySelectorAll('.btn-minus').forEach(button => {
+            button.addEventListener('click', function () {
+                const itemId = this.getAttribute('data-id');
+                const inputField = document.getElementById(itemId + '_qty');
+                let quantity = parseInt(inputField.value);
+                if (quantity > 0) {
+                    quantity -= 1;
+                    inputField.value = quantity;
+                    updateCart(itemId, quantity);
+                    updateCartSummary();
+                }
+            });
+        });
+
+        document.querySelectorAll('.btn-plus').forEach(button => {
+            button.addEventListener('click', function () {
+                const itemId = this.getAttribute('data-id');
+                const inputField = document.getElementById(itemId + '_qty');
+                let quantity = parseInt(inputField.value);
+                quantity += 1;
+                inputField.value = quantity;
+                updateCart(itemId, quantity);
+                updateCartSummary();
+            });
+        });
+
+        function updateCart(itemId, quantity) {
+            fetch('/cart/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    item_name: itemId,
+                    quantity: quantity
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Cart updated successfully
+                    }
+                });
+        }
+    });
+    </script>
+
+</div>
+{% endblock content %}
