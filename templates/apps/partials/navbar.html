@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg" style="z-index: 10000;">
     <div class="container-fluid">
       <a class="navbar-brand" href="#landing_page" style="z-index: 10000;">
-        <img src="{% static 'assets/img/home/tfl_logo.png' %}" alt="">
+        <img src="{% static 'assets/img/home/tfl_logo.webp' %}" alt="">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -36,7 +36,7 @@
                 <img width="40px" height="40px" style="border-radius: 50%;" src="{{ user.profile.picture.url }}" alt="Profile" class="profile-picture">
               {% else %}
                 <!-- Fallback: use a default avatar -->
-                <img width="40px" height="40px" style="border-radius: 50%;" src="{% static 'assets/img/avatar.png' %}" alt="Profile" class="profile-picture">
+                <img width="40px" height="40px" style="border-radius: 50%;" src="{% static 'assets/img/avatar.webp' %}" alt="Profile" class="profile-picture">
               {% endif %}
               <span>{{ user.email }}</span>
             </a>

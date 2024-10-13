@@ -70,7 +70,7 @@ body,html{
 }
 
 .circle-container{
-    background-image: url(../img/home/ring.png);
+    background-image: url(../img/home/ring.webp);
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -167,7 +167,7 @@ body,html{
 
 .order_page .order_page_heading {
     border-bottom: 7px solid transparent; 
-    border-image: url('../img/home/border.png') 20 stretch; 
+    border-image: url('../img/home/border.webp') 20 stretch; 
 }
 .order_page_date{
     font-size:x-large;
@@ -181,7 +181,7 @@ body,html{
     min-height: 50vh;
 }
 .order_page_board {
-    background-image: url('../../../static/assets/img/order/rect.png');
+    background-image: url('../../../static/assets/img/order/rect.webp');
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -207,7 +207,9 @@ body,html{
     height: 2px;
     opacity: 1;
 }
-
+.board_list_food{
+    min-width: 55%;
+}
 .board_list_food ul {
     list-style-type: none;
     padding-left: 0;

@@ -27,7 +27,7 @@ crossorigin="anonymous"></script>
         "currency": "{{ payment.currency }}",
         "name": "TFL",
         "description": "Order #{{ payment.id }}",
-        "image": "../../../static/assets/img/home/tfl_logo.png",
+        "image": "../../../static/assets/img/home/tfl_logo.webp",
         "order_id": "{{ payment.id }}",
         "handler": function (response) {
             window.location.href = "/cart/success/"
