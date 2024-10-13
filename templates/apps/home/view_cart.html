@@ -80,7 +80,6 @@
 {% endblock stylesheet %}
 {% block content %}
 <div class="login_container">
-    {% include 'apps/partials/navbar.html' %}
     <div class="cart_page container">
         <div class="row mt-4" id="cart_item_contain">
             <div class="card p-3" style="border: none;">
@@ -341,9 +340,15 @@
                         <strong id="total">0</strong>
                     </div>
                     {% if user.is_authenticated %}
-                        <button id="rzp-button1" class="login_logging_btn razorpay_btn mt-3" style="display: flex;width: 100%;text-decoration: none;justify-content: center;">
-                            <a style="text-decoration: none;">Place Order</a>
-                        </button>
+                        {% if email_verified %}
+                            <button id="rzp-button1" class="login_logging_btn razorpay_btn mt-3" style="display: flex;width: 100%;text-decoration: none;justify-content: center;">
+                                <a style="text-decoration: none;">Place Order</a>
+                            </button>
+                        {% else %}
+                            <button onclick="window.location.href='{% url 'account_email' %}'" class="login_logging_btn razorpay_btn mt-3" style="display: flex;width: 100%;text-decoration: none;justify-content: center;">
+                                <a style="text-decoration: none;">Please Verify Your Email</a>
+                            </button>
+                        {% endif %}
                     {% else %}
                         <a href="{% url 'account_login' %}" class="login_logging_btn razorpay_btn mt-3" style="display: flex;width: 100%;text-decoration: none;justify-content: center;">Log in to place order</a>
                     {% endif %}
@@ -538,6 +543,18 @@ $(document).ready(function() {
         var itemTotal = parseFloat($(this).text()) || 0;
         totalSum += itemTotal;
     });
+    if (totalSum == 0) {
+        $('.razorpay_btn').each(function() {
+            $(this).prop('disabled', true);
+            $(this).css('opacity', '0.6');
+        });
+    }
+    if (totalSum > 0) {
+        $('.razorpay_btn').each(function() {
+            $(this).prop('disabled', false);
+            $(this).css('opacity', '1');
+        });
+    }
 
     $.ajax({
         url: '{% url "home:checkout" %}', 

@@ -15,4 +15,5 @@ urlpatterns = [
     path('download-invoice/<str:order_id>/', download_invoice, name='download_invoice'), 
     path('checkout/', views.checkout, name='checkout'), 
     path('razorpay/', views.razorpay_view, name='razorpay'), 
+    path('profile/', views.user_profile, name='user_profile'),
 ]

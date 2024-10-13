@@ -10,6 +10,20 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Order
 import uuid
+from allauth.account.models import EmailAddress
+
+
+
+def user_profile(request):
+    user = request.user
+    email_verified = EmailAddress.objects.filter(user=user, verified=True).exists()
+    
+    context = {
+        'user': user,
+        'email_verified': email_verified
+    }
+    return render(request, 'apps/home/user_profile.html', context)
+
 
 def home(request):
     cart = request.session.get('cart', {})
@@ -69,6 +83,9 @@ def add_to_cart(request):
     return JsonResponse({'error': 'Invalid request method'})
 
 def view_cart(request):
+    user = request.user
+    email_verified = EmailAddress.objects.filter(user=user, verified=True).exists()
+
     cart = request.session.get('cart', {})
     items = {}
     
@@ -103,6 +120,7 @@ def view_cart(request):
         'today_nonveg_dinner_menu_price': today_nonveg_dinner_menu,
         'cart': items, 
         'cart_total_amount': cart_total_amount,
+        "email_verified":email_verified,
     }
     return render(request, 'apps/home/view_cart.html', context)
 

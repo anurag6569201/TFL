@@ -1,0 +1,24 @@
+
+.navbar-brand img{
+    width: 100px;
+}
+.login_logging_btn{
+    background-color: #E9661D;
+    border-radius: 25px;
+    border: none;
+    padding: 10px;
+    color: white;
+    width:8em;
+}
+.not_login_logging_btn{
+    background-color: transparent;
+    border: none;
+    width:8em;
+    text-decoration: underline;
+}
+.nav-link{
+    border-bottom: 2px solid transparent;
+}
+.nav-link.active{
+    border-bottom: 2px solid #E9661D;
+}

@@ -17,7 +17,6 @@ crossorigin="anonymous"></script>
 {% block content %}
 
 <div class="container-fluid">
-    {% include 'apps/partials/navbar.html' %}
     <div class="cart_button" style="z-index: 10000;">
         <a href="{% url 'home:view_cart' %}">
             <img width="25px" src="{% static 'assets/img/home/cart.webp' %}" alt="">
