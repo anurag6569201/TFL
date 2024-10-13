@@ -1,0 +1,709 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load static %}
+{% load cart_extras %}
+{% load allauth account %}
+{% block head_title %}
+{% trans "Home" %}
+{% endblock head_title %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'assets/css/home.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+<script
+src="https://code.jquery.com/jquery-3.7.1.min.js"
+integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+crossorigin="anonymous"></script>
+{% endblock stylesheet %}
+{% block content %}
+
+<div class="container-fluid">
+    {% include 'apps/partials/navbar.html' %}
+    <div class="cart_button" style="z-index: 10000;">
+        <a href="{% url 'home:view_cart' %}">
+            <img width="25px" src="{% static 'assets/img/home/cart.svg' %}" alt="">
+        </a>
+    </div>
+    <div class="bg_pattern">
+        <span class="bg_spotlight"></span>
+        <img class="arrow_image" src="{% static 'assets/img/home/arrow.svg' %}" alt="">
+        <img class="Decore_image" src="{% static 'assets/img/home/Decore.png' %}" alt="">
+        <img src="{% static 'assets/img/home/bg_pattern.png' %}" alt="">
+    </div>
+    <div class="landing_page" id="landing_page">
+        <div class="row">
+            <div class="col-md-6">
+                <p class="home_heading mt-5">Delicious Meals <br>Delivered to Your <br><span
+                        style="color: #E9661D;">Doorstep</span></p>
+                <p style="font-size: 25px;">Order healthy and tasty meals from The Flavour Lake. Freshly prepared and
+                    delivered daily to your location.</p>
+                <div class="pizza_making_img">
+                    <img src="{% static 'assets/img/home/pizza.png' %}" alt="">
+                </div>
+            </div>
+            <div class="col-md-6 main_landing_img">
+                <div class="img_main_container">
+                    <img class="testing_ring" src="../../../static/assets/img/home/ring.png" alt="">
+                    <div class="image_container_anim row" style="padding: 0;margin: 0;">
+                        <div class="quad1 col-md-6 quad" style="padding: 0;margin: 0;">
+                            <img src="{% static 'assets/img/home/cholebhature.png' %}" alt="Chole Bhature"
+                                class="food-img img1">
+                        </div>
+                        <div class="quad2 col-md-6 quad" style="padding: 0;margin: 0;">
+                            <img src="{% static 'assets/img/home/Dalmakhanibowl.png' %}" alt="Dal Makhani Bowl"
+                                class="food-img img2">
+                        </div>
+                        <div class="quad3 col-md-6 quad" style="padding: 0;margin: 0;">
+                            <img src="{% static 'assets/img/home/wings.png' %}" alt="Wings" class="food-img img3">
+                        </div>
+                        <div class="quad4 col-md-6 quad" style="padding: 0;margin: 0;">
+                            <img src="{% static 'assets/img/home/Hakkanoodles.png' %}" alt="Hakka Noodles"
+                                class="food-img img4">
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="order_page" id="today_menu">
+        <h1 style="text-align: center;"><span class="order_page_heading">Today’s <span
+                    style="color: #FF951C;">Menu</span></span></h1><br>
+        <p style="text-align: center;font-size: 25px;">"Freshly prepared daily for you".</p>
+        <h1 class="order_page_h1" style="text-align: center;color: #FF951C; "><span
+                style="border-bottom: 3px solid black;">Lunch Menu <span
+                    class="order_page_date">(06/06/24)</span></span></h1>
+        <br>
+        <div class="container">
+
+            <div class="row justify-content-center">
+                <div class="col-md-4 col-lg-6 col-xxl-4 order_page_board" style="position: relative;">
+                    <div class="row">
+                        <div class="board_data col-md-12">
+                            <div class="board_heading mt-5 w-100" style="display: flex;align-items: center;flex-direction: column;">
+                                <h2>
+                                    <center>Veg Menu <img width="30" src="../../../static/assets/img/order/veg.png" alt=""></center>
+                                </h2>
+                                <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
+                            </div>
+                            <div class="board_heading board_list_food pb-3 mt-2">
+                                {% for item in today_veg_lunch_menu %}
+                                <li>{{ item.item_name }}</li>
+                                {% endfor %}
+                            </div>
+                            <div class="board_heading w-100" style="display: flex;align-items: center;flex-direction: column;">
+                                <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
+                                <h2 style="text-align: center !important;">{{ today_veg_lunch_menu_price.price }}/-</h2>
+                            </div>
+                        </div>
+                        <div class="spacer" style="height: 120px;width: 100%;"></div>
+                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12" style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                            <div class="button1">
+                                <span style="color: black;font-weight: 700;">Roti+Rice Combo</span>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" data-id="lunchveg_combo_qty">-</button>
+                                    <input type="number" id="lunchveg_combo_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="lunchveg_combo_qty">+</button>
+                                </div>
+                            </div>
+                            <div class="button1 mt-2">
+                                <span style="color: black;font-weight: 700;">Only Rice Plate</span>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" data-id="lunchveg_rice_qty">-</button>
+                                    <input type="number" id="lunchveg_rice_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="lunchveg_rice_qty">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-md-4 col-lg-6 col-xxl-4 order_page_board" style="position: relative;">
+                    <div class="row">
+                        <div class="board_data col-md-12">
+                            <div class="board_heading mt-5 w-100" style="display: flex;align-items: center;flex-direction: column;">
+                                <h2>
+                                    <center>Non-Veg Menu <img width="30" src="../../../static/assets/img/order/non_veg.png" alt=""></center>
+                                </h2>
+                                <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
+                            </div>
+                            <div class="board_heading board_list_food pb-3">
+                                {% for item in today_nonveg_lunch_menu %}
+                                <li>{{ item.item_name }}</li>
+                                {% endfor %}
+                            </div>
+                            <div class="board_heading w-100" style="display: flex;align-items: center;flex-direction: column;">
+                                <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
+                                <h2 style="text-align: center !important;">{{ today_nonveg_lunch_menu_price.price }}/-</h2>
+                            </div>
+                        </div>
+                        <div class="spacer" style="height: 120px;width: 100%;"></div>
+                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12" style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                            <div class="button1">
+                                <span style="color: black;font-weight: 700;">Roti+Rice Combo</span>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" data-id="lunchnonveg_combo_qty">-</button>
+                                    <input type="number" id="lunchnonveg_combo_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="lunchnonveg_combo_qty">+</button>
+                                </div>
+                            </div>
+                            <div class="button1 mt-2">
+                                <span style="color: black;font-weight: 700;">Only Rice Plate</span>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" data-id="lunchnonveg_rice_qty">-</button>
+                                    <input type="number" id="lunchnonveg_rice_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="lunchnonveg_rice_qty">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+
+    <div class="add_on">
+        <h1 style="text-align: center;" class="mt-3">Lunch Add Ons</h1>
+        <div class="container">
+            <div class="row row-cols-1 row-cols-md-4 g-4" style="text-align: center;justify-content: space-evenly;">
+                {% for item in lunch_add_ons %}
+                    <div class="produto col-md-3 col-6 card" id="p1_off1" style="display: flex; align-items: center; justify-content: center; background-color: transparent; border: none;">
+                        <div>
+                            <div class="img_produto">
+                                <div id="elipse_color"></div>
+                                <div id="elipse_nocolor"></div>
+                            </div>
+                            <img id="foto_prod" src="{{ item.item_image.url }}" alt="{{ item.item_name }}">
+                            <div id="preco_prod"><span>{{ item.item_price }}/-</span></div>
+                            <div id="avaliacoes">
+                                <div id="ava_tot"></div>
+                                <div id="descri_prod">
+                                    <h2>{{ item.item_name }}</h2>
+                                    <div>
+                                        <p>{{ item.item_description }}</p>
+                                    </div>
+                                </div>
+                                <form class="add-to-cart-form">
+                                    <input type="hidden" name="item_name" value="{{ item.item_name }}">
+                                    <input type="hidden" name="meal_type" value="lunch">
+                                    <button type="button" class="bt01 add-addon" 
+                                        data-id="{{ item.item_name }}" 
+                                        data-price="{{ item.item_price }}" 
+                                        data-meal="lunch">
+                                        
+                                        {% with cart_key=item.item_name|add:"_lunch" %}
+                                            {% if cart|get_item:cart_key %}
+                                                Added
+                                            {% else %}
+                                                Add
+                                            {% endif %}
+                                        {% endwith %}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>    
+
+    <div class="order_page">
+        <h1 class="order_page_h1" style="text-align: center;color: #FF951C; "><span
+                style="border-bottom: 3px solid black;">Dinner Menu <span
+                    class="order_page_date">(06/06/24)</span></span></h1>
+        <br>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-4 col-lg-6 col-xxl-4 order_page_board"  style="position: relative;">
+                    <div class="row">
+                        <div class="board_data col-md-12">
+                            <div class="board_heading mt-5 w-100"
+                                style="display: flex;align-items: center;flex-direction: column;">
+                                <h2>
+                                    <center>Veg Menu <img width="30" src="../../../static/assets/img/order/veg.png"
+                                            alt=""></center>
+                                </h2>
+                                <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
+                            </div>
+                            <div class="board_heading board_list_food pb-3">
+                                {% for item in today_veg_dinner_menu %}
+                                <li>{{ item.item_name }}</li>
+                                {% endfor %}
+                            </div>
+                            <div class="board_heading w-100"
+                                style="display: flex;align-items: center;flex-direction: column;">
+                                <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
+                                <h2 style="text-align: center !important;">{{ today_veg_dinner_menu_price.price }}/-</h2>
+                            </div>
+                        </div>
+                        <div class="spacer" style="height: 120px;width: 100%;"></div>
+                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12" style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                            <div class="button1">
+                                <span style="color: black;font-weight: 700;">Roti+Rice Combo</span>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" data-id="dinnerveg_combo_qty">-</button>
+                                    <input type="number" id="dinnerveg_combo_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="dinnerveg_combo_qty">+</button>
+                                </div>
+                            </div>
+                            <div class="button1 mt-2">
+                                <span style="color: black;font-weight: 700;">Only Rice Plate</span>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" data-id="dinnerveg_rice_qty">-</button>
+                                    <input type="number" id="dinnerveg_rice_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="dinnerveg_rice_qty">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-6 col-xxl-4 order_page_board"  style="position: relative;">
+                    <div class="row">
+                        <div class="board_data col-md-12">
+                            <div class="board_heading mt-5 w-100"
+                                style="display: flex;align-items: center;flex-direction: column;">
+                                <h2>
+                                    <center>Non-Veg Menu <img width="30"
+                                            src="../../../static/assets/img/order/non_veg.png" alt=""></center>
+                                </h2>
+                                <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
+                            </div>
+                            <div class="board_heading board_list_food pb-3">
+                                {% for item in today_nonveg_dinner_menu %}
+                                <li>{{ item.item_name }}</li>
+                                {% endfor %}
+                            </div>
+                            <div class="board_heading w-100"
+                                style="display: flex;align-items: center;flex-direction: column;">
+                                <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
+                                <h2 style="text-align: center !important;">{{ today_nonveg_dinner_menu_price.price }}/-</h2>
+                            </div>
+                        </div>
+                        <div class="spacer" style="height: 120px;width: 100%;"></div>
+                        <div style="position: absolute;bottom: 20px;left: 0;right: 0;" class="board_data_button pb-4 col-md-12" style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                            <div class="button1">
+                                <span style="color: black;font-weight: 700;">Roti+Rice Combo</span>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" data-id="dinnernonveg_combo_qty">-</button>
+                                    <input type="number" id="dinnernonveg_combo_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="dinnernonveg_combo_qty">+</button>
+                                </div>
+                            </div>
+                            <div class="button1 mt-2">
+                                <span style="color: black;font-weight: 700;">Only Rice Plate</span>
+                                <div class="quantity">
+                                    <button type="button" class="decrease" data-id="dinnernonveg_rice_qty">-</button>
+                                    <input type="number" id="dinnernonveg_rice_qty" name="quantity" value="0" min="0" max="6" readonly>
+                                    <button type="button" class="increase" data-id="dinnernonveg_rice_qty">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="add_on">
+        <h1 style="text-align: center;" class="mt-3">Dinner Add Ons</h1>
+        <div class="container">
+            <style>
+                .bt01{
+                    border-radius: 9px !important;
+                }
+            </style>
+            <div class="row row-cols-1 row-cols-md-4 g-4" style="text-align: center;justify-content: space-evenly;">
+                {% for item in dinner_add_ons %}
+                    <div class="produto col-md-3 col-6 card" id="p1_off1" style="display: flex; align-items: center; justify-content: center; background-color: transparent; border: none;">
+                        <div>
+                            <div class="img_produto">
+                                <div id="elipse_color"></div>
+                                <div id="elipse_nocolor"></div>
+                            </div>
+                            <img id="foto_prod" src="{{ item.item_image.url }}" alt="{{ item.item_name }}">
+                            <div id="preco_prod"><span>{{ item.item_price }}/-</span></div>
+                            <div id="avaliacoes">
+                                <div id="ava_tot"></div>
+                                <div id="descri_prod">
+                                    <h2>{{ item.item_name }}</h2>
+                                    <div>
+                                        <p>{{ item.item_description }}</p>
+                                    </div>
+                                </div>
+                                <form class="add-to-cart-form">
+                                    <input type="hidden" name="item_name" value="{{ item.item_name }}">
+                                    <input type="hidden" name="meal_type" value="dinner">
+                                    <button type="button" class="bt01 add-addon" 
+                                        data-id="{{ item.item_name }}" 
+                                        data-price="{{ item.item_price }}" 
+                                        data-meal="dinner">
+                                        
+                                        {% with cart_key=item.item_name|add:"_dinner" %}
+                                            {% if cart|get_item:cart_key %}
+                                                Added
+                                            {% else %}
+                                                Add
+                                            {% endif %}
+                                        {% endwith %}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="how_works" id="how_works">
+        <h1 class="order_page_h1 mt-5" style="text-align: center;"><span style="border-bottom: 3px solid black;"> How
+                <span style="color: #FF951C;">It Works??</span></span></h1>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4" style="display: flex;align-items: center;flex-direction: column;">
+                    <div style="height: 350px;display: flex;align-items: center;justify-content: center;">
+                        <img width="340px" src="{% static 'assets/img/work/order_food.png' %}" alt="">
+                    </div>
+                    <p style="text-align: center;"> Check the website and order your favorites by choosing your delivery
+                        location.</p>
+                </div>
+                <div class="col-md-4" style="display: flex;align-items: center;flex-direction: column;">
+                    <div style="height: 350px;display: flex;align-items: center;justify-content: center;">
+                        <img width="340px" src="{% static 'assets/img/work/chef.png' %}" alt="">
+                    </div>
+                    <p style="text-align: center;">We prepare your food with utmost hygiene and love. </p>
+                </div>
+                <div class="col-md-4" style="display: flex;align-items: center;flex-direction: column;">
+                    <div style="height: 350px;display: flex;align-items: center;justify-content: center;">
+                        <img width="340px" src="{% static 'assets/img/work/time.png' %}" alt="">
+                    </div>
+                    <p style="text-align: center;"> Pay and get your order delivered o your address.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="why_tfl" id="why_tfl">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6" style="display: flex;justify-content: left;align-items: center;">
+                    <img width="500px" src="{% static 'assets/img/work/frame.png' %}" alt="">
+                </div>
+                <div class="col-md-6" style="display: flex;justify-content: center;flex-direction: column;">
+                    <h1>Why <span style="color: #FF951C;"> TFL??</span></h1>
+                    <p>At The Flavour Lake, we are committed to bringing you the freshest, most delicious meals right to
+                        your doorstep. Here’s why our customers love us:</p>
+                    <span class="why_tfl_li">
+                        <img width="24px" src="{% static 'assets/img/why/6.png' %}" alt="">
+                        <span>Fresh and Quality Ingredients</span>
+                    </span>
+                    <span class="why_tfl_li">
+                        <img width="24px" src="{% static 'assets/img/why/5.png' %}" alt="">
+                        <span>Convenient and Reliable Delivery</span>
+                    </span>
+                    <span class="why_tfl_li">
+                        <img width="24px" src="{% static 'assets/img/why/4.png' %}" alt="">
+                        <span>Simple Ordering Process</span>
+                    </span>
+                    <span class="why_tfl_li">
+                        <img width="24px" src="{% static 'assets/img/why/3.png' %}" alt="">
+                        <span>Customizable Meal Options</span>
+                    </span>
+                    <span class="why_tfl_li">
+                        <img width="24px" src="{% static 'assets/img/why/2.png' %}" alt="">
+                        <span>Clean Kitchen</span>
+                    </span>
+                    <span class="why_tfl_li">
+                        <img width="24px" src="{% static 'assets/img/why/1.png' %}" alt="">
+                        <span>Commitment to Customer Satisfaction</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <div class="best_seller mt-5" id="best_seller">
+        <div class="container">
+            <h1>Explore <span style="color: #FF951C;">Our</span> Delicious Menu</h1>
+            <h3>Our Best sellers</h3>
+            <!-- Swiper -->
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    {% for item in crousal_menu_items %}
+                    <div class="swiper-slide" style="display: flex; text-align: center;justify-content: space-evenly;">
+                        <div class="produto col-md-3 card" id="p1_off1"
+                            style="display: flex;align-items: center;justify-content: center;background-color: transparent;border: none;">
+                            <div>
+                                <div class="img_produto">
+                                    <div id="elipse_color"></div>
+                                    <div id="elipse_nocolor"></div>
+                                </div>
+                                <img id="foto_prod" src="{{ item.item_image.url }}" alt="Comida">
+                                <div id="preco_prod"><span>{{ item.item_price }}/-</span></div>
+                                <div id="avaliacoes">
+                                    <div id="ava_tot">
+                                    </div>
+                                    <div id="descri_prod">
+                                        <h2>{{ item.item_name }}</h2>
+                                        <div>
+                                            <p>{{ item.item_description }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+            <h5 class="mt-2" style="text-align: right;"><span style="color: #FF951C;">Scan</span> For Complete Online Menu</h5>
+            <div style="display: flex;justify-content: right;width: 100%;">
+                <img width="200px" src="{% static 'assets/img/why/scanner.png' %}" alt="">
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-black pt-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <!-- First Column: Brand and About -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <h2><img width="150px" src="{% static 'assets/img/home/tfl_logo.png' %}" alt=""></h2>
+                    <p>Plot no.-3,Infocity Avenue ,Infront of Manoj nonveg world,Infocity,Bhubaneswar</p>
+                </div>
+                
+                <!-- Second Column: About Us Links -->
+                <div class="col-md-6 col-lg-2 mb-4">
+                    <h5>About Us</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-black-50">About Us</a></li>
+                        <li><a href="#" class="text-black-50">Service Us</a></li>
+                        <li><a href="#" class="text-black-50">Contact</a></li>
+                        <li><a href="#" class="text-black-50">Company</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Third Column: Company Links -->
+                <div class="col-md-6 col-lg-2 mb-4">
+                    <h5>Company</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-black-50">Partnership</a></li>
+                        <li><a href="#" class="text-black-50">Terms of Use</a></li>
+                        <li><a href="#" class="text-black-50">Privacy</a></li>
+                        <li><a href="#" class="text-black-50">Sitemap</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Fourth Column: Get in Touch and Subscribe -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <h5>Get in touch</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Email" aria-label="Email">
+                        <button class="login_logging_btn" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright Section -->
+            <div class="row pt-4">
+                <div class="col text-center">
+                    <p class="text-black-50 mb-0">Copyright © 2022 Foodhut.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Initialize addedItems set based on items already in the cart
+        const addedItems = new Set();
+        
+        // Create unique key by combining item name and meal type
+        function createUniqueKey(itemName, mealType) {
+            return itemName + '-' + mealType;
+        }
+
+        {% for item in cart.items %}
+            addedItems.add(createUniqueKey("{{ item.item_name }}", "{{ item.meal_type }}"));
+        {% endfor %}
+
+        $('.add-addon').each(function() {
+            const itemName = $(this).data('id');
+            const mealType = $(this).data('meal');
+
+            // Create unique key for this button's item and meal type
+            const uniqueKey = createUniqueKey(itemName, mealType);
+
+            if (addedItems.has(uniqueKey)) {
+                $(this).text('Added'); // Mark button as "Added" if item is in the cart for the specific meal type
+            }
+        });
+
+        $('.add-addon').click(function(event) {
+            event.preventDefault();
+            const itemName = $(this).data('id');
+            const mealType = $(this).data('meal'); 
+
+            // Create unique key for the clicked item and meal type
+            const uniqueKey = createUniqueKey(itemName, mealType);
+
+            if (addedItems.has(uniqueKey)) {
+                addedItems.delete(uniqueKey);
+                $(this).text('Add'); 
+                updateCart(itemName, mealType, 0); 
+            } else {
+                addedItems.add(uniqueKey);
+                $(this).text('Added'); 
+                updateCart(itemName, mealType, 1); 
+            }
+        });
+        $('.increase').on('click', function() {
+            var inputId = $(this).data('id');
+            var currentVal = parseInt($('#' + inputId).val());
+            if (currentVal < 6) {
+                currentVal++;
+                $('#' + inputId).val(currentVal);
+                sessionStorage.setItem(inputId, currentVal);
+            }
+        });
+
+        $('.decrease').on('click', function() {
+            var inputId = $(this).data('id');
+            var currentVal = parseInt($('#' + inputId).val());
+            if (currentVal > 0) {
+                currentVal--;
+                $('#' + inputId).val(currentVal);
+                sessionStorage.setItem(inputId, currentVal);
+            }
+        });
+
+        $('.quantity input').each(function() {
+            var inputId = $(this).attr('id');
+            var savedQty = sessionStorage.getItem(inputId);
+            if (savedQty !== null) {
+                $(this).val(savedQty);
+            }
+        });
+
+        function updateCart(itemName, mealType, quantity) {
+            $.ajax({
+                type: 'POST',
+                url: '{% url "home:add_to_cart" %}', 
+                data: {
+                    'item_name': itemName,
+                    'meal_type': mealType,
+                    'quantity': quantity,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}' 
+                },
+                success: function(response) {
+                    console.log('Cart updated:', response.cart);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 4,
+        spaceBetween: 30,
+        keyboard: {
+            enabled: true,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        breakpoints: {
+            375: {
+                slidesPerView: 1,
+                spaceBetween: 10,
+            },
+            640: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+            },
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 15,
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+            },
+            1240: {
+                slidesPerView: 4,
+                spaceBetween: 30,
+            }
+        }
+    });
+</script>
+<script>
+    function increaseValue() {
+        var value = parseInt(document.getElementById('quantity').value, 10);
+        if (value < 6) {
+            value = isNaN(value) ? 0 : value;
+            value++;
+            document.getElementById('quantity').value = value;
+        }
+    }
+
+    function decreaseValue() {
+        var value = parseInt(document.getElementById('quantity').value, 10);
+        if (value > 0) {
+            value = isNaN(value) ? 0 : value;
+            value--;
+            document.getElementById('quantity').value = value;
+        }
+    }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.2/MotionPathPlugin.min.js"></script>
+<script>
+    gsap.registerPlugin(MotionPathPlugin);
+    const imageContainer1 = document.querySelector('.image_container_anim');
+    const angles1 = [0, 90, 180, 270, 360];
+    const rotateAndPause1 = () => {
+        const timeline = gsap.timeline({ repeat: -1 }); 
+        angles1.forEach((angle, index) => {
+            timeline.to(imageContainer1, {
+                rotation: angle, 
+                duration: 2, 
+                ease: "power1.inOut",
+            });
+
+            if (index < angles1.length - 1) {
+                timeline.to(imageContainer1, {
+                    duration: 1,
+                    delay: 0.5
+                });
+            }
+        });
+    };
+    rotateAndPause1();
+</script>
+
+</div>
+{% endblock content %}
