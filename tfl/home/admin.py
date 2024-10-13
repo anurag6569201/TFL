@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, LunchMenu, DinnerMenu, Scanner,DeliciousMenu,Menu_Board_items,TodayLunchMenu,TodayDinnerMenu
+from .models import Item, LunchMenu, DinnerMenu, Scanner,DeliciousMenu,Menu_Board_items,TodayLunchMenu,TodayDinnerMenu,Order
 
 # Admin for Item model
 @admin.register(Item)
@@ -49,3 +49,6 @@ class ScannerAdmin(admin.ModelAdmin):
 class DeliciousMenu(admin.ModelAdmin):
     list_display = ('id',)  # Display the ID of the Lunch Menu
     filter_horizontal = ('items',)  # Easy selection of many-to-many items
+
+from .models import Order
+admin.site.register(Order)

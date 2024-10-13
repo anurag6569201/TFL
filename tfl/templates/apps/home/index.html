@@ -526,6 +526,7 @@ crossorigin="anonymous"></script>
     
 
 </div>
+
 <script>
     $(document).ready(function() {
         // Initialize addedItems set based on items already in the cart
@@ -536,15 +537,13 @@ crossorigin="anonymous"></script>
             return itemName + '-' + mealType;
         }
 
-        // Populate addedItems based on cart items (ensure each item-meal combination has a unique key)
         {% for item in cart.items %}
             addedItems.add(createUniqueKey("{{ item.item_name }}", "{{ item.meal_type }}"));
         {% endfor %}
 
-        // Iterate over each "Add" button and check if the item is already added in the specific meal type
         $('.add-addon').each(function() {
             const itemName = $(this).data('id');
-            const mealType = $(this).data('meal'); // Get meal type from data attribute (Ensure data-meal is set in HTML)
+            const mealType = $(this).data('meal');
 
             // Create unique key for this button's item and meal type
             const uniqueKey = createUniqueKey(itemName, mealType);
@@ -554,38 +553,61 @@ crossorigin="anonymous"></script>
             }
         });
 
-        // Add or remove item when the button is clicked
         $('.add-addon').click(function(event) {
             event.preventDefault();
             const itemName = $(this).data('id');
-            const mealType = $(this).data('meal'); // Get meal type from data attribute
+            const mealType = $(this).data('meal'); 
 
             // Create unique key for the clicked item and meal type
             const uniqueKey = createUniqueKey(itemName, mealType);
 
             if (addedItems.has(uniqueKey)) {
-                // If item is already added in this meal type, remove it
                 addedItems.delete(uniqueKey);
-                $(this).text('Add'); // Change button text back to 'Add'
-                updateCart(itemName, mealType, 0); // Send quantity 0 to remove from cart
+                $(this).text('Add'); 
+                updateCart(itemName, mealType, 0); 
             } else {
-                // If item is not added in this meal type, add it
                 addedItems.add(uniqueKey);
-                $(this).text('Added'); // Change button text to 'Added'
-                updateCart(itemName, mealType, 1); // Update server cart with default quantity of 1
+                $(this).text('Added'); 
+                updateCart(itemName, mealType, 1); 
+            }
+        });
+        $('.increase').on('click', function() {
+            var inputId = $(this).data('id');
+            var currentVal = parseInt($('#' + inputId).val());
+            if (currentVal < 6) {
+                currentVal++;
+                $('#' + inputId).val(currentVal);
+                sessionStorage.setItem(inputId, currentVal);
             }
         });
 
-        // Function to update local cart and send to server
+        $('.decrease').on('click', function() {
+            var inputId = $(this).data('id');
+            var currentVal = parseInt($('#' + inputId).val());
+            if (currentVal > 0) {
+                currentVal--;
+                $('#' + inputId).val(currentVal);
+                sessionStorage.setItem(inputId, currentVal);
+            }
+        });
+
+        $('.quantity input').each(function() {
+            var inputId = $(this).attr('id');
+            var savedQty = sessionStorage.getItem(inputId);
+            if (savedQty !== null) {
+                $(this).val(savedQty);
+            }
+        });
+
         function updateCart(itemName, mealType, quantity) {
             $.ajax({
                 type: 'POST',
-                url: '{% url "home:add_to_cart" %}',  // Update with your URL for the add-to-cart view
+                url: '{% url "home:add_to_cart" %}', 
                 data: {
                     'item_name': itemName,
-                    'meal_type': mealType,  // Send meal type to server
+                    'meal_type': mealType,
                     'quantity': quantity,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'  // Ensure CSRF token is included
+                    'csrfmiddlewaretoken': '{{ csrf_token }}' 
                 },
                 success: function(response) {
                     console.log('Cart updated:', response.cart);
@@ -598,47 +620,7 @@ crossorigin="anonymous"></script>
     });
 </script>
 
-<script>
-  $(document).ready(function() {
-      // Increase quantity
-      $('.increase').on('click', function() {
-          var inputId = $(this).data('id');
-          var currentVal = parseInt($('#' + inputId).val());
-          if (currentVal < 6) {
-              currentVal++;
-              $('#' + inputId).val(currentVal);
-              // Save the updated quantity to session storage
-              sessionStorage.setItem(inputId, currentVal);
-          }
-      });
-
-      // Decrease quantity
-      $('.decrease').on('click', function() {
-          var inputId = $(this).data('id');
-          var currentVal = parseInt($('#' + inputId).val());
-          if (currentVal > 0) {
-              currentVal--;
-              $('#' + inputId).val(currentVal);
-              // Save the updated quantity to session storage
-              sessionStorage.setItem(inputId, currentVal);
-          }
-      });
-
-      // Load saved quantities from session storage
-      $('.quantity input').each(function() {
-          var inputId = $(this).attr('id');
-          var savedQty = sessionStorage.getItem(inputId);
-          if (savedQty !== null) {
-              $(this).val(savedQty);
-          }
-      });
-  });
-</script>
-
-<!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-<!-- Initialize Swiper -->
 <script>
     var swiper = new Swiper(".mySwiper", {
         slidesPerView: 4,
@@ -704,12 +686,12 @@ crossorigin="anonymous"></script>
     const imageContainer1 = document.querySelector('.image_container_anim');
     const angles1 = [0, 90, 180, 270, 360];
     const rotateAndPause1 = () => {
-        const timeline = gsap.timeline({ repeat: -1 }); // Repeat infinitely
+        const timeline = gsap.timeline({ repeat: -1 }); 
         angles1.forEach((angle, index) => {
             timeline.to(imageContainer1, {
-                rotation: angle, // Rotate to the angle
-                duration: 2, // Rotate over 2 seconds
-                ease: "power1.inOut", // Ease effect
+                rotation: angle, 
+                duration: 2, 
+                ease: "power1.inOut",
             });
 
             if (index < angles1.length - 1) {

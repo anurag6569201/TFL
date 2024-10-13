@@ -1,6 +1,5 @@
 from django.db import models
 
-# Reusable item model for both lunch and dinner
 class Item(models.Model):
     item_image = models.ImageField(upload_to='items/')
     item_name = models.CharField(max_length=100)
@@ -15,14 +14,12 @@ class Menu_Board_items(models.Model):
     def __str__(self):
         return self.item_name
 
-# Lunch menu, referring to items
 class LunchMenu(models.Model):
     items = models.ManyToManyField(Item, related_name='lunch_menus')
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f"Lunch Menu {self.id}"
 
-# Dinner menu, referring to items
 class DinnerMenu(models.Model):
     items = models.ManyToManyField(Item, related_name='dinner_menus')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -35,7 +32,6 @@ class DeliciousMenu(models.Model):
     def __str__(self):
         return f"Dinner Menu {self.id}"
 
-# Today's menu combining lunch and dinner
 class TodayLunchMenu(models.Model):
     options = (
         ("veg","veg"),
@@ -62,9 +58,20 @@ class TodayDinnerMenu(models.Model):
     def __str__(self):
         return f"Menu for {self.date}"
 
-# Scanner model, as needed for QR code or similar
 class Scanner(models.Model):
     scanner_image = models.ImageField(upload_to='scanner/')
 
     def __str__(self):
         return "Scanner"
+
+class Order(models.Model):
+    order_id = models.CharField(max_length=12, unique=True, blank=True, null=True)
+    payment_id = models.CharField(max_length=100, unique=True, blank=True, null=True)
+    pdf_invoice = models.FileField(upload_to='invoices/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    customer_email = models.EmailField(blank=True, null=True)
+    payment_status = models.CharField(max_length=10, choices=[('pending', 'Pending'), ('paid', 'Paid')], default='pending')
+    payment_mode = models.CharField(max_length=10, choices=[('online', 'Online'), ('cash', 'Cash')], default='online')
+
+    def __str__(self):
+        return f"Order {self.order_id} - Payment {self.payment_id}"
