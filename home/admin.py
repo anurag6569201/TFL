@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, LunchMenu, DinnerMenu, Scanner,DeliciousMenu,Menu_Board_items,TodayLunchMenu,TodayDinnerMenu,Order
+from .models import Item, LunchMenu, DinnerMenu, Scanner,DeliciousMenu,Menu_Board_items,TodayLunchMenu,TodayDinnerMenu,Order,DeliveryAddress
 
 # Admin for Item model
 @admin.register(Item)
@@ -52,3 +52,4 @@ class DeliciousMenu(admin.ModelAdmin):
 
 from .models import Order
 admin.site.register(Order)
+admin.site.register(DeliveryAddress)

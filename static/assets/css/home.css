@@ -524,7 +524,11 @@ footer h5{
 }
 
 
-
+.add-to-cart-form{
+    position: absolute;
+    bottom: -20px;
+    right: 50px;
+}
   
 
 

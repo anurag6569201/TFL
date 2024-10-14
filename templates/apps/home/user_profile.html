@@ -100,7 +100,11 @@
         height: 80px;
     }
 }
-
+.address_order input{
+    width: 100%;
+    border: 1px solid #888;
+    padding: 4px;
+}
 </style>
 <script
 src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -153,6 +157,45 @@ crossorigin="anonymous"></script>
                     </div>
                 </div>
             </div>
+            <div class="col-md-8">
+                <div class="card user-profile-card shadow-sm mt-4 address_order">
+                    {% if user.is_authenticated %}
+                    <div class="card-header profile-header text-center py-4">
+                        <h4>Saved Addresses</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            {% for address in addresses %}
+                              <li style="display: flex;justify-content: space-between;">
+                                  <div>
+                                    {{ address.address_line1 }}, {{ address.city }}, {{ address.phone_number }}
+                                    {% if address.is_primary %}
+                                        <strong>(Primary)</strong>
+                                    {% endif %}
+                                    {% if not address.is_primary %}
+                                        <a href="?set_primary={{ address.id }}" style="color: #E9661D;">Set as Primary</a>
+                                    {% endif %}
+                                  </div>
+                                    <a href="?delete_address={{ address.id }}" class="btn btn-sm btn-outline-primary mt-2" style="padding: 1px 15px;">Delete</a>
+                              </li>
+                            {% empty %}
+                              <li>No delivery addresses added yet.</li>
+                            {% endfor %}
+                          </ul>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <button class="login_logging_btn" type="submit">Save Address</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
         </div>
     </div>
 </div>

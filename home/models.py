@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 
 class Item(models.Model):
     item_image = models.ImageField(upload_to='items/')
@@ -64,6 +67,22 @@ class Scanner(models.Model):
     def __str__(self):
         return "Scanner"
 
+
+class DeliveryAddress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='delivery_addresses')
+    address_line1 = models.CharField(max_length=255,default="Address Line 1")
+    city = models.CharField(max_length=100,default="City A")
+    phone_number = models.CharField(max_length=15,default="9999900000")
+    is_primary = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return f"{self.address_line1}, {self.city}"
+    
+
 class Order(models.Model):
     order_id = models.CharField(max_length=12, unique=True, blank=True, null=True)
     payment_id = models.CharField(max_length=100, unique=True, blank=True, null=True)
@@ -72,6 +91,7 @@ class Order(models.Model):
     customer_email = models.EmailField(blank=True, null=True)
     payment_status = models.CharField(max_length=10, choices=[('pending', 'Pending'), ('paid', 'Paid')], default='pending')
     payment_mode = models.CharField(max_length=10, choices=[('online', 'Online'), ('cash', 'Cash')], default='online')
+    delivery_address = models.ForeignKey(DeliveryAddress, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"Order {self.order_id} - Payment {self.payment_id}"

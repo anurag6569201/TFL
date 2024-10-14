@@ -30,6 +30,21 @@ crossorigin="anonymous"></script>
         "order_id": "{{ payment.id }}",
         "handler": function (response) {
             window.location.href = "/cart/success/"
+            $.ajax({
+                url: "/cart/success/",
+                type: "POST",
+                data: {
+                    'razorpay_payment_id': response.razorpay_payment_id,
+                    'order_id': "{{ payment.id }}",  // Include the order ID
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    window.location.href = "/cart/success/";
+                },
+                error: function (error) {
+                    alert("Payment succeeded, but there was an error saving the data.");
+                }
+            });
         },
         "prefill": {
             "name": "{{ request.user.first_name }} {{ request.user.last_name }}",

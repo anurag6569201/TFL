@@ -15,7 +15,11 @@
         <form>
             <h1>Thank you for your order!</h1>
             <p>Your order was successful. You can download your invoice below:</p>
-            <a href="{% url 'home:download_invoice' order_id=order_id %}" class="login_logging_btn" style="text-decoration: none;">Download Invoice</a>
+            {% if order_id %}
+                <a href="{% url 'home:download_invoice' order_id=order_id %}" class="login_logging_btn" style="text-decoration: none;">Download Invoice</a>
+            {% else %}
+                <p>Order ID not found, unable to download invoice.</p>
+            {% endif %}
             <a href="{% url 'home:home' %}" class="login_logging_btn" style="text-decoration: none;">Home</a>
         </form>
 

@@ -11,19 +11,58 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Order
 import uuid
 from allauth.account.models import EmailAddress
-
-
+from .forms import DeliveryAddressForm
+from .models import DeliveryAddress
+from django.contrib import messages
 
 def user_profile(request):
     user = request.user
     email_verified = EmailAddress.objects.filter(user=user, verified=True).exists()
-    
+
+    try:
+        addresses = user.delivery_addresses.all()
+    except:
+        addresses = None 
+
+    # Handle POST requests for form submissions
+    if request.method == 'POST':
+        form = DeliveryAddressForm(request.POST)
+        
+        if form.is_valid():
+            delivery_address = form.save(commit=False)
+            delivery_address.user = request.user
+            delivery_address.save()
+            return redirect('home:user_profile')
+
+    else:
+        form = DeliveryAddressForm()
+
+    # Handle address deletion
+    if 'delete_address' in request.GET:
+        address_id = request.GET.get('delete_address')
+        address_to_delete = get_object_or_404(DeliveryAddress, id=address_id, user=user)
+        address_to_delete.delete()
+        messages.success(request, 'Address deleted successfully.')
+        return redirect('home:user_profile')
+
+    # Handle setting primary address
+    if 'set_primary' in request.GET:
+        address_id = request.GET.get('set_primary')
+        # Unset the previous primary address
+        user.delivery_addresses.update(is_primary=False)
+        address_to_set = get_object_or_404(DeliveryAddress, id=address_id, user=user)
+        address_to_set.is_primary = True
+        address_to_set.save()
+        messages.success(request, 'Primary address set successfully.')
+        return redirect('home:user_profile')
+
     context = {
         'user': user,
-        'email_verified': email_verified
+        'email_verified': email_verified,
+        'form': form,
+        'addresses': addresses,
     }
     return render(request, 'apps/home/user_profile.html', context)
-
 
 def home(request):
     cart = request.session.get('cart', {})
@@ -83,8 +122,16 @@ def add_to_cart(request):
     return JsonResponse({'error': 'Invalid request method'})
 
 def view_cart(request):
-    user = request.user
-    email_verified = EmailAddress.objects.filter(user=user, verified=True).exists()
+    try:
+        user = request.user
+        email_verified = EmailAddress.objects.filter(user=user, verified=True).exists()
+    except:
+        email_verified= False
+
+    try:
+        addresses = user.delivery_addresses.filter(is_primary=True).all()
+    except AttributeError: 
+        addresses = None
 
     cart = request.session.get('cart', {})
     items = {}
@@ -121,6 +168,7 @@ def view_cart(request):
         'cart': items, 
         'cart_total_amount': cart_total_amount,
         "email_verified":email_verified,
+        "addresses":addresses,
     }
     return render(request, 'apps/home/view_cart.html', context)
 
@@ -133,36 +181,81 @@ def save_pdf(request):
         payment_mode = request.POST.get('payment_mode', 'online') 
         order_id = generate_order_id()
 
-        if pdf_file:
-            order = Order.objects.create(
-                order_id=order_id,
-                pdf_invoice=pdf_file,
-                customer_email=customer_email,
-                payment_mode=payment_mode, 
-            )
+        user = request.user
+        primary_address = user.delivery_addresses.filter(is_primary=True).first()
 
-            request.session['order_id'] = order.order_id
+        if pdf_file:
+            temp_pdf_path = save_temp_pdf(pdf_file)
+
+            request.session['order_data'] = {
+                'order_id': order_id,
+                'customer_email': customer_email,
+                'payment_mode': payment_mode,
+                'pdf_path': temp_pdf_path,
+                'delivery_address_id': primary_address.id
+            }
             return JsonResponse({'success': True})
 
     return JsonResponse({'success': False, 'error': 'Invalid request'})
 
+import os
+def save_temp_pdf(pdf_file):
+    file_name = f"{str(uuid.uuid4())}.pdf"
+    temp_path = os.path.join(settings.MEDIA_ROOT, 'tmp', file_name)
+    with open(temp_path, 'wb+') as destination:
+        for chunk in pdf_file.chunks():
+            destination.write(chunk)
+    return temp_path
 
 def generate_order_id():
     return str(uuid.uuid4()).replace('-', '').upper()[:12]
 
+from django.core.files import File
 def success_cart(request):
-    order_id = request.session.get('order_id') 
+    # Retrieve order_data from the session
+    order_data = request.session.get('order_data')
     payment_id = request.POST.get('razorpay_payment_id') 
+
+    # Fetch order_id from order_data if it exists
+    order_id = order_data.get('order_id') if order_data else None
+    
+    if order_data and payment_id:
+        delivery_address = None
+        if 'delivery_address_id' in order_data:
+            try:
+                delivery_address = DeliveryAddress.objects.get(id=order_data['delivery_address_id'])
+            except DeliveryAddress.DoesNotExist:
+                delivery_address = None
+
+        order = Order.objects.create(
+            order_id=order_data['order_id'],
+            customer_email=order_data['customer_email'],
+            payment_mode=order_data['payment_mode'],
+            payment_id=payment_id,
+            payment_status='paid',
+            delivery_address=delivery_address,
+        )
+
+        temp_pdf_path = order_data['pdf_path']
+        with open(temp_pdf_path, 'rb') as temp_pdf_file:
+            order.pdf_invoice.save(f"invoice_{order.order_id}.pdf", File(temp_pdf_file), save=True)
+
+        del request.session['order_data']
+
+        if os.path.exists(temp_pdf_path):
+            os.remove(temp_pdf_path)
+
+
+        context = {
+            'order_id': order.order_id,
+        }
+
+        return render(request, 'apps/home/checkout_success.html', context)
+
+    # If order_data or payment_id is missing, handle accordingly
     context = {
         'order_id': order_id,
     }
-    if order_id and payment_id:
-        order = get_object_or_404(Order, order_id=order_id)
-        order.payment_id = payment_id 
-        order.payment_status = 'paid'  
-        order.save()
-        return render(request, 'apps/home/checkout_success.html', context)
-
     return render(request, 'apps/home/checkout_success.html', context)
 
 
@@ -208,3 +301,12 @@ def razorpay_view(request):
         'payment': payment,
     }
     return render(request, 'apps/home/razorpay.html', context)
+
+
+
+def past_orders(request):
+    past_orders = Order.objects.filter(customer_email=request.user.email).order_by('-created_at')
+    context = {
+        'past_orders': past_orders,
+    }
+    return render(request, 'apps/home/past_orders.html',context)
