@@ -1,0 +1,218 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load static %}
+{% load allauth account %}
+{% block head_title %}
+{% trans "Password Reset Done" %}
+{% endblock head_title %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'assets/css/login.css' %}">
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7f6;
+    }
+    
+    .container {
+        width: 90%;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    table.dataTable thead {
+        background-color: #E9661C;
+        color: white;
+    }
+
+    table.dataTable tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+    table th, table td {
+        padding: 12px 15px;
+        text-align: left;
+    }
+
+    table th {
+        cursor: pointer;
+    }
+
+    #otpForm {
+        display: none;
+        margin-top: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"], input[type="hidden"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button[disabled] {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+
+    .action-btn {
+        padding: 5px 10px;
+        background-color: #E9661C;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+    }
+
+    .action-btn:hover {
+        background-color: #ec7734;
+    }
+
+    #result {
+        margin-top: 20px;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+</style>
+{% endblock stylesheet %}
+{% block content %}
+
+    
+<div class="container">
+    <h2>Pending Delivery Orders</h2>
+    
+    <!-- Pending Orders Table -->
+    <table id="pendingOrders" class="display table-responsive">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Delivery Address</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in pending_orders %}
+            <tr>
+                <td>{{ order.order_id }}</td>
+                <td>{{ order.customer_email }}</td>
+                <td>{{ order.delivery_address.phone_number }}</td>
+                <td>{{ order.delivery_address.address_line1 }}, {{ order.delivery_address.city }}</td>
+                <td>
+                    <button class="action-btn select-order" data-order-id="{{ order.order_id }}">Select</button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No pending orders available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- OTP Verification Form -->
+    <form id="otpForm" method="POST" action="{% url 'home:verify_delivery_otp' %}">
+        {% csrf_token %}
+        
+        <input type="hidden" id="order_id" name="order_id" required>
+        
+        <label for="delivery_otp">Enter OTP:</label>
+        <input type="text" id="delivery_otp" name="delivery_otp" required placeholder="Enter delivery OTP">
+        
+        <button class="login_logging_btn" type="submit" disabled>Verify OTP</button>
+    </form>
+    
+    <div id="result"></div>
+</div>
+
+<!-- jQuery and DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Initialize DataTables
+        $('#pendingOrders').DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            responsive: true
+        });
+
+        const form = document.getElementById('otpForm');
+        const submitButton = form.querySelector('button[type="submit"]');
+        const hiddenOrderIdField = document.getElementById('order_id');
+        
+        // Add event listener to each "Select" button in the table
+        document.querySelectorAll('.select-order').forEach(button => {
+            button.addEventListener('click', function () {
+                const orderId = this.getAttribute('data-order-id');
+                
+                // Set hidden input with the selected order_id
+                hiddenOrderIdField.value = orderId;
+                submitButton.disabled = false;  // Enable the OTP form submission button
+                form.style.display = 'block';  // Show the form once an order is selected
+            });
+        });
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            
+            const formData = new FormData(form);
+            const url = form.action;
+    
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = data.message;
+                if (data.status === 'success') {
+                    form.reset();  // Reset the form on successful delivery
+                    submitButton.disabled = true;  // Disable the submit button again
+                    form.style.display = 'none';  // Hide the form after OTP verification
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
+
+
+{% endblock content %}

@@ -14,7 +14,8 @@ from allauth.account.models import EmailAddress
 from .forms import DeliveryAddressForm
 from .models import DeliveryAddress
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,permission_required
+import random
 
 def user_profile(request):
     user = request.user
@@ -219,7 +220,8 @@ def success_cart(request):
 
     # Fetch order_id from order_data if it exists
     order_id = order_data.get('order_id') if order_data else None
-    
+    delivery_otp = random.randint(100000, 999999)
+
     if order_data and payment_id:
         delivery_address = None
         if 'delivery_address_id' in order_data:
@@ -235,6 +237,7 @@ def success_cart(request):
             payment_id=payment_id,
             payment_status='paid',
             delivery_address=delivery_address,
+            delivery_otp=delivery_otp
         )
 
         temp_pdf_path = order_data['pdf_path']
@@ -310,3 +313,35 @@ def past_orders(request):
         'past_orders': past_orders,
     }
     return render(request, 'apps/home/past_orders.html',context)
+
+
+
+
+@login_required
+@permission_required('home.can_change_order', raise_exception=True)
+def delivery_page(request):
+    pending_orders = Order.objects.filter(delivery_status='pending').select_related('delivery_address')
+
+    context = {
+        'pending_orders': pending_orders,
+    }
+    return render(request, 'apps/home/delivery.html', context)
+
+
+@login_required
+@permission_required('home.can_change_order', raise_exception=True)
+def verify_delivery_otp(request):
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        entered_otp = int(request.POST.get('delivery_otp')) 
+        order = get_object_or_404(Order, order_id=order_id)
+
+        if order.delivery_otp == entered_otp:
+            order.delivery_status = 'delivered'
+            order.save()
+
+            return JsonResponse({'status': 'success', 'message': 'OTP verified, order delivered!'})
+        else:
+            return JsonResponse({'status': 'failure', 'message': 'Invalid OTP, please try again.'})
+    
+    return render(request, 'apps/home/delivery.html')

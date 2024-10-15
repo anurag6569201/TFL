@@ -17,4 +17,6 @@ urlpatterns = [
     path('razorpay/', views.razorpay_view, name='razorpay'), 
     path('profile/', views.user_profile, name='user_profile'),
     path('past_orders/', views.past_orders, name='past_orders'),
+    path('delivery/', views.delivery_page, name='delivery_page'),
+    path('verify-delivery-otp/', views.verify_delivery_otp, name='verify_delivery_otp'),
 ]

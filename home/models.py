@@ -92,6 +92,8 @@ class Order(models.Model):
     payment_status = models.CharField(max_length=10, choices=[('pending', 'Pending'), ('paid', 'Paid')], default='pending')
     payment_mode = models.CharField(max_length=10, choices=[('online', 'Online'), ('cash', 'Cash')], default='online')
     delivery_address = models.ForeignKey(DeliveryAddress, on_delete=models.SET_NULL, null=True, blank=True)
+    delivery_otp = models.IntegerField(default=0, null=True, blank=True)
+    delivery_status = models.CharField(max_length=10, choices=[('pending', 'Pending'), ('delivered', 'Delivered')], default='pending')
 
     def __str__(self):
         return f"Order {self.order_id} - Payment {self.payment_id}"
