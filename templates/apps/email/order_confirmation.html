@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #555;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #888;
+        }
+        .invoice-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .invoice-link:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="cid:logo_image" alt="Logo" style="width: 100px; margin-bottom: 20px;"> <!-- Logo Image -->
+        <h1>Order Confirmation</h1>
+        <p>Thank you for your order, <strong>{{ order.customer_email }}</strong>!</p>
+        <p>Your order ID is: <strong>{{ order.order_id }}</strong></p>
+        <p>Delivery OTP: <strong>{{ delivery_otp }}</strong></p>
+
+        {% if delivery_address %}
+            <h2>Delivery Address:</h2>
+            <p>{{ delivery_address }}</p>
+        {% endif %}
+
+        <p>Please find the invoice attached to this email. You can also <a class="invoice-link" href="{{ invoice_url }}">view your invoice here</a>.</p>
+
+        <div class="footer">
+            <p>If you have any questions, feel free to contact our support team.</p>
+            <p>Thank you for choosing us!</p>
+        </div>
+    </div>
+</body>
+</html>

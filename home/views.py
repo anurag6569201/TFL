@@ -16,6 +16,8 @@ from .models import DeliveryAddress
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required,permission_required
 import random
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 
 def user_profile(request):
     user = request.user
@@ -212,13 +214,14 @@ def save_temp_pdf(pdf_file):
 def generate_order_id():
     return str(uuid.uuid4()).replace('-', '').upper()[:12]
 
+
+from django.core.mail import EmailMultiAlternatives
+from email.mime.image import MIMEImage
 from django.core.files import File
 def success_cart(request):
-    # Retrieve order_data from the session
     order_data = request.session.get('order_data')
-    payment_id = request.POST.get('razorpay_payment_id') 
+    payment_id = request.POST.get('razorpay_payment_id')
 
-    # Fetch order_id from order_data if it exists
     order_id = order_data.get('order_id') if order_data else None
     delivery_otp = random.randint(100000, 999999)
 
@@ -240,27 +243,62 @@ def success_cart(request):
             delivery_otp=delivery_otp
         )
 
+        # Save the PDF invoice
         temp_pdf_path = order_data['pdf_path']
         with open(temp_pdf_path, 'rb') as temp_pdf_file:
             order.pdf_invoice.save(f"invoice_{order.order_id}.pdf", File(temp_pdf_file), save=True)
 
+        # Prepare email details
+        subject = 'Your Order Confirmation'
+        email_template = 'apps/email/order_confirmation.html'
+        context = {
+            'order': order,
+            'delivery_otp': delivery_otp,
+            'delivery_address': delivery_address,
+            'invoice_url': request.build_absolute_uri(order.pdf_invoice.url),  # Dynamic invoice URL
+        }
+
+        # Render the email body
+        email_body = render_to_string(email_template, context)
+        email = EmailMultiAlternatives(subject, '', settings.EMAIL_HOST_USER, [order.customer_email])
+        email.attach_alternative(email_body, "text/html")  # Attach HTML content
+
+        # Attach the PDF invoice
+        pdf_file_path = order.pdf_invoice.path
+        email.attach_file(pdf_file_path)
+
+        # Attach logo if it exists
+        logo_path = os.path.join(settings.STATIC_ROOT, 'img/home', 'tfl_logo.webp')
+        if os.path.exists(logo_path):
+            with open(logo_path, 'rb') as logo_file:
+                logo_image = MIMEImage(logo_file.read())
+                logo_image.add_header('Content-ID', '<logo_image>')
+                logo_image.add_header('Content-Disposition', 'inline', filename=os.path.basename(logo_path))
+                email.attach(logo_image)
+
+        # Send the email
+        email.send()
+
+        # Clean up session and temporary files
         del request.session['order_data']
 
         if os.path.exists(temp_pdf_path):
             os.remove(temp_pdf_path)
 
-
         context = {
+            'delivery_otp': delivery_otp,
             'order_id': order.order_id,
         }
 
         return render(request, 'apps/home/checkout_success.html', context)
 
-    # If order_data or payment_id is missing, handle accordingly
     context = {
         'order_id': order_id,
+        'delivery_otp': delivery_otp,
     }
     return render(request, 'apps/home/checkout_success.html', context)
+
+
 
 
 def download_invoice(request, order_id):
@@ -340,8 +378,31 @@ def verify_delivery_otp(request):
             order.delivery_status = 'delivered'
             order.save()
 
+            subject = 'Your Order Has Been Delivered!'
+            email_template = 'apps/email/order_delivery_confirmation.html'  # Path to the HTML email template
+            context = {
+                'order_id': order.order_id,
+                'customer_email': order.customer_email,
+                'delivery_address': order.delivery_address,
+            }
+            
+            email_body = render_to_string(email_template, context)
+            email = EmailMultiAlternatives(subject, '', settings.EMAIL_HOST_USER, [order.customer_email])
+            email.attach_alternative(email_body, "text/html")
+
+            logo_path = os.path.join(settings.STATIC_ROOT, 'img/home', 'tfl_logo.webp')
+            if os.path.exists(logo_path):
+                with open(logo_path, 'rb') as logo_file:
+                    logo_image = MIMEImage(logo_file.read())
+                    logo_image.add_header('Content-ID', '<logo_image>')
+                    logo_image.add_header('Content-Disposition', 'inline', filename=os.path.basename(logo_path))
+                    email.attach(logo_image)
+
+            email.send()
+
             return JsonResponse({'status': 'success', 'message': 'OTP verified, order delivered!'})
+
         else:
             return JsonResponse({'status': 'failure', 'message': 'Invalid OTP, please try again.'})
-    
+
     return render(request, 'apps/home/delivery.html')
