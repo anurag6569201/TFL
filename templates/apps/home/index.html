@@ -9,6 +9,11 @@
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'assets/css/home.css' %}">
 <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+<style>
+    .hidden{
+        display: none;
+    }
+</style>
 <script
 src="https://code.jquery.com/jquery-3.7.1.min.js"
 integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
@@ -175,7 +180,7 @@ crossorigin="anonymous"></script>
                                 <div id="elipse_nocolor"></div>
                             </div>
                             <img id="foto_prod" src="{{ item.item_image.url }}" alt="{{ item.item_name }}">
-                            <div id="preco_prod"><span>{{ item.item_price }}/-</span></div>
+                            <div id="preco_prod"><span class="item-price" data-id="{{ item.item_name }}">{{ item.item_price }}/-</span></div>
                             <div id="avaliacoes">
                                 <div id="ava_tot"></div>
                                 <div id="descri_prod">
@@ -200,11 +205,19 @@ crossorigin="anonymous"></script>
                                             {% endif %}
                                         {% endwith %}
                                     </button>
+                                    <div class="input-group quantity-selector hidden">
+                                        <button type="button" class="btn btn-outline-secondary btn-minus" data-id="{{ item.item_name }}">-</button>
+                                        <input type="hidden" name="meal_type" value="lunch">
+                                        <input type="number" class="form-control text-center" value="0" min="0" max="6" id="{{ item.item_name }}_qty" data-meal-type="lunch">
+                                        <button type="button" class="btn btn-outline-secondary btn-plus" data-id="{{ item.item_name }}">+</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
+                
+                               
 
             </div>
         </div>
@@ -325,7 +338,7 @@ crossorigin="anonymous"></script>
                                 <div id="elipse_nocolor"></div>
                             </div>
                             <img id="foto_prod" src="{{ item.item_image.url }}" alt="{{ item.item_name }}">
-                            <div id="preco_prod"><span>{{ item.item_price }}/-</span></div>
+                            <div id="preco_prod"><span class="item-price" data-id="{{ item.item_name }}">{{ item.item_price }}/-</span></div>
                             <div id="avaliacoes">
                                 <div id="ava_tot"></div>
                                 <div id="descri_prod">
@@ -350,6 +363,12 @@ crossorigin="anonymous"></script>
                                             {% endif %}
                                         {% endwith %}
                                     </button>
+                                    <div class="input-group quantity-selector hidden">
+                                        <button type="button" class="btn btn-outline-secondary btn-minus" data-id="{{ item.item_name }}">-</button>
+                                        <input type="hidden" name="meal_type" value="dinner">
+                                        <input type="number" class="form-control text-center" value="0" min="0" max="6" id="{{ item.item_name }}_qty" data-meal-type="dinner">
+                                        <button type="button" class="btn btn-outline-secondary btn-plus" data-id="{{ item.item_name }}">+</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -466,8 +485,36 @@ crossorigin="anonymous"></script>
                 <div class="swiper-pagination"></div>
             </div>
             <h5 class="mt-2" style="text-align: right;"><span style="color: #FF951C;">Scan</span> For Complete Online Menu</h5>
-            <div style="display: flex;justify-content: right;width: 100%;">
+            <div style="display: flex;justify-content: space-between;width: 100%;">
+                <img width="200px" src="{% static 'assets/img/partner/eating.png' %}" alt="">
                 <img width="200px" src="{% static 'assets/img/why/scanner.webp' %}" alt="">
+            </div>
+        </div>
+    </div>
+
+    <div class="other_partners">
+        <h1 class="order_page_h1 mt-5" style="text-align: center;"><span style="border-bottom: 3px solid black;"> Our
+            <span style="color: #FF951C;">Other Brands</span></span></h1>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="image-box-part">
+                        <img  src="{% static 'assets/img/partner/sip.webp' %}" alt="">
+                    </div>
+                    <p style="text-align: center;">"Discover Sip Station's exciting range of drinks, from Korean bubble tea to refreshing juices. A sip of innovation in every flavor."</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="image-box-part">
+                        <img src="{% static 'assets/img/partner/street_green.png' %}" alt="">
+                    </div>
+                    <p style="text-align: center;">"Explore Street Greens for fresh, flavorful salads, whole wheat sandwiches, and more. Perfectly balanced for health and taste."</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="image-box-part">
+                        <img style="scale: .9;" src="{% static 'assets/img/partner/ovens.png' %}" alt="">
+                    </div>
+                    <p style="text-align: center;">"Delight in Mr. Ovens’ array of baked treats and continental favorites. Every item promises comfort and quality."</p>
+                </div>
             </div>
         </div>
     </div>
@@ -478,7 +525,7 @@ crossorigin="anonymous"></script>
                 <!-- First Column: Brand and About -->
                 <div class="col-md-6 col-lg-4 mb-4">
                     <h2><img width="150px" src="{% static 'assets/img/home/tfl_logo.webp' %}" alt=""></h2>
-                    <p>Plot no.-3,Infocity Avenue ,Infront of Manoj nonveg world,Infocity,Bhubaneswar</p>
+                    <p>Plot no.-3,Infocity Avenue ,Infront of Manoj nonveg world,Infocity,Bhubaneswar <br>Reach us at:-7381092990</p>
                 </div>
                 
                 <!-- Second Column: About Us Links -->
@@ -517,7 +564,7 @@ crossorigin="anonymous"></script>
             <!-- Copyright Section -->
             <div class="row pt-4">
                 <div class="col text-center">
-                    <p class="text-black-50 mb-0">Copyright © 2022 Foodhut.</p>
+                    <p class="text-black-50 mb-0">Copyright © 2024 TFL.</p>
                 </div>
             </div>
         </div>
@@ -525,13 +572,113 @@ crossorigin="anonymous"></script>
     
 
 </div>
+<script>
+    document.querySelectorAll('.btn-minus').forEach(button => {
+        button.addEventListener('click', function() {
+            const itemId = this.getAttribute('data-id');
+            const mealType = this.closest('.quantity-selector').querySelector('input[name="meal_type"]').value;
+            const combinedId = itemId + '_' + mealType;
+            const inputField = document.getElementById(itemId + '_qty');
+            const priceElement = document.querySelector(`.item-price[data-id="${itemId}"]`);
+            const price = parseFloat(priceElement.textContent); 
+            let quantity = parseInt(inputField.value);
 
+            if (quantity > 0) {
+                quantity -= 1;
+                inputField.value = quantity;
+
+                const itemData = { id: combinedId, quantity: quantity, price: price };
+                localStorage.setItem(combinedId, JSON.stringify(itemData)); 
+
+                manageQuantityVisibility(quantity, this.closest('.quantity-selector'));
+            }
+        });
+    });
+
+    document.querySelectorAll('.btn-plus').forEach(button => {
+        button.addEventListener('click', function() {
+            const itemId = this.getAttribute('data-id');
+            const mealType = this.closest('.quantity-selector').querySelector('input[name="meal_type"]').value;
+            const combinedId = itemId + '_' + mealType; 
+            const inputField = document.getElementById(itemId + '_qty');
+            const priceElement = document.querySelector(`.item-price[data-id="${itemId}"]`);
+            const price = parseFloat(priceElement.textContent); 
+            let quantity = parseInt(inputField.value);
+
+            quantity += 1;
+            inputField.value = quantity;
+
+            const itemData = { id: combinedId, quantity: quantity, price: price };
+            localStorage.setItem(combinedId, JSON.stringify(itemData));
+
+            manageQuantityVisibility(quantity, this.closest('.quantity-selector'));
+        });
+    });
+
+    function updateQuantitiesFromStorage() {
+        document.querySelectorAll('.quantity-selector').forEach(selector => {
+            const itemId = selector.querySelector('.btn-minus').getAttribute('data-id'); // This is the item name
+            const mealType = selector.querySelector('input[name="meal_type"]').value; // Should return "lunch" or "dinner"
+
+            const combinedId = itemId + '_' + mealType;
+            
+            const qtyInput = selector.querySelector(`input[id="${itemId}_qty"][data-meal-type="${mealType}"]`); 
+
+            console.log("Retrieving for combined ID:", combinedId); 
+
+            const storedData = localStorage.getItem(combinedId);
+            if (storedData) {
+                const itemData = JSON.parse(storedData);
+                console.log("Retrieving for Quantity:", itemData.quantity); 
+                qtyInput.value = itemData.quantity; 
+
+                manageQuantityVisibility(itemData.quantity, selector);
+            } else {
+                console.log("No data found for ID:", combinedId); 
+            }
+        });
+    }
+
+
+    function manageQuantityVisibility(quantity, selector) {
+        const addButton = selector.previousElementSibling;
+        if (quantity <= 0) {
+            selector.classList.add('hidden'); 
+            addButton.style.display = 'block'; 
+        } else {
+            selector.classList.remove('hidden'); 
+            addButton.style.display = 'none'; 
+        }
+    }
+
+    document.querySelectorAll('.add-addon').forEach(button => {
+        button.addEventListener('click', function() {
+            this.style.display = 'none'; 
+            const quantitySelector = this.nextElementSibling;
+            quantitySelector.classList.remove('hidden');
+
+            const qtyInput = quantitySelector.querySelector('input[type="number"]');
+            qtyInput.value = 1; 
+
+            const itemId = this.getAttribute('data-id');
+            const mealType = this.getAttribute('data-meal');
+            const combinedId = itemId + '_' + mealType;
+
+            const priceElement = document.querySelector(`.item-price[data-id="${itemId}"]`);
+            const price = parseFloat(priceElement.textContent);
+            const itemData = { id: combinedId, quantity: 1, price: price };
+            localStorage.setItem(combinedId, JSON.stringify(itemData)); 
+
+            manageQuantityVisibility(1, quantitySelector); 
+        });
+    });
+
+    updateQuantitiesFromStorage();
+</script>
 <script>
     $(document).ready(function() {
-        // Initialize addedItems set based on items already in the cart
         const addedItems = new Set();
         
-        // Create unique key by combining item name and meal type
         function createUniqueKey(itemName, mealType) {
             return itemName + '-' + mealType;
         }
@@ -544,11 +691,10 @@ crossorigin="anonymous"></script>
             const itemName = $(this).data('id');
             const mealType = $(this).data('meal');
 
-            // Create unique key for this button's item and meal type
             const uniqueKey = createUniqueKey(itemName, mealType);
 
             if (addedItems.has(uniqueKey)) {
-                $(this).text('Added'); // Mark button as "Added" if item is in the cart for the specific meal type
+                $(this).text('Added'); 
             }
         });
 
@@ -557,7 +703,6 @@ crossorigin="anonymous"></script>
             const itemName = $(this).data('id');
             const mealType = $(this).data('meal'); 
 
-            // Create unique key for the clicked item and meal type
             const uniqueKey = createUniqueKey(itemName, mealType);
 
             if (addedItems.has(uniqueKey)) {

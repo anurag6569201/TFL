@@ -14,6 +14,7 @@ from allauth.account.models import EmailAddress
 from .forms import DeliveryAddressForm
 from .models import DeliveryAddress
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 def user_profile(request):
     user = request.user
@@ -275,7 +276,6 @@ def download_invoice(request, order_id):
 def checkout(request):
     if request.method == 'POST':
         total_amount = request.POST.get('total', 0)
-        print(total_amount)
         
         try:
             total_amount = float(total_amount)
@@ -303,7 +303,7 @@ def razorpay_view(request):
     return render(request, 'apps/home/razorpay.html', context)
 
 
-
+@login_required
 def past_orders(request):
     past_orders = Order.objects.filter(customer_email=request.user.email).order_by('-created_at')
     context = {

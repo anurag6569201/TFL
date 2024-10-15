@@ -530,10 +530,44 @@ footer h5{
     right: 50px;
 }
   
+.image-box-part{
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
 
+.image-box-part img{
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+}
 
-
-
+.quantity-selector button{
+    border: 1px solid white;
+    color: #FF951C;
+    background-color: white;
+    font-weight: 700;
+}
+.quantity-selector button:hover{
+    background-color: rgb(235, 235, 235);
+    color: #FF951C;
+    border-color: white;
+}
+.quantity-selector input{
+    background-color: #FF951C;
+    border: 1px solid #FF951C;
+    color: white;
+    font-weight: 700;
+}
+.quantity-selector{
+    box-shadow: 0 0 20px .1px #c0bebe;
+}
+.add-addon{
+    color: white;
+    font-weight: 700;
+}
 
 @media (max-width: 1440px){
     

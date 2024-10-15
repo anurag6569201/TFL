@@ -1,0 +1,44 @@
+{% for item in lunch_add_ons %}
+                    <div class="produto col-md-3 col-6 card" id="p1_off1" style="display: flex; align-items: center; justify-content: center; background-color: transparent; border: none;">
+                        <div>
+                            <div class="img_produto">
+                                <div id="elipse_color"></div>
+                                <div id="elipse_nocolor"></div>
+                            </div>
+                            <img id="foto_prod" src="{{ item.item_image.url }}" alt="{{ item.item_name }}">
+                            <div id="preco_prod"><span class="item-price" data-id="{{ item.item_name }}">{{ item.item_price }}/-</span></div>
+                            <div id="avaliacoes">
+                                <div id="ava_tot"></div>
+                                <div id="descri_prod">
+                                    <h2>{{ item.item_name }}</h2>
+                                    <div>
+                                        <p>{{ item.item_description }}</p>
+                                    </div>
+                                </div>
+                                <form class="add-to-cart-form">
+                                    <input type="hidden" name="item_name" value="{{ item.item_name }}">
+                                    <input type="hidden" name="meal_type" value="lunch">
+                                    <button type="button" class="bt01 add-addon" 
+                                        data-id="{{ item.item_name }}" 
+                                        data-price="{{ item.item_price }}" 
+                                        data-meal="lunch">
+                                        
+                                        {% with cart_key=item.item_name|add:"_lunch" %}
+                                            {% if cart|get_item:cart_key %}
+                                                Added
+                                            {% else %}
+                                                Add
+                                            {% endif %}
+                                        {% endwith %}
+                                    </button>
+                                    <div class="input-group quantity-selector hidden">
+                                        <button type="button" class="btn btn-outline-secondary btn-minus" data-id="{{ item.item_name }}">-</button>
+                                        <input type="hidden" name="meal_type" value="lunch">
+                                        <input type="number" class="form-control text-center" value="0" min="0" max="6" id="{{ item.item_name }}_qty" data-meal-type="lunch">
+                                        <button type="button" class="btn btn-outline-secondary btn-plus" data-id="{{ item.item_name }}">+</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
