@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'home',
-    'home.templatetags'
+    'home.templatetags',
+    'background_task',
 ]
 
 MIDDLEWARE = [

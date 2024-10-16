@@ -202,6 +202,35 @@ def save_pdf(request):
 
     return JsonResponse({'success': False, 'error': 'Invalid request'})
 
+
+@csrf_exempt
+def save_pdf_offline(request):
+    if request.method == 'POST':
+        pdf_file = request.FILES.get('pdf')
+        customer_email = request.POST.get('customer_email')  
+        payment_mode = request.POST.get('payment_mode', 'cash') 
+        order_id = generate_order_id()
+
+        user = request.user
+        primary_address = user.delivery_addresses.filter(is_primary=True).first()
+
+        if pdf_file:
+            temp_pdf_path = save_temp_pdf(pdf_file)
+
+            request.session['order_data'] = {
+                'order_id': order_id,
+                'customer_email': customer_email,
+                'payment_mode': payment_mode,
+                'pdf_path': temp_pdf_path,
+                'delivery_address_id': primary_address.id
+            }
+            return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+
+
+
 import os
 def save_temp_pdf(pdf_file):
     file_name = f"{str(uuid.uuid4())}.pdf"
@@ -358,7 +387,7 @@ def past_orders(request):
 @login_required
 @permission_required('home.can_change_order', raise_exception=True)
 def delivery_page(request):
-    pending_orders = Order.objects.filter(delivery_status='pending').select_related('delivery_address')
+    pending_orders = Order.objects.order_by('-created_at').filter(delivery_status='pending').select_related('delivery_address')
 
     context = {
         'pending_orders': pending_orders,
@@ -375,6 +404,10 @@ def verify_delivery_otp(request):
         order = get_object_or_404(Order, order_id=order_id)
 
         if order.delivery_otp == entered_otp:
+            if order.payment_status=="pending":
+                order.payment_status = 'paid'
+                order.save()
+                
             order.delivery_status = 'delivered'
             order.save()
 
@@ -406,3 +439,91 @@ def verify_delivery_otp(request):
             return JsonResponse({'status': 'failure', 'message': 'Invalid OTP, please try again.'})
 
     return render(request, 'apps/home/delivery.html')
+
+
+
+
+
+from datetime import timedelta
+def create_order(order_data):
+    """ Helper function to create an order. """
+    delivery_otp = random.randint(100000, 999999)
+    expiration_time = timezone.now() + timedelta(minutes=2) 
+    return Order.objects.create(
+        order_id=order_data['order_id'],
+        customer_email=order_data['customer_email'],
+        payment_status='pending',
+        payment_mode=order_data['payment_mode'],
+        delivery_address_id=order_data['delivery_address_id'],
+        pdf_invoice=order_data['pdf_path'],
+        delivery_otp=delivery_otp,
+        expiration_time=expiration_time,
+    )
+
+def offline_payment_view(request):
+    order_data = request.session.get('order_data')
+    total_amount = request.session.get('total_amount', 0)
+
+    if not order_data:
+        return redirect('home:view_cart')
+
+    # Create the order and set its expiration time
+    order = create_order(order_data)
+    temp_pdf_path = order_data['pdf_path']
+    with open(temp_pdf_path, 'rb') as temp_pdf_file:
+        order.pdf_invoice.save(f"invoice_{order.order_id}.pdf", File(temp_pdf_file), save=True)
+
+    scanner = Scanner.objects.first()
+
+    return render(request, 'apps/home/offline_payment.html', {
+        'order': order,
+        'scanner': scanner,
+        'total_amount': total_amount,
+    })
+from django.utils import timezone
+def cancel_order_view(request, order_id):
+    try:
+        order = get_object_or_404(Order, order_id=order_id)
+        if order.expiration_time and timezone.now() < order.expiration_time:
+            if order.payment_status == 'pending':
+                order.delete()  # Delete the order
+                return JsonResponse({'success': True, 'message': 'Order canceled successfully.'})
+            else:
+                return JsonResponse({'success': False, 'error': 'Order is already processed.'})
+        else:
+            return JsonResponse({'success': False, 'error': 'The 2-minute cancel window has passed.'})
+    except Order.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Order not found.'})
+
+
+
+def confirm_order_view(request, order_id):
+    try:
+        order = get_object_or_404(Order, order_id=order_id)
+
+        if order.payment_status == 'pending' and not order.is_expired():
+
+            # Send confirmation email
+            subject = 'Your Order Confirmation'
+            email_template = 'apps/email/order_confirmation.html'
+            context = {
+                'order': order,
+                'delivery_otp': order.delivery_otp,
+                'delivery_address': order.delivery_address,
+                'invoice_url': order.pdf_invoice.url,
+            }
+            email_body = render_to_string(email_template, context)
+            email = EmailMultiAlternatives(subject, '', settings.EMAIL_HOST_USER, [order.customer_email])
+            email.attach_alternative(email_body, "text/html")
+
+            # Attach the PDF invoice
+            pdf_file_path = order.pdf_invoice.path
+            email.attach_file(pdf_file_path)
+
+            email.send()
+
+            return JsonResponse({'success': True, 'message': 'Order confirmed successfully.'})
+        else:
+            return JsonResponse({'success': False, 'error': 'Order is already processed or expired.'})
+    except Order.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Order not found.'})

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 User = get_user_model()
 
 
@@ -95,5 +96,13 @@ class Order(models.Model):
     delivery_otp = models.IntegerField(default=0, null=True, blank=True)
     delivery_status = models.CharField(max_length=10, choices=[('pending', 'Pending'), ('delivered', 'Delivered')], default='pending')
 
+    expiration_time = models.DateTimeField(null=True, blank=True)  # New expiration field
+
+    def is_expired(self):
+        """Check if the order has expired."""
+        if self.expiration_time and timezone.now() > self.expiration_time:
+            return True
+        return False
+    
     def __str__(self):
         return f"Order {self.order_id} - Payment {self.payment_id}"

@@ -1,0 +1,85 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load static %}
+{% load allauth account %}
+
+{% block head_title %}
+    Offline Payment
+{% endblock head_title %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'assets/css/login.css' %}">
+{% endblock stylesheet %}
+
+{% block content %}
+<div class="login_container">
+    <div style="border: 1px solid #cfd0d1;padding: 20px;border-radius: 35px;">
+        <h2>Offline Payment for Order #{{ order.order_id }}</h2>
+        <p>Amount: {{ total_amount }}</p>
+        <p>Placed Successfully</p>
+
+        <!-- Confirm Order Button -->
+        <button id="confirm-button" class="login_logging_btn">Confirm Order</button>
+        <button id="cancel-button" class="login_logging_btn">Cancel Order</button>
+
+        <!-- Countdown Timer -->
+        <p id="countdown-timer">Time remaining: <span id="timer">120</span> seconds</p>
+    </div>
+
+    <script>
+        // Set a 2-minute countdown (120 seconds)
+        let countdown = 120;
+        const timerElement = document.getElementById('timer');
+        const confirmButton = document.getElementById('confirm-button');
+        const cancelButton = document.getElementById('cancel-button');
+        const orderId = "{{ order.order_id }}";
+
+        // Countdown interval
+        const countdownInterval = setInterval(function() {
+            countdown--;
+            timerElement.textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                confirmButton.disabled = true;
+                cancelButton.disabled = true;
+            }
+        }, 1000);
+
+        // Confirm Order action
+        confirmButton.addEventListener('click', function() {
+            fetch(`/confirm-order/${orderId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    alert('Order confirmed: ' + data.message);
+                    window.location.href = "{% url 'home:past_orders' %}";
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            });
+        });
+
+        // Cancel Order action
+        cancelButton.addEventListener('click', function() {
+            fetch(`/cancel-order/${orderId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    alert('Order cancelled: ' + data.message);
+                    window.location.href = "{% url 'home:past_orders' %}";
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            });
+        });
+    </script>
+</div>
+{% endblock content %}

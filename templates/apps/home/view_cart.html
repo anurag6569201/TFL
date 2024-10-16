@@ -389,18 +389,17 @@
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
     crossorigin="anonymous"></script>
     <script>
-$(document).ready(function() {
-    $('#rzp-button1').on('click', function(event) {
-        event.preventDefault(); // Prevent the default anchor click behavior
-        $('#paymentModal').modal('show'); // Show the modal
-    });
+    $(document).ready(function() {
+        $('#rzp-button1').on('click', function(event) {
+            event.preventDefault(); // Prevent the default anchor click behavior
+            $('#paymentModal').modal('show'); // Show the modal
+        });
 
-    $('#cashOnDelivery').on('click', function() {
-        // Handle cash on delivery logic
-        alert('You selected Cash on Delivery.');
-        $('#paymentModal').modal('hide'); // Hide the modal
+        $('#cashOnDelivery').on('click', function() {
+            this.window.location.href="{% url 'home:offline_payment' %}"
+            $('#paymentModal').modal('hide'); // Hide the modal
+        });
     });
-});
 
     </script>
     <script>
@@ -622,9 +621,79 @@ function populateCartFromStorage() {
         generateAndSavePDF()
     }
 
+    document.getElementById('cashOnDelivery').onclick = function (e) {
+        $('#paymentModal').modal('hide');
+        calculateAndSendTotal();
+        generateAndSavePDFoffline()
+    }
+
 
     const { jsPDF } = window.jspdf;
 
+    function generateAndSavePDFoffline() {
+    var element = document.getElementById('cart_item_contain');
+
+    if (!element) {
+        alert("Element with id 'cart_item_contain' not found!");
+        return;
+    }
+
+    // Reduce scale for better performance and lower file size
+    html2canvas(element, { scale: 1 }).then(canvas => {
+        var imgData = canvas.toDataURL('image/jpeg', 0.7); // JPEG format and compression quality set to 70%
+        var pdf = new jsPDF('p', 'mm', 'a4');
+
+        // Defined dimensions for A4 page
+        var pageWidth = pdf.internal.pageSize.getWidth();
+        var pageHeight = pdf.internal.pageSize.getHeight();
+        var imgHeight = canvas.height * (pageWidth / canvas.width); // Image height based on aspect ratio
+
+        // Add image to the first page
+        pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, imgHeight);
+
+        // Check if the image height exceeds the page height
+        var totalPages = Math.ceil(imgHeight / pageHeight);
+        for (var i = 1; i < totalPages; i++) {
+            pdf.addPage();
+            var yOffset = -pageHeight * i;
+            pdf.addImage(imgData, 'JPEG', 0, yOffset, pageWidth, imgHeight);
+        }
+
+        var formData = new FormData();
+        var pdfBlob = pdf.output('blob');
+        formData.append('pdf', pdfBlob, 'invoice.pdf');
+        formData.append('customer_email', "{{ request.user.email }}");
+
+        fetch('/save-pdf/offline/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        }).then(response => {
+            if (!response.ok) {
+                console.error('Network response was not ok:', response.statusText);
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response:', data);
+            if (data.success) {
+                window.location.href = '/offline-payment/';
+            } else {
+                console.error('Error saving the order:', data.error);
+                alert('Error saving the order: ' + data.error);
+            }
+        }).catch(error => {
+            console.error("Error:", error);
+            alert("An error occurred: " + error.message);
+        });
+    }).catch(error => {
+        console.error("Error generating PDF:", error);
+        alert("Error generating PDF.");
+    });
+}
 function generateAndSavePDF() {
     var element = document.getElementById('cart_item_contain');
 
