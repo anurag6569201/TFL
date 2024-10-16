@@ -70,6 +70,7 @@ def user_profile(request):
 
 def home(request):
     cart = request.session.get('cart', {})
+    scanner=Scanner.objects.first()
 
     lunch_add_ons = LunchMenu.objects.order_by('id').first()
     dinner_add_ons = DinnerMenu.objects.order_by('id').first()
@@ -95,6 +96,7 @@ def home(request):
         'today_veg_dinner_menu': today_veg_dinner_menu.items.all() if today_veg_dinner_menu else [],
         'today_nonveg_dinner_menu': today_nonveg_dinner_menu.items.all() if today_nonveg_dinner_menu else [],
         'cart': cart,
+        'scanner':scanner,
     }
     return render(request, 'apps/home/index.html', context)
 
@@ -125,6 +127,31 @@ def add_to_cart(request):
     
     return JsonResponse({'error': 'Invalid request method'})
 
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt 
+def remove_from_cart(request):
+    if request.method == 'POST':
+        item_name = request.POST.get('item_name')
+        cart = request.session.get('cart', {})
+
+        # Check if the item exists in the cart
+        if item_name in cart:
+            # Remove the item from the cart
+            del cart[item_name]
+            
+            # Update the session with the modified cart
+            request.session['cart'] = cart
+            
+            return JsonResponse({'success': True, 'cart': cart})
+        
+        return JsonResponse({'error': 'Item not found in cart'})
+    
+    return JsonResponse({'error': 'Invalid request method'})
+
+
 def view_cart(request):
     try:
         user = request.user
@@ -138,6 +165,7 @@ def view_cart(request):
         addresses = None
 
     cart = request.session.get('cart', {})
+    print(cart)
     items = {}
     
     today_veg_lunch_menu = TodayLunchMenu.objects.order_by('id').filter(item_category="veg").first()
@@ -149,20 +177,21 @@ def view_cart(request):
     cart_total_amount = 0  
 
     for cart_key, item_data in cart.items():
-        try:
-            item = get_object_or_404(Item, item_name=item_data['item_name'])  # Fetch using the original item name
-            item_total_price = item_data['quantity'] * item.item_price
-            items[cart_key] = {
-                'item_name': item.item_name,
-                'price': item.item_price,
-                'meal_type': item_data['meal_type'],
-                'quantity': item_data['quantity'],
-                'total_price': item_total_price,
-                'image_url': item.item_image.url if item.item_image else '',  # Assuming your Item model has an image field
-            }
-            cart_total_amount += item_total_price
-        except Http404:
-            continue
+        if item_data.get('quantity', 0) > 0:
+            try:
+                item = get_object_or_404(Item, item_name=item_data['item_name'])  # Fetch using the original item name
+                item_total_price = item_data['quantity'] * item.item_price
+                items[cart_key] = {
+                    'item_name': item.item_name,
+                    'price': item.item_price,
+                    'meal_type': item_data['meal_type'],
+                    'quantity': item_data['quantity'],
+                    'total_price': item_total_price,
+                    'image_url': item.item_image.url if item.item_image else '',  # Assuming your Item model has an image field
+                }
+                cart_total_amount += item_total_price
+            except Http404:
+                continue
 
     context = {
         'today_veg_lunch_menu_price': today_veg_lunch_menu,
@@ -444,11 +473,9 @@ def verify_delivery_otp(request):
 
 
 
-from datetime import timedelta
 def create_order(order_data):
     """ Helper function to create an order. """
     delivery_otp = random.randint(100000, 999999)
-    expiration_time = timezone.now() + timedelta(minutes=2) 
     return Order.objects.create(
         order_id=order_data['order_id'],
         customer_email=order_data['customer_email'],
@@ -457,52 +484,35 @@ def create_order(order_data):
         delivery_address_id=order_data['delivery_address_id'],
         pdf_invoice=order_data['pdf_path'],
         delivery_otp=delivery_otp,
-        expiration_time=expiration_time,
     )
 
 def offline_payment_view(request):
-    order_data = request.session.get('order_data')
     total_amount = request.session.get('total_amount', 0)
+    order_data = request.session.get('order_data')
+    order_id = order_data['order_id']
+    print(order_id)
 
-    if not order_data:
-        return redirect('home:view_cart')
-
-    # Create the order and set its expiration time
-    order = create_order(order_data)
-    temp_pdf_path = order_data['pdf_path']
-    with open(temp_pdf_path, 'rb') as temp_pdf_file:
-        order.pdf_invoice.save(f"invoice_{order.order_id}.pdf", File(temp_pdf_file), save=True)
-
+    # Retrieve the first scanner object (assuming this exists in your setup)
     scanner = Scanner.objects.first()
 
     return render(request, 'apps/home/offline_payment.html', {
-        'order': order,
         'scanner': scanner,
+        'order_id': order_id,
         'total_amount': total_amount,
     })
-from django.utils import timezone
-def cancel_order_view(request, order_id):
-    try:
-        order = get_object_or_404(Order, order_id=order_id)
-        if order.expiration_time and timezone.now() < order.expiration_time:
-            if order.payment_status == 'pending':
-                order.delete()  # Delete the order
-                return JsonResponse({'success': True, 'message': 'Order canceled successfully.'})
-            else:
-                return JsonResponse({'success': False, 'error': 'Order is already processed.'})
-        else:
-            return JsonResponse({'success': False, 'error': 'The 2-minute cancel window has passed.'})
-    except Order.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'Order not found.'})
-
-
 
 def confirm_order_view(request, order_id):
-    try:
-        order = get_object_or_404(Order, order_id=order_id)
-
-        if order.payment_status == 'pending' and not order.is_expired():
-
+    print(f"Order ID received: {order_id}")
+    order_data = request.session.get('order_data')
+    if request.method == 'POST':
+        try:
+            order = create_order(order_data)
+            
+            # Save PDF invoice
+            temp_pdf_path = order_data['pdf_path']
+            with open(temp_pdf_path, 'rb') as temp_pdf_file:
+                order.pdf_invoice.save(f"invoice_{order.order_id}.pdf", File(temp_pdf_file), save=True)
+            
             # Send confirmation email
             subject = 'Your Order Confirmation'
             email_template = 'apps/email/order_confirmation.html'
@@ -517,13 +527,20 @@ def confirm_order_view(request, order_id):
             email.attach_alternative(email_body, "text/html")
 
             # Attach the PDF invoice
-            pdf_file_path = order.pdf_invoice.path
-            email.attach_file(pdf_file_path)
+            email.attach_file(order.pdf_invoice.path)
 
             email.send()
+            if 'cart' in request.session:
+                del request.session['cart']
 
             return JsonResponse({'success': True, 'message': 'Order confirmed successfully.'})
-        else:
-            return JsonResponse({'success': False, 'error': 'Order is already processed or expired.'})
-    except Order.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'Order not found.'})
+
+        except Order.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Order not found.'})
+    
+
+def cancel_order_view(request):
+    # Redirect to the cart page and remove session data related to the order
+    if 'order_data' in request.session:
+        del request.session['order_data']
+    return redirect('cart:cart_page')

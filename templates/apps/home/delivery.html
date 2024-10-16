@@ -7,6 +7,7 @@
 {% endblock head_title %}
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'assets/css/login.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/loader.css' %}">
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
 <style>
@@ -14,7 +15,7 @@
         font-family: Arial, sans-serif;
         background-color: #f4f7f6;
     }
-    
+
     .container {
         width: 90%;
         margin: 50px auto;
@@ -44,7 +45,8 @@
         border-collapse: collapse;
     }
 
-    table th, table td {
+    table th,
+    table td {
         padding: 12px 15px;
         text-align: left;
     }
@@ -63,7 +65,8 @@
         margin-bottom: 5px;
     }
 
-    input[type="text"], input[type="hidden"] {
+    input[type="text"],
+    input[type="hidden"] {
         width: 100%;
         padding: 10px;
         margin-bottom: 15px;
@@ -107,10 +110,22 @@
 {% endblock stylesheet %}
 {% block content %}
 
-    
+
 <div class="container">
+    <div class="loader">
+        <svg viewBox="0 0 240 240" height="240" width="240" class="pl">
+            <circle stroke-linecap="round" stroke-dashoffset="-330" stroke-dasharray="0 660" stroke-width="20"
+                stroke="#000" fill="none" r="105" cy="120" cx="120" class="pl__ring pl__ring--a"></circle>
+            <circle stroke-linecap="round" stroke-dashoffset="-110" stroke-dasharray="0 220" stroke-width="20"
+                stroke="#000" fill="none" r="35" cy="120" cx="120" class="pl__ring pl__ring--b"></circle>
+            <circle stroke-linecap="round" stroke-dasharray="0 440" stroke-width="20" stroke="#000" fill="none" r="70"
+                cy="120" cx="85" class="pl__ring pl__ring--c"></circle>
+            <circle stroke-linecap="round" stroke-dasharray="0 440" stroke-width="20" stroke="#000" fill="none" r="70"
+                cy="120" cx="155" class="pl__ring pl__ring--d"></circle>
+        </svg>
+    </div>
     <h2>Pending Delivery Orders</h2>
-    
+
     <!-- Pending Orders Table -->
     <table id="pendingOrders" class="display table-responsive">
         <thead>
@@ -144,15 +159,15 @@
     <!-- OTP Verification Form -->
     <form id="otpForm" method="POST" action="{% url 'home:verify_delivery_otp' %}">
         {% csrf_token %}
-        
+
         <input type="hidden" id="order_id" name="order_id" required>
-        
+
         <label for="delivery_otp">Enter OTP:</label>
         <input type="text" id="delivery_otp" name="delivery_otp" required placeholder="Enter delivery OTP">
-        
-        <button class="login_logging_btn" type="submit" disabled>Verify OTP</button>
+
+        <button onclick="runloader()" class="login_logging_btn" type="submit" disabled>Verify OTP</button>
     </form>
-    
+
     <div id="result"></div>
 </div>
 
@@ -174,12 +189,12 @@
         const form = document.getElementById('otpForm');
         const submitButton = form.querySelector('button[type="submit"]');
         const hiddenOrderIdField = document.getElementById('order_id');
-        
+
         // Add event listener to each "Select" button in the table
         document.querySelectorAll('.select-order').forEach(button => {
             button.addEventListener('click', function () {
                 const orderId = this.getAttribute('data-order-id');
-                
+
                 // Set hidden input with the selected order_id
                 hiddenOrderIdField.value = orderId;
                 submitButton.disabled = false;  // Enable the OTP form submission button
@@ -189,10 +204,25 @@
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
-            
+
             const formData = new FormData(form);
             const url = form.action;
-    
+
+            // Function to show the loader
+            function runloader() {
+                const loader = document.querySelector('.loader');
+                loader.style.display = 'flex';  // Show the loader
+            }
+
+            // Function to hide the loader
+            function hideloader() {
+                const loader = document.querySelector('.loader');
+                loader.style.display = 'none';  // Hide the loader
+            }
+
+            // Show the loader before sending data
+            runloader();
+
             fetch(url, {
                 method: 'POST',
                 body: formData,
@@ -200,17 +230,26 @@
                     'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('result').innerHTML = data.message;
-                if (data.status === 'success') {
-                    form.reset();  // Reset the form on successful delivery
-                    submitButton.disabled = true;  // Disable the submit button again
-                    form.style.display = 'none';  // Hide the form after OTP verification
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                .then(response => response.json())
+                .then(data => {
+                    // Hide the loader once a response is received
+                    hideloader();
+
+                    document.getElementById('result').innerHTML = data.message;
+                    if (data.status === 'success') {
+                        form.reset();  // Reset the form on successful delivery
+                        submitButton.disabled = true;  // Disable the submit button again
+                        form.style.display = 'none';  // Hide the form after OTP verification
+                    }
+                })
+                .catch(error => {
+                    // Hide the loader in case of an error
+                    hideloader();
+
+                    console.error('Error:', error);
+                });
         });
+
     });
 </script>
 

@@ -97,7 +97,7 @@
                 {% if cart %}
                     <!-- Lunch Items Section -->
                     {% for item_name, item_data in cart.items %}
-                        {% if item_data.meal_type == 'lunch' %}
+                        {% if item_data.meal_type == 'lunch' and item_data.quantity > 0 %}
                             <div class="cart-item d-flex justify-content-between align-items-center pb-4 mb-4" data-item="{{ item_name }}">
                                 <div class="d-flex">
                                     <div class="img-placeholder me-3">
@@ -112,6 +112,7 @@
                                         <p class="item-price" data-id="{{ item_name }}">{{ item_data.price }}</p>
                                         <div class="input-group quantity-selector">
                                             <button class="btn btn-outline-secondary btn-minus" data-id="{{ item_name }}">-</button>
+                                            <input type="hidden" name="meal_type" value="lunch">
                                             <input type="number" class="form-control text-center" value="{{ item_data.quantity }}" min="0" max="6" id="{{ item_name }}_qty">
                                             <button class="btn btn-outline-secondary btn-plus" data-id="{{ item_name }}">+</button>
                                         </div>
@@ -141,6 +142,7 @@
                                         <p class="item-price" data-id="{{ item_name }}">{{ item_data.price }} /-</p>
                                         <div class="input-group quantity-selector">
                                             <button class="btn btn-outline-secondary btn-minus" data-id="{{ item_name }}">-</button>
+                                            <input type="hidden" name="meal_type" value="dinner">
                                             <input type="number" class="form-control text-center" value="{{ item_data.quantity }}" min="0" max="6" id="{{ item_name }}_qty">
                                             <button class="btn btn-outline-secondary btn-plus" data-id="{{ item_name }}">+</button>
                                         </div>
@@ -463,12 +465,10 @@
             });
             $('#subtotal').text(subtotal.toFixed(2));
             $('#total').text(subtotal.toFixed(2)); // Assuming no additional charges
-            calculateAndSendTotal();
         }
     
         // Event listener to update quantity
         $('.btn-plus, .btn-minus').click(function() {
-            calculateAndSendTotal();
             let itemId = $(this).data('id');
             let inputField = $('#' + itemId + '_qty');
             let currentQty = parseInt(inputField.val());
@@ -481,7 +481,6 @@
         });
     
         updateSubtotal();
-        calculateAndSendTotal();
     });
     function updateCartSummary() {
         let subtotal = 0;
@@ -493,7 +492,6 @@
 
             item.querySelector('.item-total').textContent = itemTotal.toFixed(2);
             subtotal += itemTotal;
-            calculateAndSendTotal();
         });
 
         const shippingFee = 0; // Change this if needed
@@ -503,7 +501,6 @@
         document.getElementById('shipping-fee').textContent = shippingFee.toFixed(2);
         document.getElementById('total').textContent = total.toFixed(2);
     }
-    
 document.querySelectorAll('.btn-minus').forEach(button => {
     button.addEventListener('click', function() {
         const itemId = this.getAttribute('data-id');
@@ -511,17 +508,40 @@ document.querySelectorAll('.btn-minus').forEach(button => {
         const priceElement = document.querySelector(`.item-price[data-id="${itemId}"]`);
         const price = parseFloat(priceElement.textContent); // Get price for the item
         let quantity = parseInt(inputField.value);
-
+        console.log((quantity-1) * price)
         if (quantity > 0) {
             quantity -= 1;
             inputField.value = quantity;
+            let mealType = inputField.closest('.quantity-selector').querySelector('input[name="meal_type"]').value; // Return "lunch" or "dinner"
+            let combinedId = itemId;
+            console.log(combinedId)
+            localStorage.removeItem(combinedId);
 
-            updateCart(itemId, quantity);
+            const itemTotal = (quantity) * price; // Calculate total for the item
+            console.log(itemTotal)
+            if (itemTotal < 1) {
+                sessionStorage.removeItem(itemId);
+                $.ajax({
+                    type: 'POST',
+                    url: '/remove_from_cart/',  // Add the URL to your Django view
+                    data: {
+                        'item_name': itemId,  // Adjust this according to your item identification
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'  // Ensure CSRF token is sent
+                    },
+                    success: function(response) {
+                        console.log('Item removed from cart', response);
+                    },
+                    error: function(error) {
+                        console.error('Error removing item from cart', error);
+                    }
+                });
+            } else {
+                const itemData = { id: itemId, quantity: quantity, price: price };
+                localStorage.setItem(itemId, JSON.stringify(itemData)); // or use sessionStorage
+            }
+
             updateCartSummary();
             calculateAndSendTotal();
-
-            const itemData = { id: itemId, quantity: quantity, price: price };
-            localStorage.setItem(itemId, JSON.stringify(itemData)); // or use sessionStorage
         }
     });
 });
@@ -537,47 +557,26 @@ document.querySelectorAll('.btn-plus').forEach(button => {
         quantity += 1;
         inputField.value = quantity;
 
-        updateCart(itemId, quantity);
-        updateCartSummary();
-        calculateAndSendTotal();
-
         const itemData = { id: itemId, quantity: quantity, price: price };
         localStorage.setItem(itemId, JSON.stringify(itemData));
+
+        updateCartSummary();
+        calculateAndSendTotal();
     });
 });
 
-    
-            function updateCart(itemId, quantity) {
-                fetch('/cart/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    body: JSON.stringify({
-                        item_name: itemId,
-                        quantity: quantity
-                    })
-                })
-            }
-            function calculateAndSendTotal() {
+function calculateAndSendTotal() {
     var totalSum = 0;
 
     $('.item-total').each(function() {
         var itemTotal = parseFloat($(this).text()) || 0;
         totalSum += itemTotal;
     });
-    if (totalSum == 0) {
-        $('.razorpay_btn').each(function() {
-            $(this).prop('disabled', true);
-            $(this).css('opacity', '0.6');
-        });
-    }
-    if (totalSum > 0) {
-        $('.razorpay_btn').each(function() {
-            $(this).prop('disabled', false);
-            $(this).css('opacity', '1');
-        });
+
+    if (totalSum === 0) {
+        $('.razorpay_btn').prop('disabled', true).css('opacity', '0.6');
+    } else {
+        $('.razorpay_btn').prop('disabled', false).css('opacity', '1');
     }
 
     $.ajax({
@@ -589,6 +588,7 @@ document.querySelectorAll('.btn-plus').forEach(button => {
         }
     });
 }
+
 function populateCartFromStorage() {
     for (let i = 0; i < localStorage.length; i++) {
         const itemId = localStorage.key(i);
@@ -601,7 +601,6 @@ function populateCartFromStorage() {
             if (inputField && priceElement) {
                 inputField.value = itemData.quantity;
 
-                updateCart(itemData.id, itemData.quantity);
                 updateCartSummary();
                 calculateAndSendTotal();
             }
@@ -807,11 +806,9 @@ function generateAndSavePDF() {
             if (addedItems.has(uniqueKey)) {
                 addedItems.delete(uniqueKey);
                 $(this).text('Add'); 
-                updateCart(itemName, mealType, 0); 
             } else {
                 addedItems.add(uniqueKey);
                 $(this).text('Added'); 
-                updateCart(itemName, mealType, 1); 
             }
         });
         $('.increase').on('click', function() {
@@ -842,23 +839,5 @@ function generateAndSavePDF() {
             }
         });
 
-        function updateCart(itemName, mealType, quantity) {
-            $.ajax({
-                type: 'POST',
-                url: '{% url "home:add_to_cart" %}', 
-                data: {
-                    'item_name': itemName,
-                    'meal_type': mealType,
-                    'quantity': quantity,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}' 
-                },
-                success: function(response) {
-                    console.log('Cart updated:', response.cart);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-        }
     });
 </script>

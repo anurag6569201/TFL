@@ -9,6 +9,7 @@ app_name = 'home'
 urlpatterns = [
     path('', views.home, name='home'),
     path('add-to-cart/', views.add_to_cart, name='add_to_cart'),
+    path('remove_from_cart/', views.remove_from_cart, name='remove_from_cart'),
     path('cart/', views.view_cart, name='view_cart'),
     path('save-pdf/', save_pdf, name='save_pdf'),
     path('save-pdf/offline/', views.save_pdf_offline, name='save_pdf_offline'),
@@ -22,5 +23,4 @@ urlpatterns = [
     path('verify-delivery-otp/', views.verify_delivery_otp, name='verify_delivery_otp'),
     path('offline-payment/', views.offline_payment_view, name='offline_payment'),
     path('confirm-order/<str:order_id>/', views.confirm_order_view, name='confirm_order'),
-    path('cancel-order/<str:order_id>/', views.cancel_order_view, name='cancel_order'),
 ]

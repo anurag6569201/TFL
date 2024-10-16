@@ -487,7 +487,7 @@ crossorigin="anonymous"></script>
             <h5 class="mt-2" style="text-align: right;"><span style="color: #FF951C;">Scan</span> For Complete Online Menu</h5>
             <div style="display: flex;justify-content: space-between;width: 100%;">
                 <img width="200px" src="{% static 'assets/img/partner/eating.png' %}" alt="">
-                <img width="200px" src="{% static 'assets/img/why/scanner.webp' %}" alt="">
+                <img width="200px" src="{{ scanner.scanner_image.url }}" alt="">
             </div>
         </div>
     </div>
