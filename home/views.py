@@ -165,7 +165,6 @@ def view_cart(request):
         addresses = None
 
     cart = request.session.get('cart', {})
-    print(cart)
     items = {}
     
     today_veg_lunch_menu = TodayLunchMenu.objects.order_by('id').filter(item_category="veg").first()
@@ -386,7 +385,6 @@ def checkout(request):
 
 def razorpay_view(request):
     total_amount = request.session.get('total_amount', 0)
-    print(total_amount)
 
     amountt = float(total_amount)
     client = razorpay.Client(auth=(settings.RAZORPAY_KEY, settings.RAZORPAY_SECRET))
@@ -441,7 +439,6 @@ def verify_delivery_otp(request):
                 'status': 'failure',
                 'message': 'Invalid OTP, please try again.'
             }
-            print(response_data)
             return JsonResponse(response_data)
 
         if order.delivery_otp == entered_otp:
@@ -524,7 +521,6 @@ def offline_payment_view(request):
     total_amount = request.session.get('total_amount', 0)
     order_data = request.session.get('order_data')
     order_id = order_data['order_id']
-    print(order_id)
 
     # Retrieve the first scanner object (assuming this exists in your setup)
     scanner = Scanner.objects.first()
