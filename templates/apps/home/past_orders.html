@@ -49,61 +49,7 @@
         font-size: 18px;
         margin-top: 20px;
     }
-    @media (max-width: 767.98px) {
-        .orders-table thead {
-            display: none; /* Hide table headers */
-        }
 
-        .orders-table {
-            border: 0px solid #ddd;
-            font-size: 16px;
-        }
-
-        .orders-table tbody, .orders-table tr, .orders-table td {
-            display: block;
-            width: 100%;
-        }
-
-        .orders-table td {
-            text-align: left;
-            padding: 10px 15px;
-            background: #ffffff !important;
-            position: relative;
-            border-bottom: 1px solid #e9661d;
-        }
-        .table-striped>tbody>tr:nth-of-type(odd)>*{
-            --bs-table-bg-type: #ffffff !important;
-        }
-
-        .orders-table td:last-child {
-            border-bottom: none; /* Remove border for the last element */
-        }
-
-        .orders-table td::before {
-            content: attr(data-label);
-            font-weight: bold;
-            margin-right: 10px;
-            color: #E9661D;
-        }
-
-        .btn-sm {
-            background-color: #e9661d;
-            border-color: #e9661d;
-            color: white;
-            padding: 5px 10px;
-        }
-
-        .btn-sm:hover {
-            background-color: #d45b18;
-            border-color: #d45b18;
-        }
-
-        .badge {
-            padding: 5px 10px;
-            font-size: 14px;
-            border-radius: 4px;
-        }
-    }
 </style>
 {% endblock stylesheet %}
 {% block content %}
@@ -116,34 +62,34 @@
                 <thead class="thead-dark" style="background-color: #E9661C; color: white;">
                     <tr>
                         <th>Order ID</th>
-                        <th>Payment ID</th>
-                        <th>Invoice</th>
-                        <th>Order Date</th>
-                        <th>Payment Status</th>
-                        <th>Payment Mode</th>
-                        <th>Delivery Address</th>
+                        <th class="d-none d-md-table-cell">Payment ID</th>
+                        <th class="">Invoice</th>
+                        <th class="">Order Date</th>
+                        <th class="d-none d-md-table-cell">Payment Status</th>
+                        <th class="d-none d-md-table-cell">Payment Mode</th>
+                        <th class="d-none d-md-table-cell">Delivery Address</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for order in past_orders %}
                     <tr class="mb-3">
                         <td data-label="Order ID">{{ order.order_id }}</td>
-                        <td data-label="Payment ID">{{ order.payment_id }}</td>
-                        <td data-label="Invoice">
+                        <td class="d-none d-md-table-cell" data-label="Payment ID">{{ order.payment_id }}</td>
+                        <td class="" data-label="Invoice">
                             {% if order.pdf_invoice %}
                                 <a href="{{ order.pdf_invoice.url }}" class="btn btn-sm btn-primary" target="_blank">Download</a>
                             {% else %}
                                 No Invoice
                             {% endif %}
                         </td>
-                        <td data-label="Order Date">{{ order.created_at|date:"d M Y" }}</td>
-                        <td data-label="Payment Status">
+                        <td class="" data-label="Order Date">{{ order.created_at|date:"d M Y" }}</td>
+                        <td class="d-none d-md-table-cell" data-label="Payment Status">
                             <span class="badge {% if order.payment_status == 'paid' %}badge-success{% else %}badge-warning{% endif %}">
                                 {{ order.payment_status|title }}
                             </span>
                         </td>
-                        <td data-label="Payment Mode">{{ order.payment_mode|title }}</td>
-                        <td data-label="Delivery Address">
+                        <td class="d-none d-md-table-cell" data-label="Payment Mode">{{ order.payment_mode|title }}</td>
+                        <td class="d-none d-md-table-cell" data-label="Delivery Address">
                             {% if order.delivery_address %}
                                 {{ order.delivery_address|truncatechars:30 }}
                             {% else %}
@@ -159,8 +105,8 @@
         <p class="text-center">You have no past orders.</p>
         {% endif %}
     </div>
-
 {% endblock content %}
+
 {% block extra_body %}
 {{ block.super }}
 {% if PASSKEY_LOGIN_ENABLED %}

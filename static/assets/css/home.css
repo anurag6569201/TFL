@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Concert+One&family=Merienda:wght@300..900&display=swap');
+
 body,html{
     overflow-x: hidden;
 }
@@ -179,6 +181,7 @@ body,html{
     align-items: center;
     flex-direction: column;
     min-height: 50vh;
+    font-family: "Merienda", cursive;
 }
 .order_page_board {
     background-image: url('../../../static/assets/img/order/rect.webp');
@@ -488,12 +491,24 @@ body,html{
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 15px;
+    position: relative;
+}
+.why_tfl_li .extra_span{
+    position: absolute;
+    left: 34px;
+    opacity: 0;
+    font-size: 14px;
+}
+.why_tfl_li:hover .extra_span{
+    opacity: .8;
+    transition: .7s;
+    transform: translate(0,20px);
 }
 
-
-
-
+.why_tfl_li:hover img{
+    transition: .7s;
+    transform: translate(0,10px);
+}
 
 .swiper {
     width: 100%;
@@ -568,7 +583,31 @@ footer h5{
     color: white;
     font-weight: 700;
 }
+/* Completely hide number input spinners (arrows) */
 
+/* For WebKit-based browsers (Chrome, Safari, Edge) */
+input[type="number"].no-spinner::-webkit-outer-spin-button,
+input[type="number"].no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;  /* Prevent any margins from being applied */
+}
+
+/* For Firefox */
+input[type="number"].no-spinner {
+    -moz-appearance: textfield; /* Hide the default arrows in Firefox */
+}
+
+/* General rule for all browsers to remove the arrows */
+input[type="number"].no-spinner {
+    appearance: none; /* Removes native appearance */
+}
+
+input[type="number"].no-arrows {
+    -moz-appearance: textfield;
+}
+.list-unstyled li a{
+    pointer-events: none;
+}
 @media (max-width: 1440px){
     
 }

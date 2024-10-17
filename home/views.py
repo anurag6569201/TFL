@@ -412,11 +412,11 @@ def past_orders(request):
 
 
 
-
 @login_required
 @permission_required('home.can_change_order', raise_exception=True)
 def delivery_page(request):
-    pending_orders = Order.objects.order_by('-created_at').filter(delivery_status='pending').select_related('delivery_address')
+    # Fetch all pending orders
+    pending_orders = Order.objects.filter(delivery_status='pending').select_related('delivery_address')
 
     context = {
         'pending_orders': pending_orders,
@@ -424,52 +424,86 @@ def delivery_page(request):
     return render(request, 'apps/home/delivery.html', context)
 
 
+
+
+
+
+
 @login_required
 @permission_required('home.can_change_order', raise_exception=True)
 def verify_delivery_otp(request):
     if request.method == 'POST':
-        order_id = request.POST.get('order_id')
         entered_otp = int(request.POST.get('delivery_otp')) 
-        order = get_object_or_404(Order, order_id=order_id)
+        try:
+            order = get_object_or_404(Order, delivery_otp=entered_otp)
+        except:
+            response_data = {
+                'status': 'failure',
+                'message': 'Invalid OTP, please try again.'
+            }
+            print(response_data)
+            return JsonResponse(response_data)
 
         if order.delivery_otp == entered_otp:
-            if order.payment_status=="pending":
-                order.payment_status = 'paid'
-                order.save()
-                
-            order.delivery_status = 'delivered'
-            order.save()
-
-            subject = 'Your Order Has Been Delivered!'
-            email_template = 'apps/email/order_delivery_confirmation.html'  # Path to the HTML email template
-            context = {
+            # OTP verified, send delivery details
+            response_data = {
+                'status': 'success',
                 'order_id': order.order_id,
                 'customer_email': order.customer_email,
-                'delivery_address': order.delivery_address,
+                'phone_number': order.delivery_address.phone_number,
+                'address_line1': order.delivery_address.address_line1,
+                'city': order.delivery_address.city,
+                'payment_mode':order.payment_mode,
+                'payment_status':order.payment_status,
             }
-            
-            email_body = render_to_string(email_template, context)
-            email = EmailMultiAlternatives(subject, '', settings.EMAIL_HOST_USER, [order.customer_email])
-            email.attach_alternative(email_body, "text/html")
-
-            logo_path = os.path.join(settings.STATIC_ROOT, 'img/home', 'tfl_logo.webp')
-            if os.path.exists(logo_path):
-                with open(logo_path, 'rb') as logo_file:
-                    logo_image = MIMEImage(logo_file.read())
-                    logo_image.add_header('Content-ID', '<logo_image>')
-                    logo_image.add_header('Content-Disposition', 'inline', filename=os.path.basename(logo_path))
-                    email.attach(logo_image)
-
-            email.send()
-
-            return JsonResponse({'status': 'success', 'message': 'OTP verified, order delivered!'})
-
+            return JsonResponse(response_data)
         else:
-            return JsonResponse({'status': 'failure', 'message': 'Invalid OTP, please try again.'})
+            response_data = {
+                'status': 'failure',
+                'message': 'Invalid OTP, please try again.'
+            }
+            return JsonResponse(response_data)
 
     return render(request, 'apps/home/delivery.html')
 
+@login_required
+@permission_required('home.can_change_order', raise_exception=True)
+def confirm_delivery(request):
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        order = get_object_or_404(Order, order_id=order_id)
 
+        # Update order as delivered
+        if order.payment_status == 'pending':
+            order.payment_status = 'paid'
+        order.delivery_status = 'delivered'
+        order.save()
+
+        # Send confirmation email
+        subject = 'Your Order Has Been Delivered!'
+        email_template = 'apps/email/order_delivery_confirmation.html'  # Email template
+        context = {
+            'order_id': order.order_id,
+            'customer_email': order.customer_email,
+            'delivery_address': order.delivery_address,
+        }
+
+        email_body = render_to_string(email_template, context)
+        email = EmailMultiAlternatives(subject, '', settings.EMAIL_HOST_USER, [order.customer_email])
+        email.attach_alternative(email_body, "text/html")
+
+        logo_path = os.path.join(settings.STATIC_ROOT, 'img/home', 'tfl_logo.webp')
+        if os.path.exists(logo_path):
+            with open(logo_path, 'rb') as logo_file:
+                logo_image = MIMEImage(logo_file.read())
+                logo_image.add_header('Content-ID', '<logo_image>')
+                email.attach(logo_image)
+
+        email.send()
+
+        return JsonResponse({'status': 'success', 'message': 'Delivery confirmed successfully!'})
+
+    return render(request, 'apps/home/delivery.html')
 
 
 

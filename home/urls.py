@@ -20,6 +20,7 @@ urlpatterns = [
     path('profile/', views.user_profile, name='user_profile'),
     path('past_orders/', views.past_orders, name='past_orders'),
     path('delivery/', views.delivery_page, name='delivery_page'),
+    path('confirm-delivery/', views.confirm_delivery, name='confirm_delivery'),
     path('verify-delivery-otp/', views.verify_delivery_otp, name='verify_delivery_otp'),
     path('offline-payment/', views.offline_payment_view, name='offline_payment'),
     path('confirm-order/<str:order_id>/', views.confirm_order_view, name='confirm_order'),

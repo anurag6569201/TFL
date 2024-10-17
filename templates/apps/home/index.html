@@ -208,7 +208,7 @@ crossorigin="anonymous"></script>
                                     <div class="input-group quantity-selector hidden">
                                         <button type="button" class="btn btn-outline-secondary btn-minus" data-id="{{ item.item_name }}">-</button>
                                         <input type="hidden" name="meal_type" value="lunch">
-                                        <input type="number" class="form-control text-center" value="0" min="0" max="6" id="{{ item.item_name }}_qty" data-meal-type="lunch">
+                                        <input type="number" class="form-control text-center no-spinner" value="0" min="0" max="6" id="{{ item.item_name }}_qty" data-meal-type="lunch">
                                         <button type="button" class="btn btn-outline-secondary btn-plus" data-id="{{ item.item_name }}">+</button>
                                     </div>
                                 </form>
@@ -417,30 +417,38 @@ crossorigin="anonymous"></script>
                     <h1>Why <span style="color: #FF951C;"> TFL??</span></h1>
                     <p>At The Flavour Lake, we are committed to bringing you the freshest, most delicious meals right to
                         your doorstep. Here’s why our customers love us:</p>
-                    <span class="why_tfl_li">
-                        <img width="24px" src="{% static 'assets/img/why/6.webp' %}" alt="">
-                        <span>Fresh and Quality Ingredients</span>
-                    </span>
-                    <span class="why_tfl_li">
-                        <img width="24px" src="{% static 'assets/img/why/5.webp' %}" alt="">
-                        <span>Convenient and Reliable Delivery</span>
-                    </span>
-                    <span class="why_tfl_li">
-                        <img width="24px" src="{% static 'assets/img/why/4.webp' %}" alt="">
-                        <span>Simple Ordering Process</span>
-                    </span>
-                    <span class="why_tfl_li">
-                        <img width="24px" src="{% static 'assets/img/why/3.webp' %}" alt="">
-                        <span>Customizable Meal Options</span>
-                    </span>
-                    <span class="why_tfl_li">
-                        <img width="24px" src="{% static 'assets/img/why/2.webp' %}" alt="">
-                        <span>Clean Kitchen</span>
-                    </span>
-                    <span class="why_tfl_li">
-                        <img width="24px" src="{% static 'assets/img/why/1.webp' %}" alt="">
-                        <span>Commitment to Customer Satisfaction</span>
-                    </span>
+                    <div style="display: flex;justify-content: center;flex-direction: column;gap: 25px;">
+                        <span class="why_tfl_li">
+                            <img width="24px" src="{% static 'assets/img/why/6.webp' %}" alt="">
+                            <span>Fresh and Quality Ingredients</span>
+                            <span class="extra_span">"Fresh,Local High Quality Ingredients"</span>
+                        </span>
+                        <span class="why_tfl_li">
+                            <img width="24px" src="{% static 'assets/img/why/5.webp' %}" alt="">
+                            <span>Convenient and Reliable Delivery</span>
+                            <span class="extra_span">"Hot Meals Delivered On Time"</span>
+                        </span>
+                        <span class="why_tfl_li">
+                            <img width="24px" src="{% static 'assets/img/why/4.webp' %}" alt="">
+                            <span>Simple Ordering Process</span>
+                            <span class="extra_span">"Simple Ordering,Secure QR delivery"</span>
+                        </span>
+                        <span class="why_tfl_li">
+                            <img width="24px" src="{% static 'assets/img/why/3.webp' %}" alt="">
+                            <span>Customizable Meal Options</span>
+                            <span class="extra_span">"Varied Daily menu for all tastes"</span>
+                        </span>
+                        <span class="why_tfl_li">
+                            <img width="24px" src="{% static 'assets/img/why/2.webp' %}" alt="">
+                            <span>Clean Kitchen</span>
+                            <span class="extra_span">"Spotless Kitchen ensuring safe,Hygienic Meals"</span>
+                        </span>
+                        <span class="why_tfl_li">
+                            <img width="24px" src="{% static 'assets/img/why/1.webp' %}" alt="">
+                            <span>Commitment to Customer Satisfaction</span>
+                            <span class="extra_span">"Your Satisfaction is our top priority"</span>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -485,7 +493,7 @@ crossorigin="anonymous"></script>
                 <div class="swiper-pagination"></div>
             </div>
             <h5 class="mt-2" style="text-align: right;"><span style="color: #FF951C;">Scan</span> For Complete Online Menu</h5>
-            <div style="display: flex;justify-content: space-between;width: 100%;">
+            <div class="swiper_images" style="display: flex;justify-content: space-between;width: 100%;">
                 <img width="200px" src="{% static 'assets/img/partner/eating.png' %}" alt="">
                 <img width="200px" src="{{ scanner.scanner_image.url }}" alt="">
             </div>
@@ -495,7 +503,7 @@ crossorigin="anonymous"></script>
     <div class="other_partners">
         <h1 class="order_page_h1 mt-5" style="text-align: center;"><span style="border-bottom: 3px solid black;"> Our
             <span style="color: #FF951C;">Other Brands</span></span></h1>
-        <div class="container">
+        <div class="container mt-4">
             <div class="row">
                 <div class="col-md-4">
                     <div class="image-box-part">
@@ -769,6 +777,11 @@ crossorigin="anonymous"></script>
     var swiper = new Swiper(".mySwiper", {
         slidesPerView: 4,
         spaceBetween: 30,
+        loop: true, 
+        autoplay: {
+            delay: 2000, 
+            disableOnInteraction: false, 
+        },
         keyboard: {
             enabled: true,
         },
@@ -804,6 +817,7 @@ crossorigin="anonymous"></script>
         }
     });
 </script>
+
 <script>
     function increaseValue() {
         var value = parseInt(document.getElementById('quantity').value, 10);

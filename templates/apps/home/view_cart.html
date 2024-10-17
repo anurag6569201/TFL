@@ -523,10 +523,10 @@ document.querySelectorAll('.btn-minus').forEach(button => {
                 sessionStorage.removeItem(itemId);
                 $.ajax({
                     type: 'POST',
-                    url: '/remove_from_cart/',  // Add the URL to your Django view
+                    url: '/remove_from_cart/',  
                     data: {
-                        'item_name': itemId,  // Adjust this according to your item identification
-                        'csrfmiddlewaretoken': '{{ csrf_token }}'  // Ensure CSRF token is sent
+                        'item_name': itemId, 
+                        'csrfmiddlewaretoken': '{{ csrf_token }}' 
                     },
                     success: function(response) {
                         console.log('Item removed from cart', response);
@@ -537,7 +537,7 @@ document.querySelectorAll('.btn-minus').forEach(button => {
                 });
             } else {
                 const itemData = { id: itemId, quantity: quantity, price: price };
-                localStorage.setItem(itemId, JSON.stringify(itemData)); // or use sessionStorage
+                localStorage.setItem(itemId, JSON.stringify(itemData)); 
             }
 
             updateCartSummary();

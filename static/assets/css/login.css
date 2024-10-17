@@ -92,3 +92,13 @@
     text-align: center !important;
     text-decoration: none;
 }
+
+@media (max-width:560px){
+    .login_container form{
+        width: 320px !important;
+        padding: 0 !important;
+    }
+    .login_container{
+        padding: 10px;
+    }
+}
