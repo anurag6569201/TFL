@@ -70,12 +70,21 @@ class Scanner(models.Model):
 
 
 class DeliveryAddress(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='delivery_addresses')
-    address_line1 = models.CharField(max_length=255,default="Address Line 1")
-    city = models.CharField(max_length=100,default="City A")
-    phone_number = models.CharField(max_length=15,default="9999900000")
-    is_primary = models.BooleanField(default=False)
+    ADDRESS_CHOICES = [
+        ('IIIT', 'IIIT'),
+        ('STPI', 'STPI'),
+        ('KIIT', 'KIIT'),
+    ]
+    
+    CITY_CHOICES = [
+        ('Bhubaneswar', 'Bhubaneswar'),
+    ]
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='delivery_addresses')
+    address_line1 = models.CharField(max_length=255, choices=ADDRESS_CHOICES, default='IIIT')
+    city = models.CharField(max_length=100, choices=CITY_CHOICES, default='Bhubaneswar')
+    phone_number = models.CharField(max_length=10, default='XXXXXXXXXX')
+    is_primary = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

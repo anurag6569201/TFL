@@ -452,6 +452,7 @@ def verify_delivery_otp(request):
                 'city': order.delivery_address.city,
                 'payment_mode':order.payment_mode,
                 'payment_status':order.payment_status,
+                'delivery_status':order.delivery_status,
             }
             return JsonResponse(response_data)
         else:

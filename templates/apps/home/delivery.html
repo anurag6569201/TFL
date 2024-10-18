@@ -68,6 +68,7 @@
                         <li class="list-group-item">Address: <span id="address"></span></li>
                         <li class="list-group-item">Payment Mode: <span id="payment_mode"></span></li>
                         <li class="list-group-item">Payment Status: <span id="payment_status"></span></li>
+                        <li class="list-group-item">Delivery Status: <span id="delivery_status"></span></li>
                     </ul>
 
                     <form id="confirmForm" method="POST" action="{% url 'home:confirm_delivery' %}">
@@ -137,13 +138,14 @@
                         $('#email').text(data.customer_email);
                         $('#payment_mode').text(data.payment_mode);
                         $('#payment_status').text(data.payment_status);
+                        $('#delivery_status').text(data.delivery_status);
                         $('#phone').text(data.phone_number);
                         $('#address').text(`${data.address_line1}, ${data.city}`);
                         $('#confirm_order_id').val(data.order_id);
-                        let payment_status_data= data.payment_status;
+                        let delivery_status_data= data.delivery_status;
                         deliveryDetails.show(); 
                         
-                        if (payment_status_data === "pending") {
+                        if (delivery_status_data === "pending") {
                             confirmForm.find('button').show();  // Show confirm button
                         } else {
                             confirmForm.find('button').hide();  // Hide confirm button if payment is complete
