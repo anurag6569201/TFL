@@ -55,7 +55,7 @@
 </head>
 <body>
     <div class="container">
-        <img src="cid:logo_image" alt="Logo" style="width: 100px; margin-bottom: 20px;"> <!-- Logo Image -->
+        <img loading="lazy" src="cid:logo_image" alt="Logo" style="width: 100px; margin-bottom: 20px;"> <!-- Logo Image -->
         <h1>Order Confirmation</h1>
         <p>Thank you for your order, <strong>{{ order.customer_email }}</strong>!</p>
         <p>Your order ID is: <strong>{{ order.order_id }}</strong></p>

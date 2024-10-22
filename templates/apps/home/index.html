@@ -24,14 +24,14 @@ crossorigin="anonymous"></script>
 <div class="container-fluid">
     <div class="cart_button" style="z-index: 10000;">
         <a href="{% url 'home:view_cart' %}">
-            <img width="25px" src="{% static 'assets/img/home/cart.webp' %}" alt="">
+            <img loading="lazy" width="25px" src="{% static 'assets/img/home/cart.webp' %}" alt="">
         </a>
     </div>
     <div class="bg_pattern">
         <span class="bg_spotlight"></span>
-        <img class="arrow_image" src="{% static 'assets/img/home/arrow.webp' %}" alt="">
-        <img class="Decore_image" src="{% static 'assets/img/home/Decore.webp' %}" alt="">
-        <img src="{% static 'assets/img/home/bg_pattern.webp' %}" alt="">
+        <img loading="lazy" class="arrow_image" src="{% static 'assets/img/home/arrow.webp' %}" alt="">
+        <img loading="lazy" class="Decore_image" src="{% static 'assets/img/home/Decore.webp' %}" alt="">
+        <img loading="lazy" src="{% static 'assets/img/home/bg_pattern.webp' %}" alt="">
     </div>
     <div class="landing_page" id="landing_page">
         <div class="row">
@@ -41,26 +41,26 @@ crossorigin="anonymous"></script>
                 <p style="font-size: 25px;">Order healthy and tasty meals from The Flavour Lake. Freshly prepared and
                     delivered daily to your location.</p>
                 <div class="pizza_making_img">
-                    <img src="{% static 'assets/img/home/pizza.webp' %}" alt="">
+                    <img loading="lazy" src="{% static 'assets/img/home/pizza.webp' %}" alt="">
                 </div>
             </div>
             <div class="col-md-6 main_landing_img">
                 <div class="img_main_container">
-                    <img class="testing_ring" src="../../../static/assets/img/home/ring.webp" alt="">
+                    <img loading="lazy" class="testing_ring" src="../../../static/assets/img/home/ring.webp" alt="">
                     <div class="image_container_anim row" style="padding: 0;margin: 0;">
                         <div class="quad1 col-md-6 quad" style="padding: 0;margin: 0;">
-                            <img src="{% static 'assets/img/home/cholebhature.webp' %}" alt="Chole Bhature"
+                            <img loading="lazy" src="{% static 'assets/img/home/cholebhature.webp' %}" alt="Chole Bhature"
                                 class="food-img img1">
                         </div>
                         <div class="quad2 col-md-6 quad" style="padding: 0;margin: 0;">
-                            <img src="{% static 'assets/img/home/Dalmakhanibowl.webp' %}" alt="Dal Makhani Bowl"
+                            <img loading="lazy" src="{% static 'assets/img/home/Dalmakhanibowl.webp' %}" alt="Dal Makhani Bowl"
                                 class="food-img img2">
                         </div>
                         <div class="quad3 col-md-6 quad" style="padding: 0;margin: 0;">
-                            <img src="{% static 'assets/img/home/wings.webp' %}" alt="Wings" class="food-img img3">
+                            <img loading="lazy" src="{% static 'assets/img/home/wings.webp' %}" alt="Wings" class="food-img img3">
                         </div>
                         <div class="quad4 col-md-6 quad" style="padding: 0;margin: 0;">
-                            <img src="{% static 'assets/img/home/Hakkanoodles.webp' %}" alt="Hakka Noodles"
+                            <img loading="lazy" src="{% static 'assets/img/home/Hakkanoodles.webp' %}" alt="Hakka Noodles"
                                 class="food-img img4">
                         </div>
                     </div>
@@ -86,7 +86,7 @@ crossorigin="anonymous"></script>
                         <div class="board_data col-md-12">
                             <div class="board_heading mt-5 w-100" style="display: flex;align-items: center;flex-direction: column;">
                                 <h2>
-                                    <center>Veg Menu <img width="30" src="../../../static/assets/img/order/veg.webp" alt=""></center>
+                                    <center>Veg Menu <img loading="lazy" width="30" src="../../../static/assets/img/order/veg.webp" alt=""></center>
                                 </h2>
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
                             </div>
@@ -127,7 +127,7 @@ crossorigin="anonymous"></script>
                         <div class="board_data col-md-12">
                             <div class="board_heading mt-5 w-100" style="display: flex;align-items: center;flex-direction: column;">
                                 <h2>
-                                    <center>Non-Veg Menu <img width="30" src="../../../static/assets/img/order/non_veg.webp" alt=""></center>
+                                    <center>Non-Veg Menu <img loading="lazy" width="30" src="../../../static/assets/img/order/non_veg.webp" alt=""></center>
                                 </h2>
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
                             </div>
@@ -179,7 +179,7 @@ crossorigin="anonymous"></script>
                                 <div id="elipse_color"></div>
                                 <div id="elipse_nocolor"></div>
                             </div>
-                            <img id="foto_prod" src="{{ item.item_image.url }}" alt="{{ item.item_name }}">
+                            <img loading="lazy" id="foto_prod" src="{{ item.item_image.url }}" alt="{{ item.item_name }}">
                             <div id="preco_prod"><span class="item-price" data-id="{{ item.item_name }}">{{ item.item_price }}/-</span></div>
                             <div id="avaliacoes">
                                 <div id="ava_tot"></div>
@@ -236,7 +236,7 @@ crossorigin="anonymous"></script>
                             <div class="board_heading mt-5 w-100"
                                 style="display: flex;align-items: center;flex-direction: column;">
                                 <h2>
-                                    <center>Veg Menu <img width="30" src="../../../static/assets/img/order/veg.webp"
+                                    <center>Veg Menu <img loading="lazy" width="30" src="../../../static/assets/img/order/veg.webp"
                                             alt=""></center>
                                 </h2>
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
@@ -280,7 +280,7 @@ crossorigin="anonymous"></script>
                             <div class="board_heading mt-5 w-100"
                                 style="display: flex;align-items: center;flex-direction: column;">
                                 <h2>
-                                    <center>Non-Veg Menu <img width="30"
+                                    <center>Non-Veg Menu <img loading="lazy" width="30"
                                             src="../../../static/assets/img/order/non_veg.webp" alt=""></center>
                                 </h2>
                                 <hr style="margin: 0;background-color: white;padding: 2px;width: 50%;opacity: 1;">
@@ -337,7 +337,7 @@ crossorigin="anonymous"></script>
                                 <div id="elipse_color"></div>
                                 <div id="elipse_nocolor"></div>
                             </div>
-                            <img id="foto_prod" src="{{ item.item_image.url }}" alt="{{ item.item_name }}">
+                            <img loading="lazy" id="foto_prod" src="{{ item.item_image.url }}" alt="{{ item.item_name }}">
                             <div id="preco_prod"><span class="item-price" data-id="{{ item.item_name }}">{{ item.item_price }}/-</span></div>
                             <div id="avaliacoes">
                                 <div id="ava_tot"></div>
@@ -385,20 +385,20 @@ crossorigin="anonymous"></script>
             <div class="row">
                 <div class="col-md-4" style="display: flex;align-items: center;flex-direction: column;">
                     <div style="height: 350px;display: flex;align-items: center;justify-content: center;">
-                        <img width="340px" src="{% static 'assets/img/work/order_food.webp' %}" alt="">
+                        <img loading="lazy" width="340px" src="{% static 'assets/img/work/order_food.webp' %}" alt="">
                     </div>
                     <p style="text-align: center;"> Check the website and order your favorites by choosing your delivery
                         location.</p>
                 </div>
                 <div class="col-md-4" style="display: flex;align-items: center;flex-direction: column;">
                     <div style="height: 350px;display: flex;align-items: center;justify-content: center;">
-                        <img width="340px" src="{% static 'assets/img/work/chef.webp' %}" alt="">
+                        <img loading="lazy" width="340px" src="{% static 'assets/img/work/chef.webp' %}" alt="">
                     </div>
                     <p style="text-align: center;">We prepare your food with utmost hygiene and love. </p>
                 </div>
                 <div class="col-md-4" style="display: flex;align-items: center;flex-direction: column;">
                     <div style="height: 350px;display: flex;align-items: center;justify-content: center;">
-                        <img width="340px" src="{% static 'assets/img/work/time.webp' %}" alt="">
+                        <img loading="lazy" width="340px" src="{% static 'assets/img/work/time.webp' %}" alt="">
                     </div>
                     <p style="text-align: center;"> Pay and get your order delivered o your address.</p>
                 </div>
@@ -411,7 +411,7 @@ crossorigin="anonymous"></script>
         <div class="container">
             <div class="row">
                 <div class="col-md-6" style="display: flex;justify-content: left;align-items: center;">
-                    <img width="500px" src="{% static 'assets/img/work/frame.webp' %}" alt="">
+                    <img loading="lazy" width="500px" src="{% static 'assets/img/work/frame.webp' %}" alt="">
                 </div>
                 <div class="col-md-6" style="display: flex;justify-content: center;flex-direction: column;">
                     <h1>Why <span style="color: #FF951C;"> TFL??</span></h1>
@@ -419,32 +419,32 @@ crossorigin="anonymous"></script>
                         your doorstep. Here’s why our customers love us:</p>
                     <div style="display: flex;justify-content: center;flex-direction: column;gap: 25px;">
                         <span class="why_tfl_li">
-                            <img width="24px" src="{% static 'assets/img/why/6.webp' %}" alt="">
+                            <img loading="lazy" width="24px" src="{% static 'assets/img/why/6.webp' %}" alt="">
                             <span>Fresh and Quality Ingredients</span>
                             <span class="extra_span">"Fresh,Local High Quality Ingredients"</span>
                         </span>
                         <span class="why_tfl_li">
-                            <img width="24px" src="{% static 'assets/img/why/5.webp' %}" alt="">
+                            <img loading="lazy" width="24px" src="{% static 'assets/img/why/5.webp' %}" alt="">
                             <span>Convenient and Reliable Delivery</span>
                             <span class="extra_span">"Hot Meals Delivered On Time"</span>
                         </span>
                         <span class="why_tfl_li">
-                            <img width="24px" src="{% static 'assets/img/why/4.webp' %}" alt="">
+                            <img loading="lazy" width="24px" src="{% static 'assets/img/why/4.webp' %}" alt="">
                             <span>Simple Ordering Process</span>
                             <span class="extra_span">"Simple Ordering,Secure QR delivery"</span>
                         </span>
                         <span class="why_tfl_li">
-                            <img width="24px" src="{% static 'assets/img/why/3.webp' %}" alt="">
+                            <img loading="lazy" width="24px" src="{% static 'assets/img/why/3.webp' %}" alt="">
                             <span>Customizable Meal Options</span>
                             <span class="extra_span">"Varied Daily menu for all tastes"</span>
                         </span>
                         <span class="why_tfl_li">
-                            <img width="24px" src="{% static 'assets/img/why/2.webp' %}" alt="">
+                            <img loading="lazy" width="24px" src="{% static 'assets/img/why/2.webp' %}" alt="">
                             <span>Clean Kitchen</span>
                             <span class="extra_span">"Spotless Kitchen ensuring safe,Hygienic Meals"</span>
                         </span>
                         <span class="why_tfl_li">
-                            <img width="24px" src="{% static 'assets/img/why/1.webp' %}" alt="">
+                            <img loading="lazy" width="24px" src="{% static 'assets/img/why/1.webp' %}" alt="">
                             <span>Commitment to Customer Satisfaction</span>
                             <span class="extra_span">"Your Satisfaction is our top priority"</span>
                         </span>
@@ -471,7 +471,7 @@ crossorigin="anonymous"></script>
                                     <div id="elipse_color"></div>
                                     <div id="elipse_nocolor"></div>
                                 </div>
-                                <img id="foto_prod" src="{{ item.item_image.url }}" alt="Comida">
+                                <img loading="lazy" id="foto_prod" src="{{ item.item_image.url }}" alt="Comida">
                                 <div id="preco_prod"><span>{{ item.item_price }}/-</span></div>
                                 <div id="avaliacoes">
                                     <div id="ava_tot">
@@ -494,8 +494,8 @@ crossorigin="anonymous"></script>
             </div>
             <h5 class="mt-2" style="text-align: right;"><span style="color: #FF951C;">Scan</span> For Complete Online Menu</h5>
             <div class="swiper_images" style="display: flex;justify-content: space-between;width: 100%;">
-                <img width="200px" src="{% static 'assets/img/partner/eating.png' %}" alt="">
-                <img width="200px" src="{{ scanner.scanner_image.url }}" alt="">
+                <img loading="lazy" width="200px" src="{% static 'assets/img/partner/eating.png' %}" alt="">
+                <img loading="lazy" width="200px" src="{{ scanner.scanner_image.url }}" alt="">
             </div>
         </div>
     </div>
@@ -507,19 +507,19 @@ crossorigin="anonymous"></script>
             <div class="row">
                 <div class="col-md-4">
                     <div class="image-box-part">
-                        <img  src="{% static 'assets/img/partner/sip.webp' %}" alt="">
+                        <img loading="lazy"  src="{% static 'assets/img/partner/sip.webp' %}" alt="">
                     </div>
                     <p style="text-align: center;">"Discover Sip Station's exciting range of drinks, from Korean bubble tea to refreshing juices. A sip of innovation in every flavor."</p>
                 </div>
                 <div class="col-md-4">
                     <div class="image-box-part">
-                        <img src="{% static 'assets/img/partner/street_green.png' %}" alt="">
+                        <img loading="lazy" src="{% static 'assets/img/partner/street_green.png' %}" alt="">
                     </div>
                     <p style="text-align: center;">"Explore Street Greens for fresh, flavorful salads, whole wheat sandwiches, and more. Perfectly balanced for health and taste."</p>
                 </div>
                 <div class="col-md-4">
                     <div class="image-box-part">
-                        <img style="scale: .9;" src="{% static 'assets/img/partner/ovens.png' %}" alt="">
+                        <img loading="lazy" style="scale: .9;" src="{% static 'assets/img/partner/ovens.png' %}" alt="">
                     </div>
                     <p style="text-align: center;">"Delight in Mr. Ovens’ array of baked treats and continental favorites. Every item promises comfort and quality."</p>
                 </div>
@@ -532,7 +532,7 @@ crossorigin="anonymous"></script>
             <div class="row">
                 <!-- First Column: Brand and About -->
                 <div class="col-md-6 col-lg-4 mb-4">
-                    <h2><img width="150px" src="{% static 'assets/img/home/tfl_logo.webp' %}" alt=""></h2>
+                    <h2><img loading="lazy" width="150px" src="{% static 'assets/img/home/tfl_logo.webp' %}" alt=""></h2>
                     <p>Plot no.-3,Infocity Avenue ,Infront of Manoj nonveg world,Infocity,Bhubaneswar <br>Reach us at:-7381092990</p>
                 </div>
                 
