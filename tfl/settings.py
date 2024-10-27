@@ -26,8 +26,8 @@ SECRET_KEY = 'django-insecure-!yi!%-1jzcekx%+&@gj(q%5wd4#x-v)4^slpu-k^ypjel&p@1x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://tfl2k24.azurewebsites.net','http://127.0.0.1:8000/','*']
-CSRF_TRUSTED_ORIGINS = ['https://tfl2k24.azurewebsites.net','http://127.0.0.1']
+ALLOWED_HOSTS = ['https://tfl2k24.azurewebsites.net','http://127.0.0.1:8000/','*','https://theflavourlake.in/']
+CSRF_TRUSTED_ORIGINS = ['https://tfl2k24.azurewebsites.net','http://127.0.0.1','https://theflavourlake.in']
 
 
 # Application definition

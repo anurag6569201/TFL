@@ -592,7 +592,14 @@ function calculateAndSendTotal() {
 function populateCartFromStorage() {
     for (let i = 0; i < localStorage.length; i++) {
         const itemId = localStorage.key(i);
-        const itemData = JSON.parse(localStorage.getItem(itemId));
+        let itemData;
+
+        try {
+            itemData = JSON.parse(localStorage.getItem(itemId));
+        } catch (error) {
+            console.warn(`Invalid JSON for item ${itemId}:`, error);
+            continue;  // Skip this entry if JSON parsing fails
+        }
 
         if (itemData && itemData.id && itemData.quantity && itemData.price) {
             const inputField = document.getElementById(itemData.id + '_qty');
@@ -608,7 +615,8 @@ function populateCartFromStorage() {
     }
 }
 
-    populateCartFromStorage();
+populateCartFromStorage();
+
 
         </script>
     

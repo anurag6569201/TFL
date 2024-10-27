@@ -114,3 +114,11 @@
         width: 60% !important;
     }
 }
+@media (min-width:1401px){
+    .button1 {
+        width: 80%;
+    }
+    .board_data_button_dinner .button1{
+        width: 80% !important;
+    }
+}
