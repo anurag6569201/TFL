@@ -118,6 +118,11 @@ crossorigin="anonymous"></script>
 {% endblock stylesheet %}
 {% block content %}
 <div class="container-fluid">
+    <div class="cart_button" style="z-index: 10000;">
+        <a href="{% url 'home:view_cart' %}">
+            <img loading="lazy" width="25px" src="{% static 'assets/img/home/cart.webp' %}" alt="">
+        </a>
+    </div>
     <div class="container mt-5 mb-5">
         <div class="row justify-content-center">
             <div class="col-md-8">

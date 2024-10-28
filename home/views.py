@@ -8,16 +8,17 @@ import json
 from django.urls import reverse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Order
+from .models import Order,Scanner
 import uuid
 from allauth.account.models import EmailAddress
-from .forms import DeliveryAddressForm
+from .forms import DeliveryAddressForm,ContactForm
 from .models import DeliveryAddress
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required,permission_required
 import random
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from datetime import datetime
 
 def user_profile(request):
     user = request.user
@@ -82,6 +83,37 @@ def home(request):
     today_veg_dinner_menu=TodayDinnerMenu.objects.order_by('id').filter(item_category="veg").first()
     today_nonveg_dinner_menu=TodayDinnerMenu.objects.order_by('id').filter(item_category="non_veg").first()
 
+    user_email = request.user.email if request.user.is_authenticated else ''
+    print(user_email)
+    if request.method == 'POST':
+        print("recieved POST request")
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            user_message = form.cleaned_data['message']
+            print(user_message)
+
+            subject = 'Query from User'
+            email_template = 'apps/email/query.html'
+            context = {
+                'user_message': user_message,
+                'user_email': user_email,
+            }
+            email_body = render_to_string(email_template, context)
+            email = EmailMultiAlternatives(subject, '', settings.EMAIL_HOST_USER, [user_email])
+            email.attach_alternative(email_body, "text/html")
+            
+            logo_path = os.path.join(settings.MEDIA_ROOT, 'scanner/tfl_logo.webp') 
+            with open(logo_path, 'rb') as logo_file:
+                logo = MIMEImage(logo_file.read())
+                logo.add_header('Content-ID', '<logo_image>')
+                email.attach(logo)
+
+            email.send()
+            print("Email sent")
+            messages.success(request, 'Message sent successfully.')
+
+    form = ContactForm()
+
     context = {
         'today_veg_lunch_menu_price': today_veg_lunch_menu,
         'today_nonveg_lunch_menu_price': today_nonveg_lunch_menu,
@@ -97,6 +129,7 @@ def home(request):
         'today_nonveg_dinner_menu': today_nonveg_dinner_menu.items.all() if today_nonveg_dinner_menu else [],
         'cart': cart,
         'scanner':scanner,
+        'contactform':form,
     }
     return render(request, 'apps/home/index.html', context)
 
@@ -324,14 +357,11 @@ def success_cart(request):
         pdf_file_path = order.pdf_invoice.path
         email.attach_file(pdf_file_path)
 
-        # Attach logo if it exists
-        logo_path = os.path.join(settings.STATIC_ROOT, 'img/home', 'tfl_logo.webp')
-        if os.path.exists(logo_path):
-            with open(logo_path, 'rb') as logo_file:
-                logo_image = MIMEImage(logo_file.read())
-                logo_image.add_header('Content-ID', '<logo_image>')
-                logo_image.add_header('Content-Disposition', 'inline', filename=os.path.basename(logo_path))
-                email.attach(logo_image)
+        logo_path = os.path.join(settings.MEDIA_ROOT, 'scanner/tfl_logo.webp') 
+        with open(logo_path, 'rb') as logo_file:
+            logo = MIMEImage(logo_file.read())
+            logo.add_header('Content-ID', '<logo_image>')
+            email.attach(logo)
 
         # Send the email
         email.send()
@@ -414,10 +444,12 @@ def past_orders(request):
 @permission_required('home.can_change_order', raise_exception=True)
 def delivery_page(request):
     # Fetch all pending orders
+    scanner=Scanner.objects.first()
     pending_orders = Order.objects.filter(delivery_status='pending').select_related('delivery_address')
 
     context = {
         'pending_orders': pending_orders,
+        'scanner':scanner,
     }
     return render(request, 'apps/home/delivery.html', context)
 
@@ -476,7 +508,7 @@ def confirm_delivery(request):
             order.payment_status = 'paid'
         order.delivery_status = 'delivered'
         order.save()
-
+        current_datetime = datetime.now()
         # Send confirmation email
         subject = 'Your Order Has Been Delivered!'
         email_template = 'apps/email/order_delivery_confirmation.html'  # Email template
@@ -484,18 +516,18 @@ def confirm_delivery(request):
             'order_id': order.order_id,
             'customer_email': order.customer_email,
             'delivery_address': order.delivery_address,
+            'delivery_date':current_datetime.strftime('%Y-%m-%d %H:%M:%S'),
         }
 
         email_body = render_to_string(email_template, context)
         email = EmailMultiAlternatives(subject, '', settings.EMAIL_HOST_USER, [order.customer_email])
         email.attach_alternative(email_body, "text/html")
 
-        logo_path = os.path.join(settings.STATIC_ROOT, 'img/home', 'tfl_logo.webp')
-        if os.path.exists(logo_path):
-            with open(logo_path, 'rb') as logo_file:
-                logo_image = MIMEImage(logo_file.read())
-                logo_image.add_header('Content-ID', '<logo_image>')
-                email.attach(logo_image)
+        logo_path = os.path.join(settings.MEDIA_ROOT, 'scanner/tfl_logo.webp') 
+        with open(logo_path, 'rb') as logo_file:
+            logo = MIMEImage(logo_file.read())
+            logo.add_header('Content-ID', '<logo_image>')
+            email.attach(logo)
 
         email.send()
 
@@ -559,6 +591,11 @@ def confirm_order_view(request, order_id):
 
             # Attach the PDF invoice
             email.attach_file(order.pdf_invoice.path)
+            logo_path = os.path.join(settings.MEDIA_ROOT, 'scanner/tfl_logo.webp') 
+            with open(logo_path, 'rb') as logo_file:
+                logo = MIMEImage(logo_file.read())
+                logo.add_header('Content-ID', '<logo_image>')
+                email.attach(logo)
 
             email.send()
             if 'cart' in request.session:
@@ -575,3 +612,5 @@ def cancel_order_view(request):
     if 'order_data' in request.session:
         del request.session['order_data']
     return redirect('cart:cart_page')
+
+

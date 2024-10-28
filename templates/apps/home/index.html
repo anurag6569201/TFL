@@ -561,20 +561,21 @@ crossorigin="anonymous"></script>
                 <!-- Fourth Column: Get in Touch and Subscribe -->
                 <div class="col-md-6 col-lg-4 mb-4">
                     <h5>Get in touch</h5>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                    <div class="input-group">
-                        <input type="email" class="form-control" placeholder="Email" aria-label="Email">
-                        <button class="login_logging_btn" type="button">Subscribe</button>
-                    </div>
-                </div>
+                    <form  method="POST">
+                        {% csrf_token %}
+                        {{ contactform }}
+                        <button class="login_logging_btn mt-2" type="submit">Send Message</button>
+                    </form>
+                </div>                
             </div>
             
             <!-- Copyright Section -->
             <div class="row pt-4">
                 <div class="col text-center">
-                    <p class="text-black-50 mb-0">Copyright © 2024 TFL.</p>
+                    <p class="text-black-50 mb-0">Copyright © 2024 TFL. <br> Developer: <a style="color: #ff9722;" target="_blank" href="https://anurag.icu">anurag6569201</a></p>
                 </div>
             </div>
+            <br><br>
         </div>
     </footer>
     
