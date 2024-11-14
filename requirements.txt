@@ -5,12 +5,14 @@ cffi==1.17.1
 charset-normalizer==3.3.2
 cryptography==43.0.1
 defusedxml==0.8.0rc2
+diff-match-patch==20241021
 Django==5.1.1
 django-allauth==65.1.0
 django-appconf==1.0.6
 django-background-tasks==1.2.8
 django-compressor==4.5.1
 django-htmlmin==0.11.0
+django-import-export==4.2.1
 html5lib==1.1
 htmlmin==0.1.12
 idna==3.10
@@ -31,6 +33,7 @@ social-auth-app-django==5.4.2
 social-auth-core==4.5.4
 soupsieve==2.6
 sqlparse==0.5.1
+tablib==3.7.0
 urllib3==2.2.3
 webencodings==0.5.1
 whitenoise==6.8.2
