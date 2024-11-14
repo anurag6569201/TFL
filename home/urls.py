@@ -24,4 +24,6 @@ urlpatterns = [
     path('verify-delivery-otp/', views.verify_delivery_otp, name='verify_delivery_otp'),
     path('offline-payment/', views.offline_payment_view, name='offline_payment'),
     path('confirm-order/<str:order_id>/', views.confirm_order_view, name='confirm_order'),
+
+    path('update-cart-badge/', views.update_cart_badge, name='update_cart_badge'),
 ]

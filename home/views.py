@@ -614,3 +614,13 @@ def cancel_order_view(request):
     return redirect('cart:cart_page')
 
 
+
+
+@csrf_exempt  # Only if you're using POST and not handling CSRF in headers
+def update_cart_badge(request):
+    if request.method == 'POST':
+        item_count = request.POST.get('item_count', 0)
+        # Perform necessary actions with the item_count
+        return JsonResponse({'item_count': item_count})
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)

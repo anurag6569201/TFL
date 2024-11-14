@@ -503,24 +503,25 @@
         document.getElementById('shipping-fee').textContent = shippingFee.toFixed(2);
         document.getElementById('total').textContent = total.toFixed(2);
     }
-document.querySelectorAll('.btn-minus').forEach(button => {
+    document.querySelectorAll('.btn-minus').forEach(button => {
     button.addEventListener('click', function() {
         const itemId = this.getAttribute('data-id');
         const inputField = document.getElementById(itemId + '_qty');
         const priceElement = document.querySelector(`.item-price[data-id="${itemId}"]`);
         const price = parseFloat(priceElement.textContent); // Get price for the item
         let quantity = parseInt(inputField.value);
-        console.log((quantity-1) * price)
+        console.log("Before decrement:", quantity, price);
+
         if (quantity > 0) {
             quantity -= 1;
             inputField.value = quantity;
             let mealType = inputField.closest('.quantity-selector').querySelector('input[name="meal_type"]').value; // Return "lunch" or "dinner"
             let combinedId = itemId;
-            console.log(combinedId)
-            localStorage.removeItem(combinedId);
+            console.log("Updated quantity:", quantity, "Meal Type:", mealType);
 
             const itemTotal = (quantity) * price; // Calculate total for the item
-            console.log(itemTotal)
+            console.log("Item Total:", itemTotal);
+
             if (itemTotal < 1) {
                 sessionStorage.removeItem(itemId);
                 $.ajax({
@@ -532,14 +533,30 @@ document.querySelectorAll('.btn-minus').forEach(button => {
                     },
                     success: function(response) {
                         console.log('Item removed from cart', response);
-                    },
+                        const cartItem = document.querySelector(`[data-item="${itemId}"]`);
+                        if (cartItem) {
+                                cartItem.remove();  // Remove the item completely from the DOM
+                            }
+                        },
                     error: function(error) {
                         console.error('Error removing item from cart', error);
                     }
                 });
+
+                // Hide the item if quantity is 0 or less
+                const cartItem = document.querySelector(`[data-item="${itemId}"]`);
+                console.log("Cart Item:", cartItem);
+
+                if (cartItem) {
+                    // Hide the entire cart item container
+                    cartItem.style.display = 'none';
+                    console.log("Cart item hidden");
+                } else {
+                    console.log("Cart item not found with data-item:", itemId);
+                }
             } else {
                 const itemData = { id: itemId, quantity: quantity, price: price };
-                localStorage.setItem(itemId, JSON.stringify(itemData)); 
+                sessionStorage.setItem(itemId, JSON.stringify(itemData)); 
             }
 
             updateCartSummary();
@@ -547,6 +564,7 @@ document.querySelectorAll('.btn-minus').forEach(button => {
         }
     });
 });
+
 
 document.querySelectorAll('.btn-plus').forEach(button => {
     button.addEventListener('click', function() {
@@ -560,7 +578,7 @@ document.querySelectorAll('.btn-plus').forEach(button => {
         inputField.value = quantity;
 
         const itemData = { id: itemId, quantity: quantity, price: price };
-        localStorage.setItem(itemId, JSON.stringify(itemData));
+        sessionStorage.setItem(itemId, JSON.stringify(itemData));
 
         updateCartSummary();
         calculateAndSendTotal();
@@ -592,12 +610,12 @@ function calculateAndSendTotal() {
 }
 
 function populateCartFromStorage() {
-    for (let i = 0; i < localStorage.length; i++) {
-        const itemId = localStorage.key(i);
+    for (let i = 0; i < sessionStorage.length; i++) {
+        const itemId = sessionStorage.key(i);
         let itemData;
 
         try {
-            itemData = JSON.parse(localStorage.getItem(itemId));
+            itemData = JSON.parse(sessionStorage.getItem(itemId));
         } catch (error) {
             console.warn(`Invalid JSON for item ${itemId}:`, error);
             continue;  // Skip this entry if JSON parsing fails
@@ -775,78 +793,3 @@ function generateAndSavePDF() {
 
 </div>
 {% endblock content %}
-
-
-
-<script>
-    $(document).ready(function() {
-        // Initialize addedItems set based on items already in the cart
-        const addedItems = new Set();
-        
-        // Create unique key by combining item name and meal type
-        function createUniqueKey(itemName, mealType) {
-            return itemName + '-' + mealType;
-        }
-
-        {% for item in cart.items %}
-            addedItems.add(createUniqueKey("{{ item.item_name }}", "{{ item.meal_type }}"));
-        {% endfor %}
-
-        $('.add-addon').each(function() {
-            const itemName = $(this).data('id');
-            const mealType = $(this).data('meal');
-
-            // Create unique key for this button's item and meal type
-            const uniqueKey = createUniqueKey(itemName, mealType);
-
-            if (addedItems.has(uniqueKey)) {
-                $(this).text('Added'); // Mark button as "Added" if item is in the cart for the specific meal type
-            }
-        });
-
-        $('.add-addon').click(function(event) {
-            event.preventDefault();
-            const itemName = $(this).data('id');
-            const mealType = $(this).data('meal'); 
-
-            // Create unique key for the clicked item and meal type
-            const uniqueKey = createUniqueKey(itemName, mealType);
-
-            if (addedItems.has(uniqueKey)) {
-                addedItems.delete(uniqueKey);
-                $(this).text('Add'); 
-            } else {
-                addedItems.add(uniqueKey);
-                $(this).text('Added'); 
-            }
-        });
-        $('.increase').on('click', function() {
-            var inputId = $(this).data('id');
-            var currentVal = parseInt($('#' + inputId).val());
-            if (currentVal < 6) {
-                currentVal++;
-                $('#' + inputId).val(currentVal);
-                sessionStorage.setItem(inputId, currentVal);
-            }
-        });
-
-        $('.decrease').on('click', function() {
-            var inputId = $(this).data('id');
-            var currentVal = parseInt($('#' + inputId).val());
-            if (currentVal > 0) {
-                currentVal--;
-                $('#' + inputId).val(currentVal);
-                sessionStorage.setItem(inputId, currentVal);
-            }
-        });
-
-        $('.quantity input').each(function() {
-            var inputId = $(this).attr('id');
-            var savedQty = sessionStorage.getItem(inputId);
-            if (savedQty !== null) {
-                $(this).val(savedQty);
-            }
-        });
-
-    });
-</script>
