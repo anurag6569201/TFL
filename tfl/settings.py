@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['https://tfl2k24.azurewebsites.net','http://127.0.0.1:8000/','*','https://theflavourlake.in/']
 CSRF_TRUSTED_ORIGINS = ['https://tfl2k24.azurewebsites.net','http://127.0.0.1','https://theflavourlake.in']
@@ -33,6 +33,8 @@ INSTALLED_APPS = [
 
     'compressor',
     'htmlmin', # html minify for production
+
+    'import_export',
 ]
 
 MIDDLEWARE = [

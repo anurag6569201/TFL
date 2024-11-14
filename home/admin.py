@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Item, LunchMenu, DinnerMenu, Scanner,DeliciousMenu,Menu_Board_items,TodayLunchMenu,TodayDinnerMenu,Order,DeliveryAddress
+from .models import Item, LunchMenu, DinnerMenu, Scanner,DeliciousMenu,Menu_Board_items,WeeklyMenu,Order,DeliveryAddress
+from import_export.admin import ImportExportModelAdmin
 
 # Admin for Item model
 @admin.register(Item)
@@ -10,7 +11,7 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 @admin.register(Menu_Board_items)
-class Menu_Board_itemsAdmin(admin.ModelAdmin):
+class Menu_Board_itemsAdmin(ImportExportModelAdmin):
     list_display = ('item_name',)
     search_fields = ('item_name',)
 
@@ -21,18 +22,24 @@ class LunchMenuAdmin(admin.ModelAdmin):
     list_display = ('id',)  # Display the ID of the Lunch Menu
     filter_horizontal = ('items',)  # Easy selection of many-to-many items
 
-# Admin for LunchMenu model
-@admin.register(TodayLunchMenu)
-class TodayLunchMenuAdmin(admin.ModelAdmin):
-    list_display = ('id','item_category')  # Display the ID of the Lunch Menu
-    filter_horizontal = ('items',)  # Easy selection of many-to-many items
+@admin.register(WeeklyMenu)
+class WeeklyMenuAdmin(ImportExportModelAdmin):
+    list_display = ("day_of_week", "meal_type", "item_category", "price")
+    list_filter = ("day_of_week", "meal_type", "item_category")
+    search_fields = ("day_of_week", "meal_type", "item_category")
+    filter_horizontal = ("items",)  # Enables a horizontal filter widget for ManyToMany fields
+    date_hierarchy = "date"
+    ordering = ("day_of_week", "meal_type")
 
-# Admin for LunchMenu model
-@admin.register(TodayDinnerMenu)
-class TodayDinnerMenuAdmin(admin.ModelAdmin):
-    list_display = ('id','item_category')  # Display the ID of the Lunch Menu
-    filter_horizontal = ('items',)  # Easy selection of many-to-many items
-
+    fieldsets = (
+        (None, {
+            "fields": ("day_of_week", "meal_type", "item_category", "price")
+        }),
+        ("Items", {
+            "fields": ("items",),
+        }),
+    )
+    
 # Admin for DinnerMenu model
 @admin.register(DinnerMenu)
 class DinnerMenuAdmin(admin.ModelAdmin):

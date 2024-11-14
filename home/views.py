@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Item, LunchMenu, DinnerMenu, Scanner, DeliciousMenu,TodayLunchMenu,TodayDinnerMenu
+from .models import Item, LunchMenu, DinnerMenu, Scanner, DeliciousMenu,WeeklyMenu
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse,Http404,HttpResponse
 import razorpay
@@ -19,6 +19,7 @@ import random
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from datetime import datetime
+
 
 def user_profile(request):
     user = request.user
@@ -69,7 +70,13 @@ def user_profile(request):
     }
     return render(request, 'apps/home/user_profile.html', context)
 
+
 def home(request):
+    current_date = datetime.now()
+    day_of_week_c = current_date.strftime("%A")
+    formatted_date = current_date.strftime("%d-%m-%Y")
+
+    print(day_of_week_c)
     cart = request.session.get('cart', {})
     request.session.modified = True
     
@@ -79,11 +86,11 @@ def home(request):
     dinner_add_ons = DinnerMenu.objects.order_by('id').first()
     crousal_menu_items=DeliciousMenu.objects.order_by('id').first()
 
-    today_veg_lunch_menu=TodayLunchMenu.objects.order_by('id').filter(item_category="veg").first()
-    today_nonveg_lunch_menu=TodayLunchMenu.objects.order_by('id').filter(item_category="non_veg").first()
+    today_veg_lunch_menu=WeeklyMenu.objects.order_by('id').filter(item_category="veg",meal_type='Lunch',day_of_week=day_of_week_c).first()
+    today_nonveg_lunch_menu=WeeklyMenu.objects.order_by('id').filter(item_category="non_veg",meal_type='Lunch',day_of_week=day_of_week_c).first()
 
-    today_veg_dinner_menu=TodayDinnerMenu.objects.order_by('id').filter(item_category="veg").first()
-    today_nonveg_dinner_menu=TodayDinnerMenu.objects.order_by('id').filter(item_category="non_veg").first()
+    today_veg_dinner_menu=WeeklyMenu.objects.order_by('id').filter(item_category="veg",meal_type='Dinner',day_of_week=day_of_week_c).first()
+    today_nonveg_dinner_menu=WeeklyMenu.objects.order_by('id').filter(item_category="non_veg",meal_type='Dinner',day_of_week=day_of_week_c).first()
 
     user_email = request.user.email if request.user.is_authenticated else ''
     print(user_email)
@@ -117,6 +124,7 @@ def home(request):
     form = ContactForm()
 
     context = {
+        'formatted_date':formatted_date,
         'today_veg_lunch_menu_price': today_veg_lunch_menu,
         'today_nonveg_lunch_menu_price': today_nonveg_lunch_menu,
         'today_veg_dinner_menu_price': today_veg_dinner_menu,
@@ -202,16 +210,19 @@ def view_cart(request):
         addresses = user.delivery_addresses.filter(is_primary=True).all()
     except AttributeError: 
         addresses = None
+    current_date = datetime.now()
+    day_of_week_c = current_date.strftime("%A")
+    formatted_date = current_date.strftime("%d-%m-%Y")
 
     cart = request.session.get('cart', {})
     request.session.modified = True
     items = {}
     
-    today_veg_lunch_menu = TodayLunchMenu.objects.order_by('id').filter(item_category="veg").first()
-    today_nonveg_lunch_menu = TodayLunchMenu.objects.order_by('id').filter(item_category="non_veg").first()
-    
-    today_veg_dinner_menu = TodayDinnerMenu.objects.order_by('id').filter(item_category="veg").first()
-    today_nonveg_dinner_menu = TodayDinnerMenu.objects.order_by('id').filter(item_category="non_veg").first()
+    today_veg_lunch_menu=WeeklyMenu.objects.order_by('id').filter(item_category="veg",meal_type='Lunch',day_of_week=day_of_week_c).first()
+    today_nonveg_lunch_menu=WeeklyMenu.objects.order_by('id').filter(item_category="non_veg",meal_type='Lunch',day_of_week=day_of_week_c).first()
+
+    today_veg_dinner_menu=WeeklyMenu.objects.order_by('id').filter(item_category="veg",meal_type='Dinner',day_of_week=day_of_week_c).first()
+    today_nonveg_dinner_menu=WeeklyMenu.objects.order_by('id').filter(item_category="non_veg",meal_type='Dinner',day_of_week=day_of_week_c).first()
 
     cart_total_amount = 0  
 

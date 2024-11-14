@@ -36,31 +36,37 @@ class DeliciousMenu(models.Model):
     def __str__(self):
         return f"Dinner Menu {self.id}"
 
-class TodayLunchMenu(models.Model):
-    options = (
-        ("veg","veg"),
-        ("non_veg","non_veg"),
-    )
-    item_category=models.CharField(max_length=100,choices=options)
-    items = models.ManyToManyField(Menu_Board_items, related_name='today_lunch_menu')
+class WeeklyMenu(models.Model):
+    DAY_CHOICES = [
+        ("Monday", "Monday"),
+        ("Tuesday", "Tuesday"),
+        ("Wednesday", "Wednesday"),
+        ("Thursday", "Thursday"),
+        ("Friday", "Friday"),
+        ("Saturday", "Saturday"),
+        ("Sunday", "Sunday"),
+    ]
+
+    MEAL_CHOICES = [
+        ("Lunch", "Lunch"),
+        ("Dinner", "Dinner"),
+    ]
+
+    CATEGORY_CHOICES = [
+        ("veg", "veg"),
+        ("non_veg", "non_veg"),
+    ]
+
+    day_of_week = models.CharField(max_length=20, choices=DAY_CHOICES)
+    meal_type = models.CharField(max_length=20, choices=MEAL_CHOICES)
+    item_category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
+    items = models.ManyToManyField(Menu_Board_items, related_name='weekly_menu')
     price = models.IntegerField()
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"Menu for {self.date}"
-    
-class TodayDinnerMenu(models.Model):
-    options = (
-        ("veg","veg"),
-        ("non_veg","non_veg"),
-    )
-    item_category=models.CharField(max_length=100,choices=options)
-    items = models.ManyToManyField(Menu_Board_items, related_name='today_dinner_menu')
-    price = models.IntegerField()
-    date = models.DateField(auto_now_add=True)
+        return f"{self.meal_type} Menu for {self.day_of_week} ({self.date})"
 
-    def __str__(self):
-        return f"Menu for {self.date}"
 
 class Scanner(models.Model):
     scanner_image = models.ImageField(upload_to='scanner/')
