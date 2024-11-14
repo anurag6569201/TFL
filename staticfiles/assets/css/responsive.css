@@ -1,0 +1,124 @@
+@media (max-width:560px){
+    .home_heading{
+        font-size:50px;
+        margin-top: 0px !important;
+    }
+    .main_landing_img{
+        display:none;
+    }
+    .bg_pattern .arrow_image{
+        width: 10em;
+        height: 10em;
+        top: 15px;
+    }
+    .bg_pattern .Decore_image{
+        display: none;
+    }
+    .pizza_making_img img{
+        width: 18em;
+    }
+    .board_list_food li{
+        font-size: 20px;
+    }
+    .why_tfl .col-md-6:nth-child(1) img{
+        width: 300px !important;
+    }
+    .why_tfl .col-md-6:nth-child(1){
+        justify-content: center !important;
+    }
+    .swiper_images img{
+        width: 140px !important;
+    }    
+    .login_container form{
+        width: 320px !important;
+        padding: 0 !important;
+    }
+    .board_data_button{
+        padding: 10px 20px;
+    }
+}
+@media (min-width:500px) and (max-width:525px){
+    .board_data_button{
+        padding: 10px 30px;
+    }
+}
+@media (min-width:526px) and (max-width:560px){
+    .board_data_button{
+        padding: 10px 40px;
+    }
+}
+@media (max-width:768px) and (min-width:561px){
+    .main_landing_img{
+        display:none;
+    }
+    .home_heading{
+        font-size: 54px;
+    }
+    .bg_pattern .Decore_image{
+        display: none;
+    }
+    .pizza_making_img img{
+        width: 16em;
+    }
+    .board_data{
+        min-height: 60vh;
+    }
+    .swiper_images img{
+        width: 140px !important;
+    }
+    .board_data_button{
+        padding: 10px 30px;
+    }
+    
+}
+
+@media (max-width:1024px) and (min-width:768px){
+    .why_tfl .col-md-6:nth-child(1) img{
+        width:300px !important;
+    }
+    .main_landing_img{
+        display:none;
+    }
+    .home_heading{
+        font-size: 64px;
+    }
+    .landing_page .col-md-6:nth-child(1){
+        width: 100%;
+    }
+    .bg_pattern .Decore_image{
+        display: none;
+    }
+    .how_works .col-md-4 div img{
+        width: 270px !important;
+    }
+    .board_data_button_dinner .button1{
+        width: 70% !important;
+    }
+}
+@media (max-width:1200px) and (min-width:1025px){
+    .home_heading{
+        font-size: 60px;
+    }
+    .bg_pattern .Decore_image{
+        top: 520px;
+    }
+    .board_data_button_dinner .button1{
+        width: 70% !important;
+    }
+}
+@media (min-width:1200px) and (max-width:1400px){
+    .button1 {
+        width: 70%;
+    }
+    .board_data_button_dinner .button1{
+        width: 60% !important;
+    }
+}
+@media (min-width:1401px){
+    .button1 {
+        width: 80%;
+    }
+    .board_data_button_dinner .button1{
+        width: 80% !important;
+    }
+}

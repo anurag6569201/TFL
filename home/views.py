@@ -71,6 +71,8 @@ def user_profile(request):
 
 def home(request):
     cart = request.session.get('cart', {})
+    request.session.modified = True
+    
     scanner=Scanner.objects.first()
 
     lunch_add_ons = LunchMenu.objects.order_by('id').first()
@@ -141,6 +143,7 @@ def add_to_cart(request):
         item = get_object_or_404(Item, item_name=item_name)
         
         cart = request.session.get('cart', {})
+        request.session.modified = True
         
         cart_key = f"{item_name}_{meal_type}"
         
@@ -156,6 +159,7 @@ def add_to_cart(request):
             del cart[cart_key]  
         
         request.session['cart'] = cart
+        request.session.modified = True
         return JsonResponse({'success': True, 'cart': cart})
     
     return JsonResponse({'error': 'Invalid request method'})
@@ -169,6 +173,7 @@ def remove_from_cart(request):
     if request.method == 'POST':
         item_name = request.POST.get('item_name')
         cart = request.session.get('cart', {})
+        request.session.modified = True
 
         # Check if the item exists in the cart
         if item_name in cart:
@@ -177,6 +182,7 @@ def remove_from_cart(request):
             
             # Update the session with the modified cart
             request.session['cart'] = cart
+            request.session.modified = True
             
             return JsonResponse({'success': True, 'cart': cart})
         
@@ -198,6 +204,7 @@ def view_cart(request):
         addresses = None
 
     cart = request.session.get('cart', {})
+    request.session.modified = True
     items = {}
     
     today_veg_lunch_menu = TodayLunchMenu.objects.order_by('id').filter(item_category="veg").first()
@@ -259,6 +266,7 @@ def save_pdf(request):
                 'pdf_path': temp_pdf_path,
                 'delivery_address_id': primary_address.id
             }
+            request.session.modified = True
             return JsonResponse({'success': True})
 
     return JsonResponse({'success': False, 'error': 'Invalid request'})
@@ -285,6 +293,7 @@ def save_pdf_offline(request):
                 'pdf_path': temp_pdf_path,
                 'delivery_address_id': primary_address.id
             }
+            request.session.modified = True
             return JsonResponse({'success': True})
 
     return JsonResponse({'success': False, 'error': 'Invalid request'})
@@ -310,6 +319,7 @@ from email.mime.image import MIMEImage
 from django.core.files import File
 def success_cart(request):
     order_data = request.session.get('order_data')
+    request.session.modified = True
     payment_id = request.POST.get('razorpay_payment_id')
 
     order_id = order_data.get('order_id') if order_data else None
@@ -368,6 +378,7 @@ def success_cart(request):
 
         # Clean up session and temporary files
         del request.session['order_data']
+        request.session.modified = True
 
         if os.path.exists(temp_pdf_path):
             os.remove(temp_pdf_path)
@@ -408,6 +419,7 @@ def checkout(request):
         try:
             total_amount = float(total_amount)
             request.session['total_amount'] = total_amount
+            request.session.modified = True
             return JsonResponse({'status': 'success', 'message': 'Total received', 'total': total_amount})
         except ValueError:
             return JsonResponse({'status': 'error', 'message': 'Invalid total amount'}, status=400)
@@ -415,6 +427,7 @@ def checkout(request):
 
 def razorpay_view(request):
     total_amount = request.session.get('total_amount', 0)
+    request.session.modified = True
 
     amountt = float(total_amount)
     client = razorpay.Client(auth=(settings.RAZORPAY_KEY, settings.RAZORPAY_SECRET))
@@ -553,6 +566,7 @@ def create_order(order_data):
 def offline_payment_view(request):
     total_amount = request.session.get('total_amount', 0)
     order_data = request.session.get('order_data')
+    request.session.modified = True
     order_id = order_data['order_id']
 
     # Retrieve the first scanner object (assuming this exists in your setup)
@@ -567,6 +581,7 @@ def offline_payment_view(request):
 def confirm_order_view(request, order_id):
     print(f"Order ID received: {order_id}")
     order_data = request.session.get('order_data')
+    request.session.modified = True
     if request.method == 'POST':
         try:
             order = create_order(order_data)
@@ -600,6 +615,7 @@ def confirm_order_view(request, order_id):
             email.send()
             if 'cart' in request.session:
                 del request.session['cart']
+                request.session.modified = True
 
             return JsonResponse({'success': True, 'message': 'Order confirmed successfully.'})
 
@@ -611,6 +627,7 @@ def cancel_order_view(request):
     # Redirect to the cart page and remove session data related to the order
     if 'order_data' in request.session:
         del request.session['order_data']
+        request.session.modified = True
     return redirect('cart:cart_page')
 
 

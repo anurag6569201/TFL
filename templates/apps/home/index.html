@@ -226,7 +226,7 @@ crossorigin="anonymous"></script>
                                         
                                         {% with cart_key=item.item_name|add:"_lunch" %}
                                             {% if cart|get_item:cart_key %}
-                                                Added
+                                                Add
                                             {% else %}
                                                 Add
                                             {% endif %}
@@ -384,7 +384,7 @@ crossorigin="anonymous"></script>
                                         
                                         {% with cart_key=item.item_name|add:"_dinner" %}
                                             {% if cart|get_item:cart_key %}
-                                                Added
+                                                Add
                                             {% else %}
                                                 Add
                                             {% endif %}
@@ -611,19 +611,19 @@ crossorigin="anonymous"></script>
 <script>
     document.querySelectorAll('.btn-minus').forEach(button => {
         button.addEventListener('click', function() {
-            const itemId = this.getAttribute('data-id');
-            const mealType = this.closest('.quantity-selector').querySelector('input[name="meal_type"]').value;
-            const combinedId = itemId + '_' + mealType;
-            const inputField = document.getElementById(itemId + '_qty');
-            const priceElement = document.querySelector(`.item-price[data-id="${itemId}"]`);
-            const price = parseFloat(priceElement.textContent); 
+            let itemId = this.getAttribute('data-id');
+            let mealType = this.closest('.quantity-selector').querySelector('input[name="meal_type"]').value;
+            let combinedId = itemId + '_' + mealType;
+            let inputField = document.getElementById(itemId + '_qty');
+            let priceElement = document.querySelector(`.item-price[data-id="${itemId}"]`);
+            let price = parseFloat(priceElement.textContent); 
             let quantity = parseInt(inputField.value);
 
             if (quantity > 0) {
                 quantity -= 1;
                 inputField.value = quantity;
 
-                const itemData = { id: combinedId, quantity: quantity, price: price };
+                let itemData = { id: combinedId, quantity: quantity, price: price };
                 sessionStorage.setItem(combinedId, JSON.stringify(itemData)); 
 
                 manageQuantityVisibility(quantity, this.closest('.quantity-selector'));
@@ -633,18 +633,18 @@ crossorigin="anonymous"></script>
 
     document.querySelectorAll('.btn-plus').forEach(button => {
         button.addEventListener('click', function() {
-            const itemId = this.getAttribute('data-id');
-            const mealType = this.closest('.quantity-selector').querySelector('input[name="meal_type"]').value;
-            const combinedId = itemId + '_' + mealType; 
-            const inputField = document.getElementById(itemId + '_qty');
-            const priceElement = document.querySelector(`.item-price[data-id="${itemId}"]`);
-            const price = parseFloat(priceElement.textContent); 
+            let itemId = this.getAttribute('data-id');
+            let mealType = this.closest('.quantity-selector').querySelector('input[name="meal_type"]').value;
+            let combinedId = itemId + '_' + mealType; 
+            let inputField = document.getElementById(itemId + '_qty');
+            let priceElement = document.querySelector(`.item-price[data-id="${itemId}"]`);
+            let price = parseFloat(priceElement.textContent); 
             let quantity = parseInt(inputField.value);
 
             quantity += 1;
             inputField.value = quantity;
 
-            const itemData = { id: combinedId, quantity: quantity, price: price };
+            let itemData = { id: combinedId, quantity: quantity, price: price };
             sessionStorage.setItem(combinedId, JSON.stringify(itemData));
 
             manageQuantityVisibility(quantity, this.closest('.quantity-selector'));
@@ -653,18 +653,18 @@ crossorigin="anonymous"></script>
 
     function updateQuantitiesFromStorage() {
         document.querySelectorAll('.quantity-selector').forEach(selector => {
-            const itemId = selector.querySelector('.btn-minus').getAttribute('data-id'); // This is the item name
-            const mealType = selector.querySelector('input[name="meal_type"]').value; // Should return "lunch" or "dinner"
+            let itemId = selector.querySelector('.btn-minus').getAttribute('data-id'); // This is the item name
+            let mealType = selector.querySelector('input[name="meal_type"]').value; // Should return "lunch" or "dinner"
 
-            const combinedId = itemId + '_' + mealType;
+            let combinedId = itemId + '_' + mealType;
             
-            const qtyInput = selector.querySelector(`input[id="${itemId}_qty"][data-meal-type="${mealType}"]`); 
+            let qtyInput = selector.querySelector(`input[id="${itemId}_qty"][data-meal-type="${mealType}"]`); 
 
             console.log("Retrieving for combined ID:", combinedId); 
 
-            const storedData = sessionStorage.getItem(combinedId);
+            let storedData = sessionStorage.getItem(combinedId);
             if (storedData) {
-                const itemData = JSON.parse(storedData);
+                let itemData = JSON.parse(storedData);
                 console.log("Retrieving for Quantity:", itemData.quantity); 
                 qtyInput.value = itemData.quantity; 
 
@@ -677,7 +677,7 @@ crossorigin="anonymous"></script>
 
 
     function manageQuantityVisibility(quantity, selector) {
-        const addButton = selector.previousElementSibling;
+        let addButton = selector.previousElementSibling;
         if (quantity <= 0) {
             selector.classList.add('hidden'); 
             addButton.style.display = 'block'; 
@@ -690,19 +690,19 @@ crossorigin="anonymous"></script>
     document.querySelectorAll('.add-addon').forEach(button => {
         button.addEventListener('click', function() {
             this.style.display = 'none'; 
-            const quantitySelector = this.nextElementSibling;
+            let quantitySelector = this.nextElementSibling;
             quantitySelector.classList.remove('hidden');
 
-            const qtyInput = quantitySelector.querySelector('input[type="number"]');
+            let qtyInput = quantitySelector.querySelector('input[type="number"]');
             qtyInput.value = 1; 
 
-            const itemId = this.getAttribute('data-id');
-            const mealType = this.getAttribute('data-meal');
-            const combinedId = itemId + '_' + mealType;
+            let itemId = this.getAttribute('data-id');
+            let mealType = this.getAttribute('data-meal');
+            let combinedId = itemId + '_' + mealType;
 
-            const priceElement = document.querySelector(`.item-price[data-id="${itemId}"]`);
-            const price = parseFloat(priceElement.textContent);
-            const itemData = { id: combinedId, quantity: 1, price: price };
+            let priceElement = document.querySelector(`.item-price[data-id="${itemId}"]`);
+            let price = parseFloat(priceElement.textContent);
+            let itemData = { id: combinedId, quantity: 1, price: price };
             sessionStorage.setItem(combinedId, JSON.stringify(itemData)); 
 
             manageQuantityVisibility(1, quantitySelector); 
@@ -713,7 +713,7 @@ crossorigin="anonymous"></script>
 </script>
 <script>
     $(document).ready(function() {
-        const addedItems = new Set();
+        let addedItems = new Set();
         
         function createUniqueKey(itemName, mealType) {
             return itemName + '-' + mealType;
@@ -724,22 +724,22 @@ crossorigin="anonymous"></script>
         {% endfor %}
 
         $('.add-addon').each(function() {
-            const itemName = $(this).data('id');
-            const mealType = $(this).data('meal');
+            let itemName = $(this).data('id');
+            let mealType = $(this).data('meal');
 
-            const uniqueKey = createUniqueKey(itemName, mealType);
+            let uniqueKey = createUniqueKey(itemName, mealType);
 
             if (addedItems.has(uniqueKey)) {
-                $(this).text('Added'); 
+                $(this).text('Add'); 
             }
         });
 
         $('.add-addon').click(function(event) {
             event.preventDefault();
-            const itemName = $(this).data('id');
-            const mealType = $(this).data('meal'); 
+            let itemName = $(this).data('id');
+            let mealType = $(this).data('meal'); 
 
-            const uniqueKey = createUniqueKey(itemName, mealType);
+            let uniqueKey = createUniqueKey(itemName, mealType);
 
             if (addedItems.has(uniqueKey)) {
                 addedItems.delete(uniqueKey);
@@ -747,7 +747,7 @@ crossorigin="anonymous"></script>
                 updateCart(itemName, mealType, 0); 
             } else {
                 addedItems.add(uniqueKey);
-                $(this).text('Added'); 
+                $(this).text('Add'); 
                 updateCart(itemName, mealType, 1); 
             }
         });
@@ -871,10 +871,10 @@ crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.2/MotionPathPlugin.min.js"></script>
 <script>
     gsap.registerPlugin(MotionPathPlugin);
-    const imageContainer1 = document.querySelector('.image_container_anim');
-    const angles1 = [0, 90, 180, 270, 360];
-    const rotateAndPause1 = () => {
-        const timeline = gsap.timeline({ repeat: -1 }); 
+    let imageContainer1 = document.querySelector('.image_container_anim');
+    let angles1 = [0, 90, 180, 270, 360];
+    let rotateAndPause1 = () => {
+        let timeline = gsap.timeline({ repeat: -1 }); 
         angles1.forEach((angle, index) => {
             timeline.to(imageContainer1, {
                 rotation: angle, 

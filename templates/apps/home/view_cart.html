@@ -785,7 +785,19 @@ function generateAndSavePDF() {
     });
 }
 
+const totalElement = document.getElementById("total");
+const totalValue = parseFloat(totalElement.textContent);  // Get the total value
+const orderButton = document.getElementById("rzp-button1");
 
+if (totalValue === 0) {
+    // Apply styles if total is zero
+    orderButton.style.pointerEvents = "none";
+    orderButton.style.opacity = "0.6";
+} else {
+    // Remove the styles if total is not zero
+    orderButton.style.pointerEvents = "auto";
+    orderButton.style.opacity = "1";
+}
 </script>
 
 
