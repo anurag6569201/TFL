@@ -15,6 +15,8 @@ CSRF_TRUSTED_ORIGINS = ['https://tfl2k24.azurewebsites.net','http://127.0.0.1','
 
 # Application definition
 INSTALLED_APPS = [
+    'jazzmin',
+
     'django.contrib.admin',
     'allauth',
     'allauth.account',
@@ -160,3 +162,22 @@ RAZORPAY_SECRET=os.getenv("RAZORPAY_TESTING_SECRET")
 
 SESSION_COOKIE_AGE = 300 # 5 MINS
 SESSION_SAVE_EVERY_REQUEST = True
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "The Flavour Lake",
+    "site_header": "TFL Dashboard",
+    "site_brand": "TFL",
+    "site_logo": "../static/assets/img/home/tfl_logo.webp",  # Customize with your company's logo
+    "login_logo": "../static/assets/img/home/tfl_logo.webp",
+    "welcome_sign": "Welcome to TFL Admin Panel",
+    "copyright": "theflavourlake © 2024",
+    "user_avatar": "profile.picture",  # Assuming you have a user profile picture field
+
+
+    # Footer Links
+    "footer_links": [
+        {"name": "The Flavour Lake", "url": "https://theflavourlake.in", "new_window": True},
+        {"name": "Support", "url": "mailto:support@theflavourlake5@gmail.com", "new_window": True},
+    ],
+}

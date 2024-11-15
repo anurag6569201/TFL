@@ -13,6 +13,7 @@ django-background-tasks==1.2.8
 django-compressor==4.5.1
 django-htmlmin==0.11.0
 django-import-export==4.2.1
+django-jazzmin==3.0.1
 html5lib==1.1
 htmlmin==0.1.12
 idna==3.10

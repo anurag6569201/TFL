@@ -465,7 +465,7 @@ def past_orders(request):
 
 
 @login_required
-@permission_required('home.can_change_order', raise_exception=True)
+@permission_required('home.change_order', raise_exception=True)
 def delivery_page(request):
     # Fetch all pending orders
     scanner=Scanner.objects.first()
@@ -484,7 +484,7 @@ def delivery_page(request):
 
 
 @login_required
-@permission_required('home.can_change_order', raise_exception=True)
+@permission_required('home.change_order', raise_exception=True)
 def verify_delivery_otp(request):
     if request.method == 'POST':
         entered_otp = int(request.POST.get('delivery_otp')) 
@@ -521,7 +521,7 @@ def verify_delivery_otp(request):
     return render(request, 'apps/home/delivery.html')
 
 @login_required
-@permission_required('home.can_change_order', raise_exception=True)
+@permission_required('home.change_order', raise_exception=True)
 def confirm_delivery(request):
     if request.method == 'POST':
         order_id = request.POST.get('order_id')
