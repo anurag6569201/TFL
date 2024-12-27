@@ -10,7 +10,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://tfl2k24.azurewebsites.net','http://127.0.0.1:8000/','*','https://theflavourlake.in/']
+ALLOWED_HOSTS = ['https://tfl2k24.azurewebsites.net','http://127.0.0.1:8000/','*','https://theflavourlake.in/','.vercel.app']
 CSRF_TRUSTED_ORIGINS = ['https://tfl2k24.azurewebsites.net','http://127.0.0.1','https://theflavourlake.in']
 
 # Application definition
